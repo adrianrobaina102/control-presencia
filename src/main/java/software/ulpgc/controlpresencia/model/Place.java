@@ -1,4 +1,4 @@
 package software.ulpgc.controlpresencia.model;
 
-public record Place() {
+public record Place(String id, String name) {
 }
