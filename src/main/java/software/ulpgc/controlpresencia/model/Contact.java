@@ -1,4 +1,4 @@
-package software.ulpgc.controlpresencial.model;
+package software.ulpgc.controlpresencia.model;
 
 import java.time.LocalDate;
 

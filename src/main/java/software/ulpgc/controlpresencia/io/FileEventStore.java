@@ -1,6 +1,6 @@
-package software.ulpgc.controlpresencial.io;
+package software.ulpgc.controlpresencia.io;
 
-import software.ulpgc.controlpresencial.model.TrackingEvent;
+import software.ulpgc.controlpresencia.model.TrackingEvent;
 
 import java.io.File;
 
