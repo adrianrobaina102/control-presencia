@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class FileEventStore implements EventStore {
     private final File root;
@@ -25,5 +29,15 @@ public class FileEventStore implements EventStore {
     }
     private String serializa(TrackingEvent event) {
         return event.ts() + ";"+ event.employee().id()  + ";" + event.place().id()  + ";" + event.type();
+    }
+    private File getFileFor(TrackingEvent event)  {
+        return new File(new File(root, String.valueOf(getDateTimeFor(event).getYear())), getName(event));
+    }
+    private LocalDateTime getDateTimeFor(TrackingEvent event)  {
+        return LocalDateTime.ofInstant(event.ts(), ZoneId.systemDefault());
+    }
+    private String getName(TrackingEvent event)
+    {
+        return getDateTimeFor(event).format(DateTimeFormatter.ofPattern("MMyyyy")) + ".log";
     }
 }
