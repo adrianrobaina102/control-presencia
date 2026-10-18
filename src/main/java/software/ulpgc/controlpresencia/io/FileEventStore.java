@@ -32,7 +32,7 @@ public class FileEventStore implements EventStore {
 
     }
     private String serializa(TrackingEvent event) {
-        return event.ts() + ";"+ event.employee().id()  + ";" + event.place().id()  + ";" + event.type();
+        return event.ts() + ";"+ event.employee().id()  + ";" + event.place().name()  + ";" + event.type();
     }
     private File getFileFor(TrackingEvent event)  {
 
