@@ -7,6 +7,7 @@ target/
 out/
 *.class
 *.jar
+*.log
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
