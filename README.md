@@ -10,15 +10,17 @@ El propósito de este sistema es gestionar el registro de asistencia (entradas y
 * **JDK:** Oracle OpenJDK 27 (o versión compatible).
 * **Gestor de construcción:** Apache Maven (`pom.xml`).
 * **Dependencias actuales:**
-    * *(Pendiente de documentar librerías de red, serialización y pruebas conforme se incorporen al `pom.xml`).*
+  * `JUnit 5 (Jupiter)`: Para la ejecución de pruebas unitarias automatizadas.
+  * `AssertJ Core (3.27.7)`: Librería de aserciones fluidas para los tests.
 
 ## 3. Compilación y ejecución
 
-### Compilación del proyecto
+### Compilación del proyecto y ejecución de pruebas
 Desde el directorio raíz del proyecto, ejecutar:
 
 ```bash
 mvn clean compile
+mvn test
 ```
 
 ### Ejecución del Backend y Frontends
@@ -31,10 +33,11 @@ Actualmente, el núcleo del proyecto (`software.ulpgc.controlpresencia`) se orga
 
 ```text
 src/
-└── main/java/software/ulpgc/controlpresencia/
-    ├── model/          # Entidades y registros inmutables del dominio
-    ├── io/             # Puertos y adaptadores de persistencia de eventos
-    └── Main.java       # Punto de entrada de la aplicación
+├── main/java/software/ulpgc/controlpresencia/
+│   ├── model/          # Entidades y registros inmutables del dominio
+│   ├── io/             # Puertos y adaptadores de persistencia de eventos
+│   └── Main.java       # Punto de entrada de la aplicación
+└── test/java/tests/    # Suite de pruebas unitarias automatizadas
 ```
 
 ## 5. Arquitectura de sistemas
@@ -89,8 +92,8 @@ Contiene las estructuras de datos inmutables (implementadas mediante `record` y 
      - Prueba de los 3 tipos de horario (oficina, restaurante, hospital).
      - Registro de retrasos, ausencias o salidas tempranas.
      - Pruebas de error: persona inexistente, fichaje duplicado o salida sin entrada previa. -->
-* **Verificación actual:** Comprobación de escritura y persistencia de eventos de fichaje en el sistema de archivos local (`store/2026/10/`).
-* *(Pendiente de añadir suite de pruebas unitarias automatizadas y validación de casos de uso horarios).*
+El repositorio incluye una suite de pruebas unitarias automatizadas con JUnit 5 y AssertJ en el paquete `tests`, que verifica el correcto funcionamiento del adaptador de persistencia en ficheros:
+* `FileEventStoreTest`: Valida la creación automática de la estructura de directorios por fecha, la correcta serialización de los datos del empleado y lugar en el fichero log, y la acumulación de múltiples eventos sucesivos (`APPEND`).
 
 ## 12. Límites conocidos
 <!-- NOTA: Detalla aquí cualquier límite del cálculo horario, concurrencia o reglas que queden fuera del alcance. -->
