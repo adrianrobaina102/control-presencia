@@ -1,0 +1,104 @@
+======================================================================
+Clase del 22/09/2026
+======================================================================
+
+Control de Asistencia (Trabajo Opcional IS2):
+
+- Cosas a tener en cuenta:
+	* Privacidad de datos personales: relación privada y segura entre la aplicación y el usuario (no exponer datos sensibles en logs ni eventos).
+	* Canal de comunicación con el empleado: sistema para enviar avisos, respuestas y notificaciones directas al trabajador.
+	* Bróker de mensajería asíncrona: uso de Apache ActiveMQ desplegado mediante contenedor Docker (sin instalación local directa).
+	* Gestión de eventos y concurrencia: cada acción relevante (fichaje, petición, aprobación) emite un evento inmutable hacia ActiveMQ.
+	* Auditoría y trazabilidad: al no poder modificar registros pasados, cualquier error en un fichaje genera un registro de compensación/corrección firmado.
+	* Ejemplo de caso específico a resolver: 
+		- Un usuario le pide verbalmente el día libre a su jefe y este se lo concede; sin embargo, si la solicitud no se tramita formalmente en la app o el jefe olvida validarla en el sistema, la app lo computará automáticamente como "Falta de asistencia injustificada" (ausente).
+
+- Reto:
+	* Todas las clases deben ser inmutables: ningún objeto altera su estado interno tras crearse (sin setters; los cambios generan nuevas instancias con los datos actualizados).
+
+
+======================================================================
+CLASES DEL SISTEMA Y DEFINICIONES
+======================================================================
+
+* TimeRecord:
+  Representa el fichaje puntual de un empleado.
+
+* RecordCorrection:
+  Representa una corrección o ajuste solicitado sobre un fichaje erróneo u olvidado.
+
+* Schedules:
+  Representa el horario y los turnos de trabajo asignados a un empleado.
+
+* TimeOffRequest:
+  Representa la solicitud de vacaciones, días libres o permisos de un empleado.
+
+* TimeOffStatus:
+  Representa el estado de una solicitud de vacaciones (si está aceptada, pendiente o rechazada).
+
+* TimeOffBalance:
+  Representa el saldo de días libres y vacaciones disponibles de un empleado.
+
+* AppMaster:
+  Representa el controlador central que gestiona la aplicación y sus operaciones.
+
+* Notification:
+  Representa un mensaje o aviso enviado para comunicarse con el empleado.
+
+* DomainEvent:
+  Representa el evento o mensaje que se envía al bróker ActiveMQ cuando ocurre una acción.
+
+* Timesheet:
+  Representa el resumen diario del empleado para saber si vino, faltó o tenía permiso.
+
+* Employee:
+  Representa los datos del trabajador en el sistema.
+
+* Rol:
+  Representa el rol y los permisos del usuario en la aplicación.
+
+* Building:
+  Representa la sede o edificio físico de trabajo.
+
+* Organization:
+  Representa la empresa a la que pertenece el empleado.
+
+* Contract:
+  Representa el contrato laboral entre el empleado y la organización.
+
+* Contract Status / Contract State:
+  Representa el estado actual y las fases posibles del contrato laboral.
+
+* Contact:
+  Representa los datos de contacto del empleado (teléfono y correo).
+
+* TimeState:
+  Representa el tipo o estado del tiempo registrado.
+
+======================================================================
+Clase del 06/10/2026
+======================================================================
+
+Qué debe pasar			|
+================================<=====================================
+Que pasa
+======================================================================
+Organization
+
+Evento (¿Que paso?): Son inmutables 
+	(When/Who/Where/What) 
+Event Somang: Metodología que si tiene algo como lo de abjo, dado un evento por ejemplo darle me gusta a un video 
+	(aplicación ---evento---- > database ) en database se guarda el evento
+		    <-		 -
+		      -	  bd  <- (event somang) bd se guarda el numero de me gusta 
+
+**Es importante saber defender la implementacion**
+
+
+======================================================================
+Clase del 20/10/2026
+======================================================================
+Justificacion de porque se va a utilizar ActiveMQ
+* Observabilidad nativa: Su consola web permite monitorizar las colas y mensajes en tiempo real, lo que agiliza drásticamente la depuración entre microservicios.
+* Tolerancia a fallos: Si la base de datos o el módulo Storer se caen temporalmente, el broker retiene los eventos de fichaje de forma segura para garantizar que no se pierdan datos.
+* Estándar industrial (JMS): Es la herramienta exacta y madura para resolver este patrón asíncrono (Productor-Consumidor) sin añadir la sobreingeniería de otras soluciones.
