@@ -6,6 +6,7 @@ import software.ulpgc.controlpresencia.ports.EventStore;
 import software.ulpgc.controlpresencia.adapters.FileEventStore;
 import software.ulpgc.controlpresencia.model.*;
 
+import javax.jms.JMSException;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -18,7 +19,7 @@ public class FileEventStoreTest {
     Path tempDir;
 
     @Test
-    public void should_create_log_file_in_directory_matching_event_date() {
+    public void should_create_log_file_in_directory_matching_event_date() throws JMSException {
         EventStore store = new FileEventStore(tempDir.toFile());
         store.register(createSampleTrackingEvent());
 
@@ -28,7 +29,7 @@ public class FileEventStoreTest {
     }
 
     @Test
-    public void should_write_employee_and_place_data_in_log_file() {
+    public void should_write_employee_and_place_data_in_log_file() throws JMSException {
         EventStore store = new FileEventStore(tempDir.toFile());
         store.register(createSampleTrackingEvent());
 
@@ -40,7 +41,7 @@ public class FileEventStoreTest {
                 .contains("In");
     }
     @Test
-    public void should_append_multiple_events_to_the_same_log_file() {
+    public void should_append_multiple_events_to_the_same_log_file() throws JMSException {
         EventStore store = new FileEventStore(tempDir.toFile());
 
         TrackingEvent firstEvent = createSampleTrackingEvent();
