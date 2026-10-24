@@ -13,7 +13,7 @@ public class ActiveMQEventReceiver implements EventReceiver {
         ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://localhost:61616");
         this.connection = factory.createConnection();
         this.connection.start();
-        this.session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        this.session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
         Destination destination = this.session.createQueue(queueName);
         this.consumer = session.createConsumer(destination);
     }
@@ -21,7 +21,10 @@ public class ActiveMQEventReceiver implements EventReceiver {
     public String receive()  {
         try {
             Message message = this.consumer.receive();
-            return ((TextMessage) message).getText();
+            String text = ((TextMessage) message).getText();
+
+            message.acknowledge();
+            return text;
         } catch (JMSException e) {
             throw new RuntimeException(e);
         }
