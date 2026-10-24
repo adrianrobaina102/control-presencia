@@ -24,10 +24,19 @@ public class ActiveMQEventStore implements EventStore
 
     @Override
     public void register(TrackingEvent event) throws JMSException {
-        producer.send(session.createTextMessage(event.toString()));
+        try {
+            producer.send(session.createTextMessage(serializa(event)));
+        } catch (JMSException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public void close() throws Exception {
         this.connection.close();
+    }
+    private String serializa(TrackingEvent event) {
+        return event.ts() + ";" + event.employee().id() + ";" +
+                event.place().name() + ";" + event.type();
     }
 }
