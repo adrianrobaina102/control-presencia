@@ -2,8 +2,8 @@ package tests;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import software.ulpgc.controlpresencia.io.EventStore;
-import software.ulpgc.controlpresencia.io.FileEventStore;
+import software.ulpgc.controlpresencia.ports.EventStore;
+import software.ulpgc.controlpresencia.adapters.FileEventStore;
 import software.ulpgc.controlpresencia.model.*;
 
 import java.nio.file.Path;

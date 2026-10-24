@@ -1,4 +1,4 @@
-package software.ulpgc.controlpresencia.io;
+package software.ulpgc.controlpresencia.ports;
 
 import software.ulpgc.controlpresencia.model.TrackingEvent;
 

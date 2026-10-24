@@ -1,6 +1,6 @@
 package software.ulpgc.controlpresencia;
 
-import software.ulpgc.controlpresencia.io.FileEventStore;
+import software.ulpgc.controlpresencia.adapters.FileEventStore;
 import software.ulpgc.controlpresencia.model.*;
 
 import java.io.File;

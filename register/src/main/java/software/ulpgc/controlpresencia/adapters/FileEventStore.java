@@ -1,6 +1,7 @@
-package software.ulpgc.controlpresencia.io;
+package software.ulpgc.controlpresencia.adapters;
 
 import software.ulpgc.controlpresencia.model.TrackingEvent;
+import software.ulpgc.controlpresencia.ports.EventStore;
 
 import java.io.File;
 import java.io.IOException;
