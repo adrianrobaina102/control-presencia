@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>register</module>
+        <module>Storer</module>
     </modules>
     <properties>
         <maven.compiler.source>27</maven.compiler.source>
