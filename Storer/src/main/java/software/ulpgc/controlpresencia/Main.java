@@ -11,10 +11,12 @@ import java.io.File;
 public class Main {
     public static void main() throws JMSException {
         EventReceiver receiver = new ActiveMQEventReceiver("fichajes.queue");
+        EventRepository repository = new FileEventRepository(new File("store"));
+
+        System.out.println("Storer encendido. Escuchando nuevos fichajes...");
         String message = receiver.receive();
         System.out.println("Message received: " + message );
-        ((ActiveMQEventReceiver) receiver).close();
-        EventRepository repository = new FileEventRepository(new File("store"));
         repository.save(message);
+        ((ActiveMQEventReceiver) receiver ).close();
     }
 }
