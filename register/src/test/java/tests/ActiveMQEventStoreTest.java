@@ -2,9 +2,9 @@ package tests;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.junit.jupiter.api.Test;
-import software.ulpgc.controlpresencia.adapters.ActiveMQEventStore;
-import software.ulpgc.controlpresencia.model.*;
-import software.ulpgc.controlpresencia.ports.EventStore;
+import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQEventStore;
+import software.ulpgc.controlpresencia.application.model.*;
+import software.ulpgc.controlpresencia.application.ports.EventStore;
 
 import javax.jms.*;
 import java.time.Instant;
