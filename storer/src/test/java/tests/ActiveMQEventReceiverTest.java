@@ -2,6 +2,7 @@ package tests;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.junit.jupiter.api.Test;
+import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQBrokerConnection;
 import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQEventReceiver;
 import software.ulpgc.controlpresencia.application.ports.EventReceiver;
 
@@ -18,11 +19,12 @@ public class ActiveMQEventReceiverTest {
         String expectedMessage = "emp-01,Sede Central,In,2026-10-13T08:30:00Z";
         sendMessageToQueue(TEST_QUEUE, expectedMessage);
 
-        EventReceiver receiver = new ActiveMQEventReceiver(TEST_QUEUE);
-        String actualMessage = receiver.receive();
-        ((ActiveMQEventReceiver) receiver).close();
+        try (ActiveMQBrokerConnection brokerConnection = new ActiveMQBrokerConnection()) {
+            EventReceiver receiver = new ActiveMQEventReceiver(brokerConnection.getSession(), TEST_QUEUE);
+            String actualMessage = receiver.receive();
 
-        assertThat(actualMessage).isEqualTo(expectedMessage);
+            assertThat(actualMessage).isEqualTo(expectedMessage);
+        }
     }
 
     private void sendMessageToQueue(String queueName, String text) throws Exception {

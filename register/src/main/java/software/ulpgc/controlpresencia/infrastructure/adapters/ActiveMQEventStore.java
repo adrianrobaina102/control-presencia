@@ -8,16 +8,10 @@ import javax.jms.*;
 
 public class ActiveMQEventStore implements EventStore
 {
-    private final Connection connection;
-    private final Session session;
     private final MessageProducer producer;
-
-    public ActiveMQEventStore(String queueName) throws JMSException {
-        ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://localhost:61616");
-        this.connection = factory.createConnection();
-        this.connection.start();
-
-        this.session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+    private final Session session;
+    public ActiveMQEventStore(Session session, String queueName) throws JMSException {
+        this.session = session;
         Destination destination  = session.createQueue(queueName);
         this.producer = session.createProducer(destination);
     }
@@ -30,10 +24,6 @@ public class ActiveMQEventStore implements EventStore
             throw new RuntimeException(e);
         }
 
-    }
-
-    public void close() throws Exception {
-        this.connection.close();
     }
     private String serializa(TrackingEvent event) {
         return event.ts() + ";" + event.employee().id() + ";" +

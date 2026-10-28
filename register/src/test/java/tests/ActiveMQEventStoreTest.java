@@ -2,6 +2,7 @@ package tests;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.junit.jupiter.api.Test;
+import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQBrokerConnection;
 import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQEventStore;
 import software.ulpgc.controlpresencia.application.model.*;
 import software.ulpgc.controlpresencia.application.ports.EventStore;
@@ -18,9 +19,10 @@ public class ActiveMQEventStoreTest {
 
     @Test
     public void should_send_tracking_event_to_activemq_queue() throws Exception {
-        EventStore store = new ActiveMQEventStore(TEST_QUEUE);
-        store.register(createSampleTrackingEvent());
-        ((ActiveMQEventStore) store).close();
+        try (ActiveMQBrokerConnection brokerConnection = new ActiveMQBrokerConnection()) {
+            EventStore store = new ActiveMQEventStore(brokerConnection.getSession(), TEST_QUEUE);
+            store.register(createSampleTrackingEvent());
+        }
 
         ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://localhost:61616");
         try (Connection connection = factory.createConnection()) {

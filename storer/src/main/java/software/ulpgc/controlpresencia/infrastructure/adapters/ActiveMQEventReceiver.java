@@ -6,14 +6,10 @@ import software.ulpgc.controlpresencia.application.ports.EventReceiver;
 import javax.jms.*;
 
 public class ActiveMQEventReceiver implements EventReceiver {
-    private Connection connection;
     private Session session;
     private MessageConsumer consumer;
-    public ActiveMQEventReceiver(String queueName) throws JMSException {
-        ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://localhost:61616");
-        this.connection = factory.createConnection();
-        this.connection.start();
-        this.session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+    public ActiveMQEventReceiver(Session session, String queueName) throws JMSException {
+        this.session = session;
         Destination destination = this.session.createQueue(queueName);
         this.consumer = session.createConsumer(destination);
     }
@@ -28,11 +24,5 @@ public class ActiveMQEventReceiver implements EventReceiver {
         } catch (JMSException e) {
             throw new RuntimeException(e);
         }
-    }
-    public void close()
-    {
-        try {
-            this.connection.close();
-        } catch (JMSException e) {}
     }
 }
