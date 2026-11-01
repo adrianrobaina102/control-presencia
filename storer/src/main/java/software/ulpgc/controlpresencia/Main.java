@@ -39,6 +39,8 @@ public class Main {
             storeUseCase.execute(message);
         }
         System.out.println("Cola vacia. Servidor HTTP activo en puerto 7071.");
+        System.out.println("-> Ver fichajes guardados: http://localhost:7071/");
+        System.out.println("-> Registrar fichaje manual: http://localhost:7071/events?event=2026-11-01T08:00:00Z;emp-99;Sede;In");
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
