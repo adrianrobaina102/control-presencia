@@ -2,6 +2,8 @@
 
 Proyecto extraordinario de la asignatura Ingeniería del Software 2 (ULPGC). Sistema de control de presencia, gestión de horarios y registro de fichajes diseñado bajo arquitectura hexagonal y computación distribuida.
 
+*(Para diagramas de flujo interactivos y guía rápida para desarrolladores, consultar [`docs/architecture.md`](docs/architecture.md)).*
+
 ## 1. Objetivo de la entrega
 
 El propósito de este sistema es gestionar el registro de asistencia (entradas y salidas), la definición de distintos regímenes horarios y la consulta del cumplimiento horario o incidencias de los empleados. La arquitectura separa los módulos de captura de datos de los módulos de almacenamiento para garantizar la escalabilidad. Actualmente, el sistema está dividido en un productor de eventos (`register`) y un consumidor/almacenador (`storer`), comunicados asíncronamente mediante un broker de mensajería (ActiveMQ) y expuestos al exterior mediante servidores web ligeros con Javalin, aislando la lógica de dominio y la persistencia mediante el patrón de Puertos y Adaptadores.
@@ -47,6 +49,9 @@ El sistema se ejecuta en dos procesos separados para demostrar el desacoplamient
 El proyecto se divide en módulos independientes siguiendo estrictamente la Arquitectura Hexagonal y la Inversión de Dependencias (Pure DI):
 
 ```text
+├── docs/                                               # Documentación técnica y flujos del sistema
+│   ├── architecture.md                                 # Flujos detallados con diagramas y mapa de componentes
+│   └── agent.md                                        # Reglas y contexto operativo del asistente
 ├── register/                                           # Módulo Productor (Captura de fichajes)
 │   ├── src/main/java/software/ulpgc/controlpresencia/
 │   │   ├── application/                                # Core / Dominio (Sin dependencias externas)
