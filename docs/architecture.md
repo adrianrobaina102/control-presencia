@@ -4,14 +4,14 @@ Este documento describe de forma visual e inmediata cómo fluyen las acciones en
 
 ---
 
-## 1. Flujo 1: Registro y Emisión de un Fichaje (Módulo `register`)
+## 1. Flujo 1: Registro y Emisión de un Fichaje (Módulo `tracking-service`)
 Muestra cómo una petición HTTP externa entra por Javalin, atraviesa el caso de uso sin acoplamiento y viaja como mensaje ligero hacia la cola de ActiveMQ.
 
 ```text
 [ Cliente Web / Navegador / Torno: POST o GET http://localhost:7070/events?employeeId=emp-01&placeId=Oficina&type=In ]
        │
        ▼ (Petición HTTP entrante)
-[ Javalin Router (register/Main: puerto 7070) ]
+[ Javalin Router (tracking-service/Main: puerto 7070) ]
        │
        ▼ (Enrutamiento dinámico con inyección del Context)
 [ RegisterTrackingEndPoint.execute() ]
@@ -27,10 +27,10 @@ Muestra cómo una petición HTTP externa entra por Javalin, atraviesa el caso de
 [ RegisterTrackingEventUseCase.execute(event) ]
        │
        ▼ (Delega en el puerto de salida)
-[ EventStore.register(event) ] (Interfaz del Core)
+[ EventStore.tracking-service(event) ] (Interfaz del Core)
        │
        ▼ (Implementación concreta del adaptador)
-[ ActiveMQEventStore.register(event) ]
+[ ActiveMQEventStore.tracking-service(event) ]
        │
        ├──> serializa(event) ───────────────> "2026-11-02T15:00:00Z;emp-01;Oficina;In"
        │
@@ -41,7 +41,7 @@ Muestra cómo una petición HTTP externa entra por Javalin, atraviesa el caso de
 [ Cola ActiveMQ: "fichajes.queue" ] ────────> Mensaje esperando en el broker
        │
        ▼
-[ context.status(201).result("Tracking event registered") ] ──> Respuesta HTTP 201 al cliente
+[ context.status(201).result("Tracking event tracking-serviceed") ] ──> Respuesta HTTP 201 al cliente
 ```
 
 ---
@@ -115,9 +115,9 @@ Muestra cómo el usuario o supervisor consulta en su navegador todos los eventos
 
 Para ubicar cualquier archivo en 2 segundos según la **Arquitectura Hexagonal** y la separación estricta de responsabilidades:
 
-### Módulo `register` (Captura y Producción)
+### Módulo `tracking-service` (Captura y Producción)
 ```text
-register/src/main/java/software/ulpgc/controlpresencia/
+tracking-service/src/main/java/software/ulpgc/controlpresencia/
 │
 ├── application/                         <-- EL CORE (Cero librerías externas ni frameworks web)
 │   ├── model/                           <-- Entidades inmutables: Employee, Contact, Place, TrackingEvent, TrackingType

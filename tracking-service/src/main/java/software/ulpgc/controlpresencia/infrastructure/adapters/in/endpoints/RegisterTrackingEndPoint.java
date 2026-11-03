@@ -1,11 +1,11 @@
-package software.ulpgc.controlpresencia.infrastructure.adapters.endpoints;
+package software.ulpgc.controlpresencia.infrastructure.adapters.in.endpoints;
 
 import io.javalin.http.Context;
 import software.ulpgc.controlpresencia.application.model.Employee;
 import software.ulpgc.controlpresencia.application.model.Place;
 import software.ulpgc.controlpresencia.application.model.TrackingEvent;
 import software.ulpgc.controlpresencia.application.model.TrackingType;
-import software.ulpgc.controlpresencia.application.ports.TrackingEventParser;
+import software.ulpgc.controlpresencia.application.ports.processing.TrackingEventParser;
 import software.ulpgc.controlpresencia.application.usecases.RegisterTrackingEventUseCase;
 
 public class RegisterTrackingEndPoint implements EndPoint {

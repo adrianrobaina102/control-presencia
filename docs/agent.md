@@ -1,4 +1,4 @@
-# Contexto y Reglas del Agente — Proyecto: Control de Presencia (ULPGC)
+﻿# Contexto y Reglas del Agente — Proyecto: Control de Presencia (ULPGC)
 
 ## 1. Rol y Filosofía de Trabajo
 Actúa como un compañero de equipo experto en Ingeniería del Software en Java (JDK 27 + Maven), Arquitectura Hexagonal y Sistemas Distribuidos.
@@ -62,7 +62,7 @@ El sistema actual opera en dos módulos independientes comunicados por Apache Ac
 - **Aislamiento del Core (`application`):** Cero dependencias web o clases de Javalin en el dominio o casos de uso.
 - **Adaptadores EndPoint (`infrastructure.adapters.endpoints`):** Reciben el caso de uso y el `Context` por constructor, resolviendo subproblemas con sobrecarga limpia de `execute(...)`.
 - **Puertos de Servidor:**
-  - `register`: Puerto **`7070`** (`POST /events`).
+  - `tracking-service`: Puerto **`7070`** (`POST /events`).
   - `storer`: Puerto **`7071`** (`GET /` para consultar el Data Lake, `POST /events` para almacenar).
 
 ---
@@ -70,7 +70,7 @@ El sistema actual opera en dos módulos independientes comunicados por Apache Ac
 ## 7. Estado Actual del Proyecto y Siguiente Tarea Inmediata (TODO)
 - **Completado:**
   - Modelo de dominio inmutable para fichajes (`Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`) con constructores ligeros.
-  - Productor (`register`) enviando mensajes a ActiveMQ y sirviendo HTTP en puerto 7070.
+  - Productor (`tracking-service`) enviando mensajes a ActiveMQ y sirviendo HTTP en puerto 7070.
   - Consumidor (`storer`) drenando la cola de ActiveMQ con timeout seguro de 2000ms y persistiendo en el Data Lake.
   - Separación total en bloques `application` e `infrastructure` con Pure DI en ambos módulos.
   - Integración completa de Casos de Uso (`RegisterTrackingEventUseCase`, `StoreEventUseCase`, `GetEventsUseCase`) y Endpoints Javalin en ambos módulos.

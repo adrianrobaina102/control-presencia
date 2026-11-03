@@ -1,4 +1,4 @@
-package software.ulpgc.controlpresencia.infrastructure.adapters;
+package software.ulpgc.controlpresencia.infrastructure.adapters.out;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 

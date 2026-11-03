@@ -2,17 +2,17 @@ package software.ulpgc.controlpresencia;
 
 import io.javalin.Javalin;
 import software.ulpgc.controlpresencia.application.model.Configuration;
-import software.ulpgc.controlpresencia.application.ports.ConfigurationReader;
-import software.ulpgc.controlpresencia.application.ports.EventStore;
-import software.ulpgc.controlpresencia.application.ports.TrackingEventParser;
-import software.ulpgc.controlpresencia.application.ports.TrackingEventSerializer;
+import software.ulpgc.controlpresencia.application.ports.in.ConfigurationReader;
+import software.ulpgc.controlpresencia.application.ports.out.EventStore;
+import software.ulpgc.controlpresencia.application.ports.processing.TrackingEventParser;
+import software.ulpgc.controlpresencia.application.ports.processing.TrackingEventSerializer;
 import software.ulpgc.controlpresencia.application.usecases.RegisterTrackingEventUseCase;
-import software.ulpgc.controlpresencia.infrastructure.JsonConfigurationReader;
-import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQBrokerConnection;
-import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQEventStore;
-import software.ulpgc.controlpresencia.infrastructure.adapters.CsvTrackingEventParser;
-import software.ulpgc.controlpresencia.infrastructure.adapters.CsvTrackingEventSerializer;
-import software.ulpgc.controlpresencia.infrastructure.adapters.endpoints.RegisterTrackingEndPoint;
+import software.ulpgc.controlpresencia.infrastructure.adapters.in.JsonConfigurationReader;
+import software.ulpgc.controlpresencia.infrastructure.adapters.out.ActiveMQBrokerConnection;
+import software.ulpgc.controlpresencia.infrastructure.adapters.out.ActiveMQEventStore;
+import software.ulpgc.controlpresencia.infrastructure.adapters.processing.CsvTrackingEventParser;
+import software.ulpgc.controlpresencia.infrastructure.adapters.processing.CsvTrackingEventSerializer;
+import software.ulpgc.controlpresencia.infrastructure.adapters.in.endpoints.RegisterTrackingEndPoint;
 
 import java.io.File;
 

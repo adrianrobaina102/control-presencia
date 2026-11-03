@@ -1,4 +1,4 @@
-# control-presencia
+﻿# control-presencia
 
 Proyecto extraordinario de la asignatura Ingeniería del Software 2 (ULPGC). Sistema de control de presencia, gestión de horarios y registro de fichajes diseñado bajo arquitectura hexagonal y computación distribuida.
 
@@ -6,11 +6,11 @@ Proyecto extraordinario de la asignatura Ingeniería del Software 2 (ULPGC). Sis
 
 ## 1. Objetivo de la entrega
 
-El propósito de este sistema es gestionar el registro de asistencia (entradas y salidas), la definición de distintos regímenes horarios y la consulta del cumplimiento horario o incidencias de los empleados. La arquitectura separa los módulos de captura de datos de los módulos de almacenamiento para garantizar la escalabilidad. Actualmente, el sistema está dividido en un productor de eventos (`register`) y un consumidor/almacenador (`storer`), comunicados asíncronamente mediante un broker de mensajería (ActiveMQ) y expuestos al exterior mediante servidores web ligeros con Javalin, aislando la lógica de dominio y la persistencia mediante el patrón de Puertos y Adaptadores.
+El propósito de este sistema es gestionar el registro de asistencia (entradas y salidas), la definición de distintos regímenes horarios y la consulta del cumplimiento horario o incidencias de los empleados. La arquitectura separa los módulos de captura de datos de los módulos de almacenamiento para garantizar la escalabilidad. Actualmente, el sistema está dividido en un productor de eventos (`tracking-service`) y un consumidor/almacenador (`storer`), comunicados asíncronamente mediante un broker de mensajería (ActiveMQ) y expuestos al exterior mediante servidores web ligeros con Javalin, aislando la lógica de dominio y la persistencia mediante el patrón de Puertos y Adaptadores.
 
 ## 2. Dependencias y entorno de desarrollo
 - **JDK:** Oracle OpenJDK 27 (o versión compatible).
-- **Gestor de construcción:** Apache Maven (módulos independientes `register/pom.xml` y `storer/pom.xml`).
+- **Gestor de construcción:** Apache Maven (módulos independientes `tracking-service/pom.xml` y `storer/pom.xml`).
 - **Dependencias actuales:**
   - `Javalin (6.1.3)`: Servidor web HTTP ligero y sin reflexión para los endpoints.
   - `SLF4J Simple (2.0.9)`: Fachada de logging para Javalin y ActiveMQ.
@@ -27,8 +27,8 @@ Es necesario tener un servidor **Apache ActiveMQ** ejecutándose en local en el 
 ### Compilación del proyecto y ejecución de pruebas
 Cada módulo cuenta con su propio ciclo de vida Maven independiente:
 ```bash
-# Para el módulo register:
-mvn test -f register/pom.xml
+# Para el módulo tracking-service:
+mvn test -f tracking-service/pom.xml
 
 # Para el módulo storer:
 mvn test -f storer/pom.xml
@@ -41,8 +41,8 @@ El sistema se ejecuta en dos procesos separados para demostrar el desacoplamient
    Ejecutar la clase `Main` del módulo `storer`.
    - Drena de forma segura y secuencial los fichajes pendientes en la cola `fichajes.queue` con timeout de 2000 ms y confirmación manual (`CLIENT_ACKNOWLEDGE`), almacenándolos en el Data Lake (`store/`).
    - Mantiene activo un servidor HTTP en el **puerto 7071** para consultar el histórico de fichajes en el navegador.
-2. **Arrancar el Productor/Capturador (`register`):**
-   Ejecutar la clase `Main` del módulo `register`.
+2. **Arrancar el Productor/Capturador (`tracking-service`):**
+   Ejecutar la clase `Main` del módulo `tracking-service`.
    - Mantiene activo un servidor HTTP en el **puerto 7070** para recibir fichajes vía HTTP y emitirlos como eventos individuales a la cola de ActiveMQ.
 
 ## 4. Estructura del proyecto
@@ -52,7 +52,7 @@ El proyecto se divide en módulos independientes siguiendo estrictamente la Arqu
 ├── docs/                                               # Documentación técnica y flujos del sistema
 │   ├── architecture.md                                 # Flujos detallados con diagramas y mapa de componentes
 │   └── agent.md                                        # Reglas y contexto operativo del asistente
-├── register/                                           # Módulo Productor (Captura de fichajes)
+├── tracking-service/                                           # Módulo Productor (Captura de fichajes)
 │   ├── src/main/java/software/ulpgc/controlpresencia/
 │   │   ├── application/                                # Core / Dominio (Sin dependencias externas)
 │   │   │   ├── model/                                  # Entidades inmutables (Employee, Place, TrackingEvent...)
@@ -90,7 +90,7 @@ El proyecto se divide en módulos independientes siguiendo estrictamente la Arqu
 
 ## 5. Arquitectura de sistemas
 El diseño actual implementa un flujo asíncrono y desacoplado:
-1. **Captura Web (register - Puerto 7070):** La petición HTTP llega a `RegisterTrackingEndPoint`, que invoca `RegisterTrackingEventUseCase` y serializa el evento a texto plano ligero (`ts;empId;place;type`).
+1. **Captura Web (tracking-service - Puerto 7070):** La petición HTTP llega a `RegisterTrackingEndPoint`, que invoca `RegisterTrackingEventUseCase` y serializa el evento a texto plano ligero (`ts;empId;place;type`).
 2. **Transporte Asíncrono (ActiveMQ):** El mensaje se envía a la cola `fichajes.queue` a través de `ActiveMQBrokerConnection`.
 3. **Consumo y Persistencia (storer - Puerto 7071):** `ActiveMQEventReceiver` lee de la cola con timeout de 2000 ms. Al recibir cada evento, `StoreEventUseCase` delega en `FileEventRepository` para guardarlo en disco y solo entonces se confirma (`CLIENT_ACKNOWLEDGE`), garantizando cero pérdida de eventos.
 4. **Consulta Web (storer - Puerto 7071):** Al acceder a la raíz web, `GetEventsEndPoint` ejecuta `GetEventsUseCase`, leyendo mediante `FileEventReader` todos los fichajes persistidos en el Data Lake y mostrándolos en pantalla.
@@ -127,11 +127,11 @@ Orquestan la lógica pura comunicándose exclusivamente mediante los puertos baj
 
 ## 7. Contrato de comunicación HTTP
 
-### Módulo `register` (Puerto 7070)
+### Módulo `tracking-service` (Puerto 7070)
 - **Registrar Fichaje:**
   - **Método:** `POST` / `GET`
   - **Ruta:** `/events?employeeId={id}&placeId={place}&type={In|Out}`
-  - **Respuesta:** `201 Created` — `"Tracking event registered"`
+  - **Respuesta:** `201 Created` — `"Tracking event tracking-serviceed"`
 
 ### Módulo `storer` (Puerto 7071)
 - **Consultar Data Lake:**

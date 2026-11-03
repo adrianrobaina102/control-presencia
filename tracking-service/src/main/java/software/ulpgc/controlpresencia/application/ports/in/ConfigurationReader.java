@@ -1,4 +1,4 @@
-package software.ulpgc.controlpresencia.application.ports;
+package software.ulpgc.controlpresencia.application.ports.in;
 
 import software.ulpgc.controlpresencia.application.model.Configuration;
 

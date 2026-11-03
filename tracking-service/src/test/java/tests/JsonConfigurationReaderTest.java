@@ -3,8 +3,8 @@ package tests;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import software.ulpgc.controlpresencia.application.model.Configuration;
-import software.ulpgc.controlpresencia.application.ports.ConfigurationReader;
-import software.ulpgc.controlpresencia.infrastructure.JsonConfigurationReader;
+import software.ulpgc.controlpresencia.application.ports.in.ConfigurationReader;
+import software.ulpgc.controlpresencia.infrastructure.adapters.in.JsonConfigurationReader;
 
 import java.io.File;
 import java.io.IOException;

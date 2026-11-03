@@ -1,7 +1,7 @@
 package software.ulpgc.controlpresencia.application.usecases;
 
 import software.ulpgc.controlpresencia.application.model.TrackingEvent;
-import software.ulpgc.controlpresencia.application.ports.EventStore;
+import software.ulpgc.controlpresencia.application.ports.out.EventStore;
 
 public class RegisterTrackingEventUseCase implements UseCase<TrackingEvent, Void>{
     private final EventStore eventStore;

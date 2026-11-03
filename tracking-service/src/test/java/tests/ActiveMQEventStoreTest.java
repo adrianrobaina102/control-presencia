@@ -2,11 +2,11 @@ package tests;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.junit.jupiter.api.Test;
-import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQBrokerConnection;
-import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQEventStore;
-import software.ulpgc.controlpresencia.infrastructure.adapters.CsvTrackingEventSerializer;
+import software.ulpgc.controlpresencia.infrastructure.adapters.out.ActiveMQBrokerConnection;
+import software.ulpgc.controlpresencia.infrastructure.adapters.out.ActiveMQEventStore;
+import software.ulpgc.controlpresencia.infrastructure.adapters.processing.CsvTrackingEventSerializer;
 import software.ulpgc.controlpresencia.application.model.*;
-import software.ulpgc.controlpresencia.application.ports.EventStore;
+import software.ulpgc.controlpresencia.application.ports.out.EventStore;
 
 import javax.jms.*;
 import java.time.Instant;

@@ -5,7 +5,7 @@ import software.ulpgc.controlpresencia.application.model.Employee;
 import software.ulpgc.controlpresencia.application.model.Place;
 import software.ulpgc.controlpresencia.application.model.TrackingEvent;
 import software.ulpgc.controlpresencia.application.model.TrackingType;
-import software.ulpgc.controlpresencia.application.ports.EventStore;
+import software.ulpgc.controlpresencia.application.ports.out.EventStore;
 import software.ulpgc.controlpresencia.application.usecases.RegisterTrackingEventUseCase;
 
 import java.util.ArrayList;
