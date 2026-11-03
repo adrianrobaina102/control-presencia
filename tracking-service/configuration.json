@@ -1,0 +1,6 @@
+{
+  "broker-url": "tcp://localhost:61616",
+  "broker-token": "secret-token-123",
+  "employee-service-url": "http://localhost:7072",
+  "building-service-url": "http://localhost:7073"
+}
