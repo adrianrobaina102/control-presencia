@@ -4,11 +4,13 @@ import io.javalin.Javalin;
 import software.ulpgc.controlpresencia.application.model.Configuration;
 import software.ulpgc.controlpresencia.application.ports.ConfigurationReader;
 import software.ulpgc.controlpresencia.application.ports.EventStore;
+import software.ulpgc.controlpresencia.application.ports.TrackingEventParser;
 import software.ulpgc.controlpresencia.application.ports.TrackingEventSerializer;
 import software.ulpgc.controlpresencia.application.usecases.RegisterTrackingEventUseCase;
 import software.ulpgc.controlpresencia.infrastructure.JsonConfigurationReader;
 import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQBrokerConnection;
 import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQEventStore;
+import software.ulpgc.controlpresencia.infrastructure.adapters.CsvTrackingEventParser;
 import software.ulpgc.controlpresencia.infrastructure.adapters.CsvTrackingEventSerializer;
 import software.ulpgc.controlpresencia.infrastructure.adapters.endpoints.RegisterTrackingEndPoint;
 
@@ -25,9 +27,9 @@ public class Main {
         RegisterTrackingEventUseCase useCase = new RegisterTrackingEventUseCase(store);
 
         Javalin app = Javalin.create().start(7070);
-
-        app.post("/events", context -> new RegisterTrackingEndPoint(useCase, context).execute());
-        app.get("/events", context -> new RegisterTrackingEndPoint(useCase, context).execute());
+        TrackingEventParser eventParser = new CsvTrackingEventParser();
+        app.post("/events", context -> new RegisterTrackingEndPoint(useCase, context, eventParser).execute());
+        app.get("/events", context -> new RegisterTrackingEndPoint(useCase, context, eventParser).execute());
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
