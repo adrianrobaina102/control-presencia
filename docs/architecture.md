@@ -1,4 +1,4 @@
-# Arquitectura y Flujos del Sistema — Control de Presencia (ULPGC)
+﻿# Arquitectura y Flujos del Sistema — Control de Presencia (ULPGC)
 
 Este documento describe de forma visual e inmediata cómo fluyen las acciones en el sistema distribuido de control de presencia, separando cada ciclo en su propio diagrama de flujo para que sea rápido y fácil de entender por el **Adri del futuro**.
 
@@ -160,7 +160,47 @@ storer/src/main/java/software/ulpgc/controlpresencia/
 
 ---
 
-## 5. Reglas de Oro para Defender la Arquitectura
+## 5. Evolución hacia Microservicios Distribuidos (Portero)
+
+A partir del diseño en clase y los esquemas en pizarra, el sistema evoluciona hacia una arquitectura de múltiples microservicios independientes comunicados mediante API y Message Broker, configurados de forma externa.
+
+### 5.1. Esquemas de Pizarra y Red de Servicios
+
+![Arquitectura de Servicios](images/architecture-services.jpg)
+*Esquema 1: Relación entre Tracking Service (Dispositivo/Phone), Employee Service/Admin, Building Service/Admin y la API.*
+
+![Mesh y Configuración Externa](images/mesh-and-configuration.jpg)
+*Esquema 2: Red Mesh con Gateway y formato del fichero de configuración (broker-url, token, employee-service-url, building-service-url).*
+
+### 5.2. Mapa General de la Red de Servicios
+``text
+                       [ Fichero configuration.json / .yaml ]
+                       (broker-url, broker-token, employee-url, building-url)
+                                        │
+                                        ▼
+[ Device (NFC / Swing / Web) ] ──> [ tracking-service ]
+                                        │
+        ┌───────────────────────────────┼───────────────────────────────┐
+        │ (HTTP: valida/consulta)       │ (JMS: publica evento)         │ (HTTP: valida/consulta)
+        ▼                               ▼                               ▼
+[ employee-service ]            [ ActiveMQ Broker ]             [ building-service ]
+        ▲                               │                               ▲
+        │ (HTTP: gestiona)              ▼ (JMS: consume cola)           │ (HTTP: gestiona)
+[ employee-admin ]                 [ storer ]                   [ building-admin ]
+(Employee Console)              (Guarda en events.dat)
+``
+
+### 5.3. Módulos del Sistema
+1. **	racking-service**: Servicio de captura de eventos de presencia desde dispositivos (físicos o simulados). Lee configuración externa (configuration.json), valida si procede contra servicios satélite y publica eventos en el Broker.
+2. **storer**: Servicio de ingestión y archivo histórico. Consume los eventos publicados en el broker y los persiste en disco con alta disponibilidad y confirmación segura.
+3. **employee-service**: Microservicio con API REST para la gestión y consulta de empleados.
+4. **employee-admin**: Consola o interfaz administrativa para la gestión del ciclo de vida de los empleados.
+5. **uilding-service**: Microservicio con API REST para la gestión y consulta de edificios/sedes.
+6. **uilding-admin**: Consola o interfaz administrativa para la gestión de edificios/sedes.
+
+---
+
+## 6. Reglas de Oro para Defender la Arquitectura
 1. **Pure DI (Inversión de dependencias pura):** Ningún adaptador hace `new` de URLs, conexiones o librerías dentro de sí mismo. Todo entra por constructor (`private final`). El `Main` es el único lugar donde se instancian las herramientas técnicas.
 2. **Sin Concurrencia Manual:** No se usan `Thread`, `Runnable` ni `ExecutorService` para gestionar el consumidor. Se resuelve secuencialmente con `consumer.receive(2000)` para salir del bucle cuando la cola se vacíe.
 3. **Seguridad contra pérdidas de datos:** `storer` solo confirma (`acknowledge`) después de que `Files.writeString` termine con éxito en disco. Si el disco falla, el mensaje permanece seguro en ActiveMQ.
