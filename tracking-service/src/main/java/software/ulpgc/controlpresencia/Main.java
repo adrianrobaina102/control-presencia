@@ -1,15 +1,23 @@
 package software.ulpgc.controlpresencia;
 
 import io.javalin.Javalin;
+import software.ulpgc.controlpresencia.application.model.Configuration;
+import software.ulpgc.controlpresencia.application.ports.ConfigurationReader;
 import software.ulpgc.controlpresencia.application.ports.EventStore;
 import software.ulpgc.controlpresencia.application.usecases.RegisterTrackingEventUseCase;
+import software.ulpgc.controlpresencia.infrastructure.JsonConfigurationReader;
 import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQBrokerConnection;
 import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQEventStore;
 import software.ulpgc.controlpresencia.infrastructure.adapters.endpoints.RegisterTrackingEndPoint;
 
+import java.io.File;
+
 public class Main {
     public static void main(String[] args) throws Exception {
-        ActiveMQBrokerConnection brokerConnection = new ActiveMQBrokerConnection();
+        ConfigurationReader configReader = new JsonConfigurationReader(new File("tracking-service/configuration.json"));
+        Configuration config = configReader.read();
+
+        ActiveMQBrokerConnection brokerConnection = new ActiveMQBrokerConnection(config.brokerUrl());
         EventStore store = new ActiveMQEventStore(brokerConnection.getSession(), "fichajes.queue");
 
         RegisterTrackingEventUseCase useCase = new RegisterTrackingEventUseCase(store);

@@ -11,7 +11,11 @@ public class ActiveMQBrokerConnection implements AutoCloseable {
     private final Session session;
 
     public ActiveMQBrokerConnection() throws JMSException {
-        ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+        this("tcp://localhost:61616");
+    }
+
+    public ActiveMQBrokerConnection(String brokerUrl) throws JMSException {
+        ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(brokerUrl);
         this.connection = factory.createConnection();
         this.connection.start();
 
