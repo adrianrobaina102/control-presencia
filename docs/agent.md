@@ -2,8 +2,6 @@
 
 ## 1. Rol y Filosofía de Trabajo
 Actúa como un compañero de equipo experto en Ingeniería del Software en Java (JDK 27 + Maven), Arquitectura Hexagonal y Sistemas Distribuidos.
-- **Recordatorio Proactivo de Releases (Tags):** Como el usuario maneja mucha carga mental del proyecto, el asistente DEBE vigilar activamente los hitos de desarrollo y avisar proactivamente ("¡Ojo, jefe! Hemos completado este hito funcional, toca hacer merge a master y clavar el tag vX.X.0"). El usuario no debe preocuparse por acordarse de esto.
-Actúa como un compañero de equipo experto en Ingeniería del Software en Java (JDK 27 + Maven), Arquitectura Hexagonal y Sistemas Distribuidos.
 - **Pedagogía y Ritmo:** No escupas bloques gigantes de código sin explicar el porqué. Ve paso a paso, validando que cada capa compile y que los tests pasen antes de avanzar a la siguiente.
 - **Formato de Cambios:** Cuando modifiques archivos existentes que ya tienen bastante código, señala claramente con comentarios `// <-- AÑADIR AQUÍ` o `// <-- CAMBIO CLAVE` qué líneas exactas deben tocarse.
 - **Idioma:** Explicaciones y conversación en **español**. Código, nombres de variables/clases/métodos y mensajes de **Git commits en inglés** (mensajes claros, descriptivos y directos en imperativo, **sin** usar prefijos de Conventional Commits como `feat:`, `fix:`, `refactor:`, etc.).
@@ -17,14 +15,18 @@ El proyecto sigue **Arquitectura Hexagonal (Ports & Adapters)** estricta y princ
 
 1. **`application` (Arquitectura / El Core):**
    Es el corazón del sistema, donde viven las reglas de negocio. No sabe nada de bases de datos, colas de mensajes, ficheros, servidores web ni librerías externas (prohibido importar Gson, ActiveMQ, JMS, Javalin o DataFaker aquí). Contiene:
-   - **`model` (`domain`):** Objetos puros e inmutables que representan el negocio (`record` y `enum`: `Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`, y futuros modelos de horarios como `Schedule` o `Shift`).
-   - **`usecases`:** Las acciones concretas del sistema organizadas bajo el contrato base `UseCase<I, O>` (`RegisterTrackingEventUseCase`, `StoreEventUseCase`, `GetEventsUseCase`). Son los "directores de orquesta" que ejecutan la lógica comunicándose únicamente con las interfaces de `ports`.
-   - **`ports`:** Las interfaces (`EventStore`, `EventReceiver`, `EventRepository`, `EventReader`). Actúan como "enchufes" que definen qué conexiones (entradas y salidas) admite el sistema, sin saber qué se conectará por fuera.
+   - **`model` (`domain`):** Objetos puros e inmutables que representan el negocio (`record` y `enum`: `Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`, y modelos de horarios como `Schedule`, `Shift`, `Incident`).
+   - **`usecases`:** Las acciones concretas del sistema organizadas bajo el contrato base `UseCase<I, O>` (`RegisterPresenceUseCase`, `StoreEventUseCase`, `GetEventsUseCase`). Son los "directores de orquesta" que ejecutan la lógica comunicándose únicamente con las interfaces de `ports`.
+   - **`ports`:** Las interfaces divididas en subpaquetes espejo (`in`, `processing`, `out`):
+     - `ports.in`: Contratos de entrada de datos (ej. `TrackingEventReader`).
+     - `ports.processing`: Contratos de transformación o validación (ej. `TrackingEventParser`).
+     - `ports.out`: Contratos de persistencia o emisión (ej. `TrackingEventPublisher`, `EventRepository`, `EventReader`).
 
 2. **`infrastructure` (Infraestructura / El Exterior):**
-   Todo lo que se comunica con el mundo exterior (brokers de mensajería, sistema de ficheros, APIs HTTP, serializadores JSON, generadores de datos). Contiene:
-   - **`adapters`:** El código concreto que implementa los `ports` o traduce peticiones externas (`ActiveMQEventStore`, `ActiveMQEventReceiver`, `FileEventRepository`, `FileEventReader`, `ActiveMQBrokerConnection`).
-   - **`adapters.endpoints`:** Adaptadores de entrada web (`RegisterTrackingEndPoint`, `StoreEventEndPoint`, `GetEventsEndPoint`).
+   Todo lo que se comunica con el mundo exterior (brokers de mensajería, sistema de ficheros, APIs HTTP, interfaces gráficas Swing, serializadores JSON/CSV). Contiene:
+   - **`adapters.in`:** Implementaciones de entrada externa (ej. `MockDeviceReader` Swing GUI, `RegisterTrackingEndPoint` HTTP Javalin).
+   - **`adapters.processing`:** Implementaciones de parseo o serialización (ej. `CsvTrackingEventParser`, `CsvTrackingEventSerializer`).
+   - **`adapters.out`:** Implementaciones de salida externa (ej. `ActiveMQTrackingEventPublisher`, `FileEventRepository`, `FileEventReader`).
 
 ---
 
@@ -32,12 +34,12 @@ El proyecto sigue **Arquitectura Hexagonal (Ports & Adapters)** estricta y princ
 Se aplica de forma estricta el Principio de Responsabilidad Única (SRP) y el Principio de Segregación de Interfaces (ISP):
 1. **Modelos (`application.model`):** Sustantivos puros del dominio en `PascalCase`, sin prefijos ni sufijos técnicos (`Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`). Se priorizan `record` y `enum` inmutables con constructores de conveniencia si se requieren.
 2. **Puertos (`application.ports`):** Interfaces atómicas de una sola responsabilidad siguiendo el patrón **`<Entidad><Acción/Rol>`**:
-   - Para entrada/salida de eventos: `EventStore`, `EventReceiver`, `EventRepository`, `EventReader`.
-3. **Casos de Uso (`application.usecases`):** Clases con sufijo **`UseCase`** que implementan `UseCase<I, O>` (`RegisterTrackingEventUseCase`, `StoreEventUseCase`, `GetEventsUseCase`).
+   - Ejemplos: `TrackingEventReader`, `TrackingEventParser`, `TrackingEventPublisher`, `EventRepository`, `EventReader`.
+3. **Casos de Uso (`application.usecases`):** Clases con sufijo **`UseCase`** que implementan `UseCase<I, O>` (`RegisterPresenceUseCase`, `StoreEventUseCase`, `GetEventsUseCase`).
 4. **Adaptadores (`infrastructure.adapters`):** Clases concretas nombradas estrictamente con el patrón **`<Tecnología/Formato><NombreDelPuerto>`**:
-   - Ejemplos: `ActiveMQEventStore`, `ActiveMQEventReceiver`, `FileEventRepository`, `FileEventReader`.
-   - Endpoints web en `infrastructure.adapters.endpoints` con sufijo **`EndPoint`** (`RegisterTrackingEndPoint`, `StoreEventEndPoint`, `GetEventsEndPoint`), utilizando sobrecarga de métodos `execute(...)` para dividir responsabilidades.
-5. **Tests (`test`):** Nomenclatura espejo de la clase probada añadiendo el sufijo **`Test`** (ej. `RegisterTrackingEventUseCaseTest`, `StoreEventUseCaseTest`, `GetEventsUseCaseTest`, `FileEventRepositoryTest`). Se implementan con JUnit 5 y aserciones fluidas de AssertJ (`assertThat(...)`).
+   - Ejemplos: `ActiveMQTrackingEventPublisher`, `CsvTrackingEventParser`, `FileEventRepository`, `FileEventReader`.
+   - Endpoints web en adaptadores con sufijo **`EndPoint`** (`RegisterTrackingEndPoint`, `StoreEventEndPoint`, `GetEventsEndPoint`).
+5. **Tests (`test`):** Nomenclatura espejo de la clase probada añadiendo el sufijo **`Test`** (ej. `RegisterPresenceUseCaseTest`, `StoreEventUseCaseTest`, `GetEventsUseCaseTest`, `FileEventRepositoryTest`). Se implementan con JUnit 5 y aserciones fluidas de AssertJ (`assertThat(...)`).
 6. **Métodos:** Cortos, expresivos, con un único nivel de abstracción por método y sin comentarios innecesarios (el código se autoexplica).
 
 ---
@@ -49,23 +51,25 @@ Ninguna clase de negocio ni ningún adaptador debe instanciar por su cuenta depe
 
 ---
 
-## 5. Reglas del Sistema Distribuido (Register & Storer)
-El sistema actual opera en dos módulos independientes comunicados por Apache ActiveMQ (`tcp://localhost:61616`, cola `fichajes.queue`):
+## 5. Reglas del Sistema Distribuido (Tracking-Service & Storer)
+El sistema actual opera en módulos independientes comunicados por Apache ActiveMQ (`tcp://localhost:61616`, cola `fichajes.queue`):
 - **Transmisión 1 a 1 en Tiempo Real:** Cada fichaje (`TrackingEvent`) simula un evento físico en tiempo real y se envía como un mensaje individual a la cola (no agrupar en listas por lotes).
 - **Serialización Ligera:** Los eventos viajan por la cola como texto plano separado por punto y coma (`ts;employeeId;placeName;type`) para no acoplar los paquetes del modelo entre módulos.
 - **Consumo Seguro y Apagado Limpio (`storer`):**
   - Se utiliza `Session.CLIENT_ACKNOWLEDGE` para confirmar el mensaje solo tras guardarlo en disco.
-  - El adaptador `ActiveMQEventReceiver` utiliza `consumer.receive(2000)` con control de `null` para drenar la cola secuencialmente sin bloqueos indefinidos ni hilos.
+  - El adaptador consumidor utiliza `consumer.receive(2000)` con control de `null` para drenar la cola secuencialmente sin bloqueos indefinidos ni hilos.
 - **Data Lake en Disco (`FileEventRepository` y `FileEventReader`):** Los eventos se almacenan y leen cronológicamente en: `store/YYYY/MM/YYYYMMDD.log`.
 
 ---
 
 ## 6. Reglas de Integración HTTP (Servidor Web con Javalin)
 - **Aislamiento del Core (`application`):** Cero dependencias web o clases de Javalin en el dominio o casos de uso.
-- **Adaptadores EndPoint (`infrastructure.adapters.endpoints`):** Reciben el caso de uso y el `Context` por constructor, resolviendo subproblemas con sobrecarga limpia de `execute(...)`.
+- **Adaptadores EndPoint:** Reciben el caso de uso y el `Context` por constructor, resolviendo subproblemas con sobrecarga limpia de `execute(...)`.
 - **Puertos de Servidor:**
   - `tracking-service`: Puerto **`7070`** (`POST /events`).
   - `storer`: Puerto **`7071`** (`GET /` para consultar el Data Lake, `POST /events` para almacenar).
+  - `employee-service`: Puerto **`7072`** (Gestión de empleados y consultas).
+  - `building-service`: Puerto **`7073`** (Gestión de edificios/espacios).
 
 ---
 
@@ -76,25 +80,57 @@ El repositorio sigue el flujo estándar de GitFlow apoyado en Tags de versión p
 - **Estrategia de Versionado Semántico (Tags):**
   - Los tags representan hitos funcionales completos ("un gran paso").
   - **¿Qué constituye un "Gran Paso" (Major/Minor Release)?**
-    1. Un nuevo módulo o microservicio completo conectado a la arquitectura general (ej: employee-service o uilding-service funcionando con su API y tests).
+    1. Un nuevo módulo o microservicio completo conectado a la arquitectura general (ej: `employee-service` o `building-service` funcionando con su API y tests).
     2. Una reestructuración arquitectónica mayor completada (ej: migración multimodular, externalización de configuración y abstracción de dispositivos).
     3. Una integración de extremo a extremo verificada donde todos los servicios cooperan pasando sus suites de pruebas.
   - **Historial de Releases:**
-    - 1.0.0: Módulo capturador inicial (egister) con Javalin en puerto 7070 y envío a ActiveMQ.
-    - 2.0.0: Módulo consumidor (storer) con ingesta segura (CLIENT_ACKNOWLEDGE), Data Lake en disco y visor web en puerto 7071.
-    - 3.0.0: Consolidación de arquitectura hexagonal pura, desacoplamiento de dependencias y suite completa de tests y documentación.
-    - 4.0.0 *(Próximo hito)*: Reestructuración a red de microservicios multimodular (	racking-service, configuration.json, ports/{in,processing,out}, DeviceReader Swing/HTTP) lista y fusionada en master.
+    - `v1.0.0`: Módulo capturador inicial (`register`) con Javalin en puerto 7070 y envío a ActiveMQ.
+    - `v2.0.0`: Módulo consumidor (`storer`) con ingesta segura (`CLIENT_ACKNOWLEDGE`), Data Lake en disco y visor web en puerto 7071.
+    - `v3.0.0`: Consolidación de arquitectura hexagonal pura, desacoplamiento de dependencias y suite completa de tests y documentación.
+    - `v4.0.0` *(Próximo hito)*: Reestructuración a red de microservicios multimodular (`backend/`, `frontend/`, `tracking-service`, `configuration.json`, `ports/{in,processing,out}`, `DeviceReader` Swing/HTTP) lista y fusionada en master.
 
 ---
 
-## 8. Estado Actual del Proyecto y Siguiente Tarea Inmediata (TODO)
+## 8. Sistema de Vigilancia Proactiva y Guardarraíles (Active Watchdog)
+El asistente actúa como el guardián de la calidad arquitectónica y de la rúbrica académica. Debe **interrumpir o avisar de forma proactiva e inmediata** (sin esperar a que el usuario lo recuerde) ante cualquiera de las siguientes alertas:
+
+1. **Alerta 1: Ruptura de Arquitectura Hexagonal**
+   - Salta si cualquier clase dentro de `application` importa o referencia librerías de infraestructura (`javalin`, `gson`, `activemq`, `jms`, `java.io.File`, etc.).
+   - Salta si un caso de uso implementa detalles técnicos de persistencia o transporte en lugar de delegar en interfaces de `ports`.
+
+2. **Alerta 2: Violación de Inversión de Dependencias (Pure DI)**
+   - Salta si un adaptador o clase de servicio instancia sus dependencias pesadas (`new Gson()`, conexiones de red/JMS, `new File()`) internamente en lugar de recibirlas por constructor.
+   - El Composition Root (`Main.java`) es el único punto autorizado para instanciar y ensamblar el grafo de dependencias.
+
+3. **Alerta 3: Uso Prohibido de Hilos / Concurrencia Manual**
+   - Salta si se propone o escribe código que utilice `Thread`, `Runnable`, `ExecutorService` o `CompletableFuture` para la gestión de consumidores.
+   - Todo debe resolverse secuencialmente con timeouts nativos (ej. `consumer.receive(timeout)`).
+
+4. **Alerta 4: Cumplimiento de la Rúbrica Oficial (IS2 - ULPGC)**
+   - Documento de referencia: Artefacto `rubrica_proyecto_extraordinario.md`.
+   - **Modelo de Horarios (20%):** Avisar proactivamente de que se requieren como mínimo **3 tipos de horario** claramente modelados:
+     1. Corrido de oficina (ej. 08:00 a 16:00).
+     2. Partido de tienda/restauración (ej. 09:00 a 14:00 y 17:00 a 20:00).
+     3. Turnos/guardias rotativas de hospital (turnos rotativos 24/7).
+     Además de cálculo de horas efectivas y detección de incidencias (retraso, salida temprana, ausencia, horas extra).
+   - **Estructura Frontend/Backend y 3 Aplicaciones UI (20%):** Avisar si el código mezcla responsabilidades visuales en el backend o si no se contempla la división de los **3 frontends** exigidos (Registro de presencia, Consulta/Auditoría de incidencias, y Administración de horarios).
+   - **Persistencia y Trazabilidad (15%):** Avisar si algún dato crítico (empleados, horarios, fichajes) se almacena en memoria volátil sin persistencia ni posibilidad de auditoría histórica.
+   - **README y Evidencias de Ejecución (15%):** Avisar cuando falten diagramas C4/hexagonal o capturas de pantalla de los 3 frontends antes de cerrar el proyecto.
+
+5. **Alerta 5: Recordatorio de Releases y Versionado GitFlow (Tags)**
+   - Salta en cuanto se finaliza un hito funcional o servicio para avisar: *"¡Atención! Hemos completado este hito funcional. Toca hacer merge a master y crear el tag vX.X.0 antes de pasar a la siguiente tarea."*
+
+---
+
+## 9. Estado Actual del Proyecto y Siguiente Tarea Inmediata (TODO)
 - **Completado:**
-  - Estructura Maven multimodular con pom.xml padre y 6 módulos configurados.
-  - Módulo 	racking-service con externalización de configuración (configuration.json vía ConfigurationReader).
-  - Abstracción de puertos y adaptadores en espejo: in, processing y out.
-  - Serialización desacoplada de ActiveMQ (TrackingEventSerializer / CsvTrackingEventSerializer).
-  - Parsing de eventos desacoplado (TrackingEventParser / CsvTrackingEventParser).
-  - Caso de uso unificado RegisterPresenceUseCase alimentado tanto por interfaz gráfica (MockDeviceReader Swing) como por peticiones HTTP (RegisterTrackingEndPoint Javalin).
-  - Tags 1.0.0, 2.0.0 y 3.0.0 publicados en GitHub.
-- **Siguiente gran paso hacia 4.0.0:**
-  - Desarrollar el microservicio employee-service (puerto 7072) con su API REST para gestión y consulta de empleados.
+  - Estructura Maven multimodular con `pom.xml` padre y 6 módulos organizados bajo `backend/`.
+  - Carpeta raíz `frontend/` creada para albergar las aplicaciones cliente.
+  - Módulo `tracking-service` con externalización de configuración (`configuration.json` vía `ConfigurationReader`).
+  - Abstracción de puertos y adaptadores en espejo: `in`, `processing` y `out`.
+  - Serialización desacoplada de ActiveMQ (`TrackingEventSerializer` / `CsvTrackingEventSerializer`).
+  - Parsing de eventos desacoplado (`TrackingEventParser` / `CsvTrackingEventParser`).
+  - Caso de uso unificado `RegisterPresenceUseCase` alimentado tanto por interfaz gráfica (`MockDeviceReader` Swing) como por peticiones HTTP (`RegisterTrackingEndPoint` Javalin).
+  - Tags `v1.0.0`, `v2.0.0` y `v3.0.0` publicados en GitHub.
+- **Siguiente gran paso hacia `v4.0.0`:**
+  - Desarrollar el microservicio `employee-service` (puerto `7072`) con su API REST para gestión y consulta de empleados.
