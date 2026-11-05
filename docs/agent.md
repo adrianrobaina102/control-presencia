@@ -1,4 +1,4 @@
-﻿# Contexto y Reglas del Agente — Proyecto: Control de Presencia (ULPGC)
+# Contexto y Reglas del Agente — Proyecto: Control de Presencia (ULPGC)
 
 ## 1. Rol y Filosofía de Trabajo
 Actúa como un compañero de equipo experto en Ingeniería del Software en Java (JDK 27 + Maven), Arquitectura Hexagonal y Sistemas Distribuidos.
@@ -67,15 +67,32 @@ El sistema actual opera en dos módulos independientes comunicados por Apache Ac
 
 ---
 
-## 7. Estado Actual del Proyecto y Siguiente Tarea Inmediata (TODO)
+## 7. Gestión de Ramas y Versiones con Git Tags (GitFlow)
+El repositorio sigue el flujo estándar de GitFlow apoyado en Tags de versión para entregas académicas:
+- **develop**: Rama de trabajo diario donde se desarrollan las funcionalidades, refactorizaciones y pruebas.
+- **master**: Rama de producción / entrega estable. Solo recibe código terminado mediante merge desde develop.
+- **Estrategia de Versionado Semántico (Tags):**
+  - Los tags representan hitos funcionales completos ("un gran paso").
+  - **¿Qué constituye un "Gran Paso" (Major/Minor Release)?**
+    1. Un nuevo módulo o microservicio completo conectado a la arquitectura general (ej: employee-service o uilding-service funcionando con su API y tests).
+    2. Una reestructuración arquitectónica mayor completada (ej: migración multimodular, externalización de configuración y abstracción de dispositivos).
+    3. Una integración de extremo a extremo verificada donde todos los servicios cooperan pasando sus suites de pruebas.
+  - **Historial de Releases:**
+    - 1.0.0: Módulo capturador inicial (egister) con Javalin en puerto 7070 y envío a ActiveMQ.
+    - 2.0.0: Módulo consumidor (storer) con ingesta segura (CLIENT_ACKNOWLEDGE), Data Lake en disco y visor web en puerto 7071.
+    - 3.0.0: Consolidación de arquitectura hexagonal pura, desacoplamiento de dependencias y suite completa de tests y documentación.
+    - 4.0.0 *(Próximo hito)*: Reestructuración a red de microservicios multimodular (	racking-service, configuration.json, ports/{in,processing,out}, DeviceReader Swing/HTTP) lista y fusionada en master.
+
+---
+
+## 8. Estado Actual del Proyecto y Siguiente Tarea Inmediata (TODO)
 - **Completado:**
-  - Modelo de dominio inmutable para fichajes (`Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`) con constructores ligeros.
-  - Productor (`tracking-service`) enviando mensajes a ActiveMQ y sirviendo HTTP en puerto 7070.
-  - Consumidor (`storer`) drenando la cola de ActiveMQ con timeout seguro de 2000ms y persistiendo en el Data Lake.
-  - Separación total en bloques `application` e `infrastructure` con Pure DI en ambos módulos.
-  - Integración completa de Casos de Uso (`RegisterTrackingEventUseCase`, `StoreEventUseCase`, `GetEventsUseCase`) y Endpoints Javalin en ambos módulos.
-  - Adaptador `FileEventReader` para consultar el histórico de fichajes del Data Lake desde la web en `GET http://localhost:7071/`.
-  - Cobertura completa de tests unitarios puros con JUnit 5 y AssertJ en ambos módulos.
-- **Siguiente tarea inmediata (TODO):**
-  1. **Refactorizar `TrackingEventFactory`:** Mover la generación simulada de eventos con DataFaker a la capa `infrastructure` e inyectar la instancia de `Faker` por constructor (Pure DI).
-  2. **Modelado de horarios y turnos (Schedules, Shifts):** Incorporar los nuevos modelos de negocio para control de asistencia y verificación de horarios.
+  - Estructura Maven multimodular con pom.xml padre y 6 módulos configurados.
+  - Módulo 	racking-service con externalización de configuración (configuration.json vía ConfigurationReader).
+  - Abstracción de puertos y adaptadores en espejo: in, processing y out.
+  - Serialización desacoplada de ActiveMQ (TrackingEventSerializer / CsvTrackingEventSerializer).
+  - Parsing de eventos desacoplado (TrackingEventParser / CsvTrackingEventParser).
+  - Caso de uso unificado RegisterPresenceUseCase alimentado tanto por interfaz gráfica (MockDeviceReader Swing) como por peticiones HTTP (RegisterTrackingEndPoint Javalin).
+  - Tags 1.0.0, 2.0.0 y 3.0.0 publicados en GitHub.
+- **Siguiente gran paso hacia 4.0.0:**
+  - Desarrollar el microservicio employee-service (puerto 7072) con su API REST para gestión y consulta de empleados.
