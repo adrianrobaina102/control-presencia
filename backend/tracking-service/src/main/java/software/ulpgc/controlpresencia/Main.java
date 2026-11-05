@@ -18,7 +18,11 @@ import java.io.File;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        ConfigurationReader configReader = new JsonConfigurationReader(new File("tracking-service/configuration.json"));
+        File configFile = new File("backend/tracking-service/configuration.json");
+        if (!configFile.exists()) {
+            configFile = new File("tracking-service/configuration.json");
+        }
+        ConfigurationReader configReader = new JsonConfigurationReader(configFile);
         Configuration config = configReader.read();
 
         ActiveMQBrokerConnection brokerConnection = new ActiveMQBrokerConnection(config.brokerUrl());

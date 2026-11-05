@@ -10,12 +10,12 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>tracking-service</module>
-        <module>storer</module>
-        <module>employee-service</module>
-        <module>employee-admin</module>
-        <module>building-service</module>
-        <module>building-admin</module>
+        <module>backend/tracking-service</module>
+        <module>backend/storer</module>
+        <module>backend/employee-service</module>
+        <module>backend/employee-admin</module>
+        <module>backend/building-service</module>
+        <module>backend/building-admin</module>
     </modules>
 
     <properties>

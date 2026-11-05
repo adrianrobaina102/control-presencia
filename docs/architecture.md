@@ -1,4 +1,4 @@
-﻿# Arquitectura y Flujos del Sistema — Control de Presencia (ULPGC)
+# Arquitectura y Flujos del Sistema — Control de Presencia (ULPGC)
 
 Este documento describe de forma visual e inmediata cómo fluyen las acciones en el sistema distribuido de control de presencia, separando cada ciclo en su propio diagrama de flujo para que sea rápido y fácil de entender por el **Adri del futuro**.
 
@@ -117,7 +117,7 @@ Para ubicar cualquier archivo en 2 segundos según la **Arquitectura Hexagonal**
 
 ### Módulo `tracking-service` (Captura y Producción)
 ```text
-tracking-service/src/main/java/software/ulpgc/controlpresencia/
+backend/tracking-service/src/main/java/software/ulpgc/controlpresencia/
 │
 ├── application/                         <-- EL CORE (Cero librerías externas ni frameworks web)
 │   ├── model/                           <-- Entidades inmutables: Employee, Contact, Place, TrackingEvent, TrackingType
@@ -138,7 +138,7 @@ tracking-service/src/main/java/software/ulpgc/controlpresencia/
 
 ### Módulo `storer` (Persistencia y Data Lake)
 ```text
-storer/src/main/java/software/ulpgc/controlpresencia/
+backend/storer/src/main/java/software/ulpgc/controlpresencia/
 │
 ├── application/                         <-- EL CORE (Reglas de persistencia puras)
 │   ├── ports/                           <-- Contratos: EventReceiver, EventRepository, EventReader

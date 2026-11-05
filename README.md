@@ -1,4 +1,4 @@
-﻿# control-presencia
+# control-presencia
 
 Proyecto extraordinario de la asignatura Ingeniería del Software 2 (ULPGC). Sistema de control de presencia, gestión de horarios y registro de fichajes diseñado bajo arquitectura hexagonal y computación distribuida.
 
@@ -10,7 +10,7 @@ El propósito de este sistema es gestionar el registro de asistencia (entradas y
 
 ## 2. Dependencias y entorno de desarrollo
 - **JDK:** Oracle OpenJDK 27 (o versión compatible).
-- **Gestor de construcción:** Apache Maven (módulos independientes `tracking-service/pom.xml` y `storer/pom.xml`).
+- **Gestor de construcción:** Apache Maven (módulos independientes `backend/tracking-service/pom.xml` y `backend/storer/pom.xml`).
 - **Dependencias actuales:**
   - `Javalin (6.1.3)`: Servidor web HTTP ligero y sin reflexión para los endpoints.
   - `SLF4J Simple (2.0.9)`: Fachada de logging para Javalin y ActiveMQ.
@@ -28,10 +28,10 @@ Es necesario tener un servidor **Apache ActiveMQ** ejecutándose en local en el 
 Cada módulo cuenta con su propio ciclo de vida Maven independiente:
 ```bash
 # Para el módulo tracking-service:
-mvn test -f tracking-service/pom.xml
+mvn test -f backend/tracking-service/pom.xml
 
 # Para el módulo storer:
-mvn test -f storer/pom.xml
+mvn test -f backend/storer/pom.xml
 ```
 
 ### Ejecución de los servicios (Backend Distribuido)
@@ -52,7 +52,7 @@ El proyecto se divide en módulos independientes siguiendo estrictamente la Arqu
 ├── docs/                                               # Documentación técnica y flujos del sistema
 │   ├── architecture.md                                 # Flujos detallados con diagramas y mapa de componentes
 │   └── agent.md                                        # Reglas y contexto operativo del asistente
-├── tracking-service/                                           # Módulo Productor (Captura de fichajes)
+├── backend/`r`n│   ├── tracking-service/                                           # Módulo Productor (Captura de fichajes)
 │   ├── src/main/java/software/ulpgc/controlpresencia/
 │   │   ├── application/                                # Core / Dominio (Sin dependencias externas)
 │   │   │   ├── model/                                  # Entidades inmutables (Employee, Place, TrackingEvent...)
@@ -67,7 +67,7 @@ El proyecto se divide en módulos independientes siguiendo estrictamente la Arqu
 │   │   └── Main.java                                   # Composition Root en puerto 7070
 │   ├── src/test/java/tests/                            # RegisterTrackingEventUseCaseTest, ActiveMQEventStoreTest
 │   └── pom.xml
-├── storer/                                             # Módulo Consumidor (Data Lake y Consulta)
+│   ├── storer/                                             # Módulo Consumidor (Data Lake y Consulta)
 │   ├── src/main/java/software/ulpgc/controlpresencia/
 │   │   ├── application/                                # Core / Dominio (Sin dependencias externas)
 │   │   │   ├── ports/                                  # EventReceiver, EventRepository, EventReader
