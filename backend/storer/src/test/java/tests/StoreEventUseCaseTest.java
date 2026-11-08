@@ -1,7 +1,7 @@
 package tests;
 
 import org.junit.jupiter.api.Test;
-import software.ulpgc.controlpresencia.architecture.ports.EventRepository;
+import software.ulpgc.controlpresencia.architecture.ports.EventWriter;
 import software.ulpgc.controlpresencia.architecture.domain.StoreEventUseCase;
 
 import java.util.ArrayList;
@@ -12,11 +12,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StoreEventUseCaseTest {
 
     @Test
-    public void should_store_event_via_event_repository_port() {
+    public void should_store_event_via_event_writer_port() {
         List<String> storedEvents = new ArrayList<>();
-        EventRepository mockRepository = storedEvents::add;
+        EventWriter mockWriter = storedEvents::add;
 
-        StoreEventUseCase useCase = new StoreEventUseCase(mockRepository);
+        StoreEventUseCase useCase = new StoreEventUseCase(mockWriter);
 
         String sampleEvent = "2026-10-31T15:00:00Z;emp-01;Oficina;In";
         Void result = useCase.execute(sampleEvent);

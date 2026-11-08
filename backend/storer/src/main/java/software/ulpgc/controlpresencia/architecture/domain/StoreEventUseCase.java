@@ -1,17 +1,17 @@
 package software.ulpgc.controlpresencia.architecture.domain;
 
-import software.ulpgc.controlpresencia.architecture.ports.EventRepository;
+import software.ulpgc.controlpresencia.architecture.ports.EventWriter;
 
 public class StoreEventUseCase implements UseCase<String, Void> {
-    private final EventRepository  eventRepository;
+    private final EventWriter eventWriter;
 
-    public StoreEventUseCase(EventRepository eventRepository) {
-        this.eventRepository = eventRepository;
+    public StoreEventUseCase(EventWriter eventWriter) {
+        this.eventWriter = eventWriter;
     }
 
     @Override
     public Void execute(String eventText) {
-        this.eventRepository.save(eventText);
+        this.eventWriter.write(eventText);
         return null;
     }
 }

@@ -2,23 +2,23 @@ package tests;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import software.ulpgc.controlpresencia.architecture.ports.EventRepository;
-import software.ulpgc.controlpresencia.infrastructure.adapters.FileEventRepository;
+import software.ulpgc.controlpresencia.architecture.ports.EventWriter;
+import software.ulpgc.controlpresencia.infrastructure.adapters.FileEventWriter;
 
 import javax.jms.JMSException;
 import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FileEventRepositoryTest {
+public class FileEventWriterTest {
 
     @TempDir
     Path tempDir;
 
     @Test
     public void should_create_log_file_in_directory_matching_event_date() throws JMSException {
-        EventRepository repository = new FileEventRepository(tempDir.toFile());
-        repository.save(createSampleEventText());
+        EventWriter writer = new FileEventWriter(tempDir.toFile());
+        writer.write(createSampleEventText());
 
         Path expectedLogFile = tempDir.resolve("2026").resolve("10").resolve("20261013.log");
 
@@ -27,8 +27,8 @@ public class FileEventRepositoryTest {
 
     @Test
     public void should_write_employee_and_place_data_in_log_file() throws JMSException {
-        EventRepository repository = new FileEventRepository(tempDir.toFile());
-        repository.save(createSampleEventText());
+        EventWriter writer = new FileEventWriter(tempDir.toFile());
+        writer.write(createSampleEventText());
 
         Path expectedLogFile = tempDir.resolve("2026").resolve("10").resolve("20261013.log");
 
@@ -40,10 +40,10 @@ public class FileEventRepositoryTest {
 
     @Test
     public void should_append_multiple_events_to_the_same_log_file() throws JMSException {
-        EventRepository repository = new FileEventRepository(tempDir.toFile());
+        EventWriter writer = new FileEventWriter(tempDir.toFile());
 
-        repository.save(createSampleEventText());
-        repository.save(createSampleEventText());
+        writer.write(createSampleEventText());
+        writer.write(createSampleEventText());
 
         Path expectedLogFile = tempDir.resolve("2026").resolve("10").resolve("20261013.log");
 

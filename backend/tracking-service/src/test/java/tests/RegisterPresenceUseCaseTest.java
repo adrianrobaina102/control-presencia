@@ -6,7 +6,7 @@ import software.ulpgc.controlpresencia.architecture.model.Place;
 import software.ulpgc.controlpresencia.architecture.model.TrackingEvent;
 import software.ulpgc.controlpresencia.architecture.model.TrackingType;
 import software.ulpgc.controlpresencia.architecture.ports.in.DeviceReader;
-import software.ulpgc.controlpresencia.architecture.ports.out.EventStore;
+import software.ulpgc.controlpresencia.architecture.ports.out.EventPublisher;
 import software.ulpgc.controlpresencia.architecture.ports.processing.TrackingEventParser;
 import software.ulpgc.controlpresencia.architecture.domain.RegisterPresenceUseCase;
 
@@ -18,16 +18,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RegisterPresenceUseCaseTest {
 
     @Test
-    public void should_read_from_device_parse_and_store_event() {
+    public void should_read_from_device_parse_and_publish_event() {
         DeviceReader fakeReader = () -> "emp-01;Oficina;In";
         TrackingEventParser fakeParser = input -> {
             String[] parts = input.split(";");
             return new TrackingEvent(new Employee(parts[0]), new Place(parts[1]), TrackingType.valueOf(parts[2]));
         };
         List<TrackingEvent> recordedEvents = new ArrayList<>();
-        EventStore fakeStore = recordedEvents::add;
+        EventPublisher fakePublisher = recordedEvents::add;
 
-        RegisterPresenceUseCase useCase = new RegisterPresenceUseCase(fakeStore, fakeReader, fakeParser);
+        RegisterPresenceUseCase useCase = new RegisterPresenceUseCase(fakePublisher, fakeReader, fakeParser);
         useCase.execute(null);
 
         assertThat(recordedEvents).hasSize(1);

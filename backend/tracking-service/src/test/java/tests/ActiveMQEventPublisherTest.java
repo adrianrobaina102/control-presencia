@@ -3,10 +3,10 @@ package tests;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.junit.jupiter.api.Test;
 import software.ulpgc.controlpresencia.infrastructure.adapters.out.ActiveMQBrokerConnection;
-import software.ulpgc.controlpresencia.infrastructure.adapters.out.ActiveMQEventStore;
+import software.ulpgc.controlpresencia.infrastructure.adapters.out.ActiveMQEventPublisher;
 import software.ulpgc.controlpresencia.infrastructure.adapters.processing.CsvTrackingEventSerializer;
 import software.ulpgc.controlpresencia.architecture.model.*;
-import software.ulpgc.controlpresencia.architecture.ports.out.EventStore;
+import software.ulpgc.controlpresencia.architecture.ports.out.EventPublisher;
 
 import javax.jms.*;
 import java.time.Instant;
@@ -14,15 +14,15 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ActiveMQEventStoreTest {
+public class ActiveMQEventPublisherTest {
 
     private static final String TEST_QUEUE = "fichajes.test.queue";
 
     @Test
     public void should_send_tracking_event_to_activemq_queue() throws Exception {
         try (ActiveMQBrokerConnection brokerConnection = new ActiveMQBrokerConnection()) {
-            EventStore store = new ActiveMQEventStore(brokerConnection.getSession(), TEST_QUEUE, new CsvTrackingEventSerializer());
-            store.register(createSampleTrackingEvent());
+            EventPublisher publisher = new ActiveMQEventPublisher(brokerConnection.getSession(), TEST_QUEUE, new CsvTrackingEventSerializer());
+            publisher.publish(createSampleTrackingEvent());
         }
 
         ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://localhost:61616");

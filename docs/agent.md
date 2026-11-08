@@ -20,13 +20,13 @@ El proyecto sigue **Arquitectura Hexagonal (Ports & Adapters)** estricta y princ
    - **`ports`:** Las interfaces divididas en subpaquetes espejo (`in`, `processing`, `out`):
      - `ports.in`: Contratos de entrada de datos (ej. `TrackingEventReader`, `ConfigurationReader`, `DeviceReader`).
      - `ports.processing`: Contratos de transformación o validación (ej. `TrackingEventParser`, `TrackingEventSerializer`).
-     - `ports.out`: Contratos de persistencia o emisión (ej. `EventStore`, `EventRepository`, `EventReader`, `EventReceiver`).
+     - `ports.out`: Contratos de persistencia o emisión (ej. `EventPublisher`, `EventWriter`, `EventReader`, `EventReceiver`).
 
 2. **`infrastructure` (Infraestructura / El Exterior):**
    Todo lo que se comunica con el mundo exterior (brokers de mensajería, sistema de ficheros, APIs HTTP, interfaces gráficas Swing, serializadores JSON/CSV). Contiene:
-   - **`adapters.in`:** Implementaciones de entrada externa (ej. `MockDeviceReader` Swing GUI, `RegisterTrackingEndPoint` HTTP Javalin, `JsonConfigurationReader`).
+   - **`adapters.in`:** Implementaciones de entrada externa (ej. `SwingDeviceReader` Swing GUI, `RegisterPresenceEndPoint` HTTP Javalin, `JsonConfigurationReader`).
    - **`adapters.processing`:** Implementaciones de parseo o serialización (ej. `CsvTrackingEventParser`, `CsvTrackingEventSerializer`).
-   - **`adapters.out`:** Implementaciones de salida externa (ej. `ActiveMQEventStore`, `FileEventRepository`, `FileEventReader`, `ActiveMQEventReceiver`).
+   - **`adapters.out`:** Implementaciones de salida externa (ej. `ActiveMQEventPublisher`, `FileEventWriter`, `FileEventReader`, `ActiveMQEventReceiver`).
 
 ---
 
@@ -34,12 +34,12 @@ El proyecto sigue **Arquitectura Hexagonal (Ports & Adapters)** estricta y princ
 Se aplica de forma estricta el Principio de Responsabilidad Única (SRP) y el Principio de Segregación de Interfaces (ISP):
 1. **Modelos (`architecture.model`):** Sustantivos puros del dominio en `PascalCase`, sin prefijos ni sufijos técnicos (`Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`, `Configuration`). Se priorizan `record` y `enum` inmutables con constructores de conveniencia si se requieren.
 2. **Puertos (`architecture.ports`):** Interfaces atómicas de una sola responsabilidad siguiendo el patrón **`<Entidad><Acción/Rol>`**:
-   - Ejemplos: `DeviceReader`, `TrackingEventParser`, `TrackingEventSerializer`, `EventStore`, `EventRepository`, `EventReader`.
+   - Ejemplos: `DeviceReader`, `TrackingEventParser`, `TrackingEventSerializer`, `EventPublisher`, `EventWriter`, `EventReader`.
 3. **Casos de Uso (`architecture.domain`):** Clases con sufijo **`UseCase`** que implementan `UseCase<I, O>` (`RegisterPresenceUseCase`, `StoreEventUseCase`, `GetEventsUseCase`). Viven en `domain` como operaciones activas del núcleo.
 4. **Adaptadores (`infrastructure.adapters`):** Clases concretas nombradas estrictamente con el patrón **`<Tecnología/Formato><NombreDelPuerto>`**:
-   - Ejemplos: `ActiveMQEventStore`, `CsvTrackingEventParser`, `FileEventRepository`, `FileEventReader`.
-   - Endpoints web en adaptadores con sufijo **`EndPoint`** (`RegisterTrackingEndPoint`, `StoreEventEndPoint`, `GetEventsEndPoint`).
-5. **Tests (`test`):** Nomenclatura espejo de la clase probada añadiendo el sufijo **`Test`** (ej. `RegisterPresenceUseCaseTest`, `StoreEventUseCaseTest`, `GetEventsUseCaseTest`, `FileEventRepositoryTest`). Se implementan con JUnit 5 y aserciones fluidas de AssertJ (`assertThat(...)`).
+   - Ejemplos: `ActiveMQEventPublisher`, `CsvTrackingEventParser`, `FileEventWriter`, `FileEventReader`.
+   - Endpoints web en adaptadores con sufijo **`EndPoint`** (`RegisterPresenceEndPoint`, `StoreEventEndPoint`, `GetEventsEndPoint`).
+5. **Tests (`test`):** Nomenclatura espejo de la clase probada añadiendo el sufijo **`Test`** (ej. `RegisterPresenceUseCaseTest`, `StoreEventUseCaseTest`, `GetEventsUseCaseTest`, `FileEventWriterTest`). Se implementan con JUnit 5 y aserciones fluidas de AssertJ (`assertThat(...)`).
 6. **Métodos:** Cortos, expresivos, con un único nivel de abstracción por método y sin comentarios innecesarios (el código se autoexplica).
 
 ---
@@ -58,7 +58,7 @@ El sistema actual opera en módulos independientes comunicados por Apache Active
 - **Consumo Seguro y Apagado Limpio (`storer`):**
   - Se utiliza `Session.CLIENT_ACKNOWLEDGE` para confirmar el mensaje solo tras guardarlo en disco.
   - El adaptador consumidor utiliza `consumer.receive(2000)` con control de `null` para drenar la cola secuencialmente sin bloqueos indefinidos ni hilos.
-- **Data Lake en Disco (`FileEventRepository` y `FileEventReader`):** Los eventos se almacenan y leen cronológicamente en: `store/YYYY/MM/YYYYMMDD.log`.
+- **Data Lake en Disco (`FileEventWriter` y `FileEventReader`):** Los eventos se almacenan y leen cronológicamente en: `store/YYYY/MM/YYYYMMDD.log`.
 
 ---
 
@@ -130,7 +130,7 @@ El asistente actúa como el guardián de la calidad arquitectónica y de la rúb
   - Abstracción de puertos y adaptadores en espejo: `in`, `processing` y `out`.
   - Serialización desacoplada de ActiveMQ (`TrackingEventSerializer` / `CsvTrackingEventSerializer`).
   - Parsing de eventos desacoplado (`TrackingEventParser` / `CsvTrackingEventParser`).
-  - Caso de uso unificado `RegisterPresenceUseCase` alimentado tanto por interfaz gráfica (`MockDeviceReader` Swing) como por peticiones HTTP (`RegisterTrackingEndPoint` Javalin).
+  - Caso de uso unificado `RegisterPresenceUseCase` alimentado tanto por interfaz gráfica (`SwingDeviceReader` Swing) como por peticiones HTTP (`RegisterPresenceEndPoint` Javalin).
   - Tags `v1.0.0`, `v2.0.0` y `v3.0.0` publicados en GitHub.
 - **Siguiente gran paso hacia `v4.0.0`:**
   - Desarrollar el microservicio `employee-service` (puerto `7072`) con su API REST para gestión y consulta de empleados.

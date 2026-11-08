@@ -3,13 +3,13 @@ package software.ulpgc.controlpresencia;
 import io.javalin.Javalin;
 import software.ulpgc.controlpresencia.architecture.ports.EventReader;
 import software.ulpgc.controlpresencia.architecture.ports.EventReceiver;
-import software.ulpgc.controlpresencia.architecture.ports.EventRepository;
+import software.ulpgc.controlpresencia.architecture.ports.EventWriter;
 import software.ulpgc.controlpresencia.architecture.domain.GetEventsUseCase;
 import software.ulpgc.controlpresencia.architecture.domain.StoreEventUseCase;
 import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQBrokerConnection;
 import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQEventReceiver;
 import software.ulpgc.controlpresencia.infrastructure.adapters.FileEventReader;
-import software.ulpgc.controlpresencia.infrastructure.adapters.FileEventRepository;
+import software.ulpgc.controlpresencia.infrastructure.adapters.FileEventWriter;
 import software.ulpgc.controlpresencia.infrastructure.adapters.endpoints.GetEventsEndPoint;
 import software.ulpgc.controlpresencia.infrastructure.adapters.endpoints.StoreEventEndPoint;
 
@@ -20,10 +20,10 @@ public class Main {
         ActiveMQBrokerConnection connection = new ActiveMQBrokerConnection();
         EventReceiver receiver = new ActiveMQEventReceiver(connection.getSession(), "fichajes.queue");
         File storeDir = new File("store");
-        EventRepository repository = new FileEventRepository(storeDir);
+        EventWriter writer = new FileEventWriter(storeDir);
         EventReader reader = new FileEventReader(storeDir);
 
-        StoreEventUseCase storeUseCase = new StoreEventUseCase(repository);
+        StoreEventUseCase storeUseCase = new StoreEventUseCase(writer);
         GetEventsUseCase getEventsUseCase = new GetEventsUseCase(reader);
 
         Javalin app = Javalin.create().start(7071);

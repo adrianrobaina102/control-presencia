@@ -1,6 +1,6 @@
 package software.ulpgc.controlpresencia.infrastructure.adapters;
 
-import software.ulpgc.controlpresencia.architecture.ports.EventRepository;
+import software.ulpgc.controlpresencia.architecture.ports.EventWriter;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,16 +12,16 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public class FileEventRepository implements EventRepository {
+public class FileEventWriter implements EventWriter {
 
     private final File root;
 
-    public FileEventRepository(File root) {
+    public FileEventWriter(File root) {
         this.root = root;
     }
 
     @Override
-    public void save(String eventText) {
+    public void write(String eventText) {
         String row = eventText + System.lineSeparator();
         File logFile = getFileFor(eventText);
 
@@ -49,7 +49,6 @@ public class FileEventRepository implements EventRepository {
         String timeStamp = eventText.substring(0, eventText.indexOf(";"));
         return LocalDateTime.ofInstant(Instant.parse(timeStamp), ZoneId.systemDefault());
     }
-
 
     private String formatDate(String eventText, String pattern) {
         return getDateTimeFor(eventText).format(DateTimeFormatter.ofPattern(pattern));

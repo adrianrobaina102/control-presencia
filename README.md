@@ -10,13 +10,14 @@ El propósito de este sistema es gestionar el registro de asistencia (entradas y
 
 ## 2. Dependencias y entorno de desarrollo
 - **JDK:** Oracle OpenJDK 27 (o versión compatible).
-- **Gestor de construcción:** Apache Maven (módulos independientes `backend/tracking-service/pom.xml` y `backend/storer/pom.xml`).
+- **Gestor de construcción:** Apache Maven multimodular (`pom.xml` padre en raíz y módulos bajo `backend/`).
 - **Dependencias actuales:**
   - `Javalin (6.1.3)`: Servidor web HTTP ligero y sin reflexión para los endpoints.
   - `SLF4J Simple (2.0.9)`: Fachada de logging para Javalin y ActiveMQ.
   - `JUnit 5 (Jupiter 6.1.3)`: Para la ejecución de pruebas unitarias automatizadas.
   - `AssertJ Core (3.27.7)`: Librería de aserciones fluidas para los tests.
   - `ActiveMQ Client (5.18.3)`: Para la conexión JMS con el broker de mensajería.
+  - `Gson (2.11.0)`: Para la serialización y lectura de configuración JSON.
   - `DataFaker (2.0.2)`: Generación de datos falsos realistas (nombres, emails, teléfonos) para simulaciones de carga masiva.
 
 ## 3. Compilación y ejecución
@@ -25,63 +26,70 @@ El propósito de este sistema es gestionar el registro de asistencia (entradas y
 Es necesario tener un servidor **Apache ActiveMQ** ejecutándose en local en el puerto por defecto (`tcp://localhost:61616`).
 
 ### Compilación del proyecto y ejecución de pruebas
-Cada módulo cuenta con su propio ciclo de vida Maven independiente:
 ```bash
-# Para el módulo tracking-service:
-mvn test -f backend/tracking-service/pom.xml
+# Compilar todos los módulos del backend:
+mvn test-compile
 
-# Para el módulo storer:
-mvn test -f backend/storer/pom.xml
+# Ejecutar las pruebas unitarias:
+mvn test
 ```
 
 ### Ejecución de los servicios (Backend Distribuido)
-El sistema se ejecuta en dos procesos separados para demostrar el desacoplamiento:
+El sistema se ejecuta en procesos independientes para demostrar el desacoplamiento:
 
 1. **Arrancar el Almacenador/Consumidor (`storer`):** 
-   Ejecutar la clase `Main` del módulo `storer`.
+   Ejecutar la clase `Main` del módulo `backend/storer`.
    - Drena de forma segura y secuencial los fichajes pendientes en la cola `fichajes.queue` con timeout de 2000 ms y confirmación manual (`CLIENT_ACKNOWLEDGE`), almacenándolos en el Data Lake (`store/`).
    - Mantiene activo un servidor HTTP en el **puerto 7071** para consultar el histórico de fichajes en el navegador.
 2. **Arrancar el Productor/Capturador (`tracking-service`):**
-   Ejecutar la clase `Main` del módulo `tracking-service`.
-   - Mantiene activo un servidor HTTP en el **puerto 7070** para recibir fichajes vía HTTP y emitirlos como eventos individuales a la cola de ActiveMQ.
+   Ejecutar la clase `Main` del módulo `backend/tracking-service`.
+   - Despliega una interfaz gráfica de escritorio Swing interactiva (`SwingDeviceReader`) con botón *"¡He llegado!"* para simular un lector físico de presencia.
+   - Mantiene activo un servidor HTTP en el **puerto 7070** para recibir fichajes vía HTTP y emitirlos como eventos individuales a la cola de ActiveMQ a través de `EventPublisher`.
 
 ## 4. Estructura del proyecto
-El proyecto se divide en módulos independientes siguiendo estrictamente la Arquitectura Hexagonal y la Inversión de Dependencias (Pure DI):
+El proyecto sigue estrictamente la Arquitectura Hexagonal y la Inversión de Dependencias (Pure DI):
 
 ```text
-├── docs/                                               # Documentación técnica y flujos del sistema
+├── docs/                                               # Documentación técnica, rúbrica y reglas del agente
 │   ├── architecture.md                                 # Flujos detallados con diagramas y mapa de componentes
 │   └── agent.md                                        # Reglas y contexto operativo del asistente
-├── backend/`r`n│   ├── tracking-service/                                           # Módulo Productor (Captura de fichajes)
-│   ├── src/main/java/software/ulpgc/controlpresencia/
-│   │   ├── application/                                # Core / Dominio (Sin dependencias externas)
-│   │   │   ├── model/                                  # Entidades inmutables (Employee, Place, TrackingEvent...)
-│   │   │   ├── ports/                                  # EventStore (Puerto de salida)
-│   │   │   └── usecases/                               # UseCase<I, O>, RegisterTrackingEventUseCase
-│   │   ├── infrastructure/                             # Infraestructura y Adaptadores
-│   │   │   └── adapters/
-│   │   │       ├── ActiveMQBrokerConnection.java       # Gestor AutoCloseable de conexión JMS
-│   │   │       ├── ActiveMQEventStore.java             # Adaptador de envío JMS
-│   │   │       └── endpoints/                          # EndPoint, RegisterTrackingEndPoint
-│   │   ├── factories/                                  # TrackingEventFactory (Generador con DataFaker)
-│   │   └── Main.java                                   # Composition Root en puerto 7070
-│   ├── src/test/java/tests/                            # RegisterTrackingEventUseCaseTest, ActiveMQEventStoreTest
-│   └── pom.xml
-│   ├── storer/                                             # Módulo Consumidor (Data Lake y Consulta)
-│   ├── src/main/java/software/ulpgc/controlpresencia/
-│   │   ├── application/                                # Core / Dominio (Sin dependencias externas)
-│   │   │   ├── ports/                                  # EventReceiver, EventRepository, EventReader
-│   │   │   └── usecases/                               # UseCase<I, O>, StoreEventUseCase, GetEventsUseCase
-│   │   ├── infrastructure/                             # Infraestructura y Adaptadores
-│   │   │   └── adapters/
-│   │   │       ├── ActiveMQBrokerConnection.java       # Gestor AutoCloseable de conexión JMS
-│   │   │       ├── ActiveMQEventReceiver.java          # Adaptador de lectura JMS con timeout seguro
-│   │   │       ├── FileEventRepository.java            # Adaptador de escritura en Data Lake
-│   │   │       ├── FileEventReader.java                # Adaptador de lectura del Data Lake
-│   │   │       └── endpoints/                          # EndPoint, StoreEventEndPoint, GetEventsEndPoint
-│   │   └── Main.java                                   # Composition Root en puerto 7071
-│   ├── src/test/java/tests/                            # StoreEventUseCaseTest, GetEventsUseCaseTest, FileEventRepositoryTest, ActiveMQEventReceiverTest
-│   └── pom.xml
+├── frontend/                                           # Directorio raíz para las aplicaciones cliente de usuario
+├── backend/                                            # Módulos del backend
+│   ├── tracking-service/                               # Microservicio Productor (Captura y emisión de fichajes)
+│   │   ├── src/main/java/software/ulpgc/controlpresencia/
+│   │   │   ├── architecture/                           # Core / Núcleo
+│   │   │   │   ├── model/                              # Entidades inmutables (Employee, Place, TrackingEvent, Configuration...)
+│   │   │   │   ├── domain/                             # Casos de uso (RegisterPresenceUseCase, UseCase)
+│   │   │   │   └── ports/                              # Contratos divididos en in, processing y out
+│   │   │   │       ├── in/                             # DeviceReader, ConfigurationReader
+│   │   │   │       ├── processing/                     # TrackingEventParser, TrackingEventSerializer
+│   │   │   │       └── out/                            # EventPublisher
+│   │   │   ├── infrastructure/                         # Infraestructura y Adaptadores
+│   │   │   │   └── adapters/
+│   │   │   │       ├── in/                             # SwingDeviceReader, JsonConfigurationReader, RegisterPresenceEndPoint
+│   │   │   │       ├── processing/                     # CsvTrackingEventParser, CsvTrackingEventSerializer
+│   │   │   │       └── out/                            # ActiveMQBrokerConnection, ActiveMQEventPublisher
+│   │   │   ├── factories/                              # TrackingEventFactory (Generador con DataFaker)
+│   │   │   └── Main.java                               # Composition Root en puerto 7070 y GUI Swing
+│   │   └── src/test/java/tests/                        # RegisterPresenceUseCaseTest, JsonConfigurationReaderTest, ActiveMQEventPublisherTest
+│   ├── storer/                                         # Microservicio Consumidor (Data Lake y Consulta)
+│   │   ├── src/main/java/software/ulpgc/controlpresencia/
+│   │   │   ├── architecture/                           # Core / Núcleo
+│   │   │   │   ├── domain/                             # Casos de uso (StoreEventUseCase, GetEventsUseCase, UseCase)
+│   │   │   │   └── ports/                              # EventWriter, EventReader, EventReceiver
+│   │   │   ├── infrastructure/                         # Infraestructura y Adaptadores
+│   │   │   │   └── adapters/
+│   │   │   │       ├── ActiveMQBrokerConnection.java   # Gestor AutoCloseable de conexión JMS
+│   │   │   │       ├── ActiveMQEventReceiver.java      # Adaptador de lectura JMS con timeout seguro
+│   │   │   │       ├── FileEventWriter.java            # Adaptador de escritura en Data Lake
+│   │   │   │       ├── FileEventReader.java            # Adaptador de lectura del Data Lake
+│   │   │   │       └── endpoints/                      # StoreEventEndPoint, GetEventsEndPoint
+│   │   │   └── Main.java                               # Composition Root en puerto 7071
+│   │   └── src/test/java/tests/                        # FileEventWriterTest, GetEventsUseCaseTest, StoreEventUseCaseTest, ActiveMQEventReceiverTest
+│   ├── employee-service/                               # Microservicio de empleados (en desarrollo)
+│   ├── employee-admin/                                 # Panel de administración de empleados (en desarrollo)
+│   ├── building-service/                               # Microservicio de edificios (en desarrollo)
+│   └── building-admin/                                 # Panel de administración de edificios (en desarrollo)
 └── store/                                              # Data Lake particionado cronológicamente
     └── YYYY/
         └── MM/
@@ -90,48 +98,56 @@ El proyecto se divide en módulos independientes siguiendo estrictamente la Arqu
 
 ## 5. Arquitectura de sistemas
 El diseño actual implementa un flujo asíncrono y desacoplado:
-1. **Captura Web (tracking-service - Puerto 7070):** La petición HTTP llega a `RegisterTrackingEndPoint`, que invoca `RegisterTrackingEventUseCase` y serializa el evento a texto plano ligero (`ts;empId;place;type`).
-2. **Transporte Asíncrono (ActiveMQ):** El mensaje se envía a la cola `fichajes.queue` a través de `ActiveMQBrokerConnection`.
-3. **Consumo y Persistencia (storer - Puerto 7071):** `ActiveMQEventReceiver` lee de la cola con timeout de 2000 ms. Al recibir cada evento, `StoreEventUseCase` delega en `FileEventRepository` para guardarlo en disco y solo entonces se confirma (`CLIENT_ACKNOWLEDGE`), garantizando cero pérdida de eventos.
+1. **Captura (tracking-service - Puerto 7070 y Swing GUI):** 
+   - A través de la interfaz gráfica interactiva `SwingDeviceReader` o mediante peticiones HTTP a `RegisterPresenceEndPoint`.
+   - Se invoca `RegisterPresenceUseCase`, que lee los datos del dispositivo, parsea el formato con `TrackingEventParser` y lo publica a ActiveMQ mediante `EventPublisher`.
+2. **Transporte Asíncrono (ActiveMQ):** El mensaje se envía a la cola `fichajes.queue` a través de `ActiveMQEventPublisher`.
+3. **Consumo y Persistencia (storer - Puerto 7071):** `ActiveMQEventReceiver` lee de la cola con timeout de 2000 ms. Al recibir cada evento, `StoreEventUseCase` delega en `FileEventWriter` para guardarlo en disco de forma particionada y solo entonces se confirma (`CLIENT_ACKNOWLEDGE`), garantizando cero pérdida de eventos.
 4. **Consulta Web (storer - Puerto 7071):** Al acceder a la raíz web, `GetEventsEndPoint` ejecuta `GetEventsUseCase`, leyendo mediante `FileEventReader` todos los fichajes persistidos en el Data Lake y mostrándolos en pantalla.
 
 ## 6. Arquitectura hexagonal del Backend
 
-### Modelo de Dominio (`application.model`)
+### Modelo de Datos (`architecture.model`)
 Objetos puros e inmutables implementados mediante `record` y `enum`:
 - `Employee`: Representa al empleado (con constructor ligero por ID).
 - `Contact`: Información de contacto asociada.
 - `Place`: Ubicación o centro de trabajo (con constructor ligero por nombre).
 - `TrackingEvent`: Evento de fichaje (con constructor por defecto a hora actual).
 - `TrackingType`: Enumerado de tipo de movimiento (`In` / `Out`).
+- `Configuration`: Configuración tipada del microservicio (broker URL, colas, etc.).
 
-### Puertos (`application.ports`)
-- `EventStore`: Contrato para el registro y envío de eventos de fichaje.
-- `EventReceiver`: Contrato para la recepción de mensajes desde el broker.
-- `EventRepository`: Contrato para el almacenamiento físico de eventos.
-- `EventReader`: Contrato para la lectura de eventos desde el Data Lake.
-
-### Casos de Uso (`application.usecases`)
+### Casos de Uso (`architecture.domain`)
 Orquestan la lógica pura comunicándose exclusivamente mediante los puertos bajo la interfaz `UseCase<I, O>`:
-- `RegisterTrackingEventUseCase`: Recibe un `TrackingEvent` y lo envía a través del puerto `EventStore`.
-- `StoreEventUseCase`: Recibe el texto de un evento y lo persiste mediante `EventRepository`.
+- `RegisterPresenceUseCase`: Lee del dispositivo, parsea y emite el evento mediante el puerto `EventPublisher`.
+- `StoreEventUseCase`: Recibe el texto de un evento y lo persiste mediante `EventWriter`.
 - `GetEventsUseCase`: Obtiene el listado completo de eventos persistidos a través de `EventReader`.
+
+### Puertos (`architecture.ports`)
+- `EventPublisher`: Contrato para la publicación de eventos hacia el exterior.
+- `EventReceiver`: Contrato para la recepción de mensajes desde el broker.
+- `EventWriter`: Contrato para la escritura física de eventos en almacenamiento persistente.
+- `EventReader`: Contrato para la lectura de eventos desde el Data Lake.
+- `DeviceReader`: Contrato de lectura de datos crudos desde un dispositivo físico o simulado.
+- `ConfigurationReader`: Contrato de carga de configuración de servicio.
+- `TrackingEventParser` / `TrackingEventSerializer`: Contratos de transformación y serialización de eventos.
 
 ### Adaptadores (`infrastructure.adapters`)
 - `ActiveMQBrokerConnection`: Encapsula la conexión JMS con `AutoCloseable`.
-- `ActiveMQEventStore`: Adaptador productor JMS.
+- `ActiveMQEventPublisher`: Adaptador productor JMS que publica eventos en colas ActiveMQ.
 - `ActiveMQEventReceiver`: Adaptador consumidor con parada limpia tras 2000 ms sin mensajes.
-- `FileEventRepository`: Escribe eventos en la estructura cronológica `store/YYYY/MM/YYYYMMDD.log`.
+- `SwingDeviceReader`: Interfaz gráfica interactiva de escritorio con Swing para simular fichajes.
+- `FileEventWriter`: Escribe eventos en la estructura cronológica `store/YYYY/MM/YYYYMMDD.log`.
 - `FileEventReader`: Explora recursivamente el Data Lake para recuperar todos los eventos registrados.
-- `endpoints`: Adaptadores HTTP de Javalin con sobrecarga de métodos `execute(...)` para un solo nivel de abstracción.
+- `JsonConfigurationReader`: Carga la configuración del servicio desde un archivo JSON con Pure DI.
+- `RegisterPresenceEndPoint`, `StoreEventEndPoint`, `GetEventsEndPoint`: Adaptadores HTTP de Javalin.
 
 ## 7. Contrato de comunicación HTTP
 
 ### Módulo `tracking-service` (Puerto 7070)
 - **Registrar Fichaje:**
   - **Método:** `POST` / `GET`
-  - **Ruta:** `/events?employeeId={id}&placeId={place}&type={In|Out}`
-  - **Respuesta:** `201 Created` — `"Tracking event tracking-serviceed"`
+  - **Ruta:** `/events?event={ts;empId;place;type}`
+  - **Respuesta:** `201 Created` — `"Presence registered successfully"`
 
 ### Módulo `storer` (Puerto 7071)
 - **Consultar Data Lake:**
@@ -145,8 +161,9 @@ Orquestan la lógica pura comunicándose exclusivamente mediante los puertos baj
 
 ## 8. Verificación y Pruebas Unitarias
 El proyecto cuenta con cobertura de pruebas automatizadas con JUnit 5 y AssertJ en ambos módulos:
-- `RegisterTrackingEventUseCaseTest`: Prueba unitaria pura del caso de uso de registro mediante mock en memoria de `EventStore`.
-- `StoreEventUseCaseTest`: Prueba unitaria pura del guardado de eventos mediante mock de `EventRepository`.
+- `RegisterPresenceUseCaseTest`: Prueba unitaria pura del caso de uso de registro mediante mock en memoria de `EventPublisher`.
+- `JsonConfigurationReaderTest`: Prueba unitaria de lectura de configuración JSON y valores por defecto.
+- `StoreEventUseCaseTest`: Prueba unitaria pura del guardado de eventos mediante mock de `EventWriter`.
 - `GetEventsUseCaseTest`: Prueba unitaria pura de la recuperación de eventos mediante mock de `EventReader`.
-- `FileEventRepositoryTest`: Prueba unitaria que valida la creación automática de directorios cronológicos y modo `APPEND` sobre archivos temporales.
-- `ActiveMQEventStoreTest` y `ActiveMQEventReceiverTest`: Pruebas de integración sobre colas de mensajería usando sesiones inyectadas.
+- `FileEventWriterTest`: Prueba unitaria que valida la creación automática de directorios cronológicos y modo `APPEND` sobre archivos temporales.
+- `ActiveMQEventPublisherTest` y `ActiveMQEventReceiverTest`: Pruebas de integración sobre colas de mensajería usando sesiones inyectadas.
