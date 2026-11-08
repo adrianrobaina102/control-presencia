@@ -17,7 +17,7 @@ public class GetEmployeeEndPoint implements EndPoint {
 
     @Override
     public void execute() {
-        String id = context.queryParam("id");
+        String id = context.pathParamMap().containsKey("id") ? context.pathParam("id") : context.queryParam("id");
         useCase.execute(id).ifPresentOrElse(
                 employee -> context.contentType("application/json").result(gson.toJson(employee)),
                 () -> context.status(404).result("Employee not found")
