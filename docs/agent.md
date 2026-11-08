@@ -131,6 +131,7 @@ El asistente actúa como el guardián de la calidad arquitectónica y de la rúb
   - Serialización desacoplada de ActiveMQ (`TrackingEventSerializer` / `CsvTrackingEventSerializer`).
   - Parsing de eventos desacoplado (`TrackingEventParser` / `CsvTrackingEventParser`).
   - Caso de uso unificado `RegisterPresenceUseCase` alimentado tanto por interfaz gráfica (`SwingDeviceReader` Swing) como por peticiones HTTP (`RegisterPresenceEndPoint` Javalin).
+  - Microservicio `employee-service` (puerto `7072`) completado con arquitectura hexagonal, modelos inmutables, `JsonEmployeeReader`, endpoints REST (`GET /employees`, `GET /employees/{id}`) y suite completa de tests unitarios con AssertJ.
   - Tags `v1.0.0`, `v2.0.0` y `v3.0.0` publicados en GitHub.
 - **Siguiente gran paso hacia `v4.0.0`:**
-  - Desarrollar el microservicio `employee-service` (puerto `7072`) con su API REST para gestión y consulta de empleados.
+  - Desarrollar el microservicio `building-service` (puerto `7073`) o el modelado completo de turnos y cálculo de incidencias/horas trabajadas.

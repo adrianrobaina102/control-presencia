@@ -159,11 +159,18 @@ Orquestan la lógica pura comunicándose exclusivamente mediante los puertos baj
   - **Ruta:** `/events?event={texto}` o body con el texto del evento.
   - **Respuesta:** `201 Created` — `"Event stored successfully"`
 
+### Módulo `employee-service` (Puerto 7072)
+- **Listar Empleados:**
+  - **Método:** `GET`
+  - **Ruta:** `/employees`
+  - **Respuesta:** `200 OK` — Array JSON con todos los empleados, roles, contactos y contratos vigentes.
+- **Consultar Empleado por ID:**
+  - **Método:** `GET`
+  - **Ruta:** `/employees/{id}` o `/employees?id={id}`
+  - **Respuesta:** `200 OK` — Ficha completa del empleado en formato JSON, o `404 Not Found`.
+
 ## 8. Verificación y Pruebas Unitarias
-El proyecto cuenta con cobertura de pruebas automatizadas con JUnit 5 y AssertJ en ambos módulos:
-- `RegisterPresenceUseCaseTest`: Prueba unitaria pura del caso de uso de registro mediante mock en memoria de `EventPublisher`.
-- `JsonConfigurationReaderTest`: Prueba unitaria de lectura de configuración JSON y valores por defecto.
-- `StoreEventUseCaseTest`: Prueba unitaria pura del guardado de eventos mediante mock de `EventWriter`.
-- `GetEventsUseCaseTest`: Prueba unitaria pura de la recuperación de eventos mediante mock de `EventReader`.
-- `FileEventWriterTest`: Prueba unitaria que valida la creación automática de directorios cronológicos y modo `APPEND` sobre archivos temporales.
-- `ActiveMQEventPublisherTest` y `ActiveMQEventReceiverTest`: Pruebas de integración sobre colas de mensajería usando sesiones inyectadas.
+El proyecto cuenta con cobertura de pruebas automatizadas con JUnit 5 y AssertJ en todos sus módulos:
+- **`tracking-service`:** `RegisterPresenceUseCaseTest`, `JsonConfigurationReaderTest`, `ActiveMQEventPublisherTest`.
+- **`storer`:** `StoreEventUseCaseTest`, `GetEventsUseCaseTest`, `FileEventWriterTest`, `ActiveMQEventReceiverTest`.
+- **`employee-service`:** `GetEmployeeUseCaseTest`, `ListEmployeesUseCaseTest`, `JsonEmployeeReaderTest`.
