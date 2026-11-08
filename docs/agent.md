@@ -15,7 +15,8 @@ El proyecto sigue **Arquitectura Hexagonal (Ports & Adapters)** estricta y princ
 
 1. **`architecture` (El Core):**
    Es el corazón del sistema, donde viven las reglas de negocio. No sabe nada de bases de datos, colas de mensajes, ficheros, servidores web ni librerías externas (prohibido importar Gson, ActiveMQ, JMS, Javalin o DataFaker aquí). Contiene:
-   - **`domain`:** Objetos puros e inmutables que representan el negocio (`record` y `enum`: `Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`, y modelos de horarios como `Schedule`, `Shift`, `Incident`) junto con las acciones concretas del sistema organizadas bajo el contrato base `UseCase<I, O>` (`RegisterPresenceUseCase`, `StoreEventUseCase`, `GetEventsUseCase`).
+   - **`model`:** Objetos puros e inmutables que representan los datos del negocio (`record` y `enum`: `Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`, `Configuration`, y modelos de horarios como `Schedule`, `Shift`, `Incident`). Cero lógica orquestadora.
+   - **`domain`:** Las acciones concretas y lógica operativa del negocio organizadas bajo el contrato base `UseCase<I, O>` (`RegisterPresenceUseCase`, `StoreEventUseCase`, `GetEventsUseCase`). Son los directores de orquesta del sistema.
    - **`ports`:** Las interfaces divididas en subpaquetes espejo (`in`, `processing`, `out`):
      - `ports.in`: Contratos de entrada de datos (ej. `TrackingEventReader`, `ConfigurationReader`, `DeviceReader`).
      - `ports.processing`: Contratos de transformación o validación (ej. `TrackingEventParser`, `TrackingEventSerializer`).
@@ -31,10 +32,10 @@ El proyecto sigue **Arquitectura Hexagonal (Ports & Adapters)** estricta y princ
 
 ## 3. Reglas de Nomenclatura y Clean Code (ISP y SRP Extremos)
 Se aplica de forma estricta el Principio de Responsabilidad Única (SRP) y el Principio de Segregación de Interfaces (ISP):
-1. **Modelos (`architecture.domain`):** Sustantivos puros del dominio en `PascalCase`, sin prefijos ni sufijos técnicos (`Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`). Se priorizan `record` y `enum` inmutables con constructores de conveniencia si se requieren.
+1. **Modelos (`architecture.model`):** Sustantivos puros del dominio en `PascalCase`, sin prefijos ni sufijos técnicos (`Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`, `Configuration`). Se priorizan `record` y `enum` inmutables con constructores de conveniencia si se requieren.
 2. **Puertos (`architecture.ports`):** Interfaces atómicas de una sola responsabilidad siguiendo el patrón **`<Entidad><Acción/Rol>`**:
    - Ejemplos: `DeviceReader`, `TrackingEventParser`, `TrackingEventSerializer`, `EventStore`, `EventRepository`, `EventReader`.
-3. **Casos de Uso (`architecture.domain`):** Clases con sufijo **`UseCase`** que implementan `UseCase<I, O>` (`RegisterPresenceUseCase`, `StoreEventUseCase`, `GetEventsUseCase`). Viven en `domain` para cohesión del núcleo de negocio.
+3. **Casos de Uso (`architecture.domain`):** Clases con sufijo **`UseCase`** que implementan `UseCase<I, O>` (`RegisterPresenceUseCase`, `StoreEventUseCase`, `GetEventsUseCase`). Viven en `domain` como operaciones activas del núcleo.
 4. **Adaptadores (`infrastructure.adapters`):** Clases concretas nombradas estrictamente con el patrón **`<Tecnología/Formato><NombreDelPuerto>`**:
    - Ejemplos: `ActiveMQEventStore`, `CsvTrackingEventParser`, `FileEventRepository`, `FileEventReader`.
    - Endpoints web en adaptadores con sufijo **`EndPoint`** (`RegisterTrackingEndPoint`, `StoreEventEndPoint`, `GetEventsEndPoint`).

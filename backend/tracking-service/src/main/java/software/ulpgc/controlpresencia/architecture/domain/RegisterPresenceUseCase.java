@@ -1,6 +1,6 @@
 package software.ulpgc.controlpresencia.architecture.domain;
 
-import software.ulpgc.controlpresencia.architecture.domain.TrackingEvent;
+import software.ulpgc.controlpresencia.architecture.model.TrackingEvent;
 import software.ulpgc.controlpresencia.architecture.ports.in.DeviceReader;
 import software.ulpgc.controlpresencia.architecture.ports.out.EventStore;
 import software.ulpgc.controlpresencia.architecture.ports.processing.TrackingEventParser;

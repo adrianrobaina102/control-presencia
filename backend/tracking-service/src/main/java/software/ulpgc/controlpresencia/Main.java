@@ -1,7 +1,7 @@
 package software.ulpgc.controlpresencia;
 
 import io.javalin.Javalin;
-import software.ulpgc.controlpresencia.architecture.domain.Configuration;
+import software.ulpgc.controlpresencia.architecture.model.Configuration;
 import software.ulpgc.controlpresencia.architecture.ports.in.ConfigurationReader;
 import software.ulpgc.controlpresencia.architecture.ports.in.DeviceReader;
 import software.ulpgc.controlpresencia.architecture.ports.out.EventStore;

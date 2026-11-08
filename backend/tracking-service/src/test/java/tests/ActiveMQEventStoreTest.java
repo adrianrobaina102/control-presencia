@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import software.ulpgc.controlpresencia.infrastructure.adapters.out.ActiveMQBrokerConnection;
 import software.ulpgc.controlpresencia.infrastructure.adapters.out.ActiveMQEventStore;
 import software.ulpgc.controlpresencia.infrastructure.adapters.processing.CsvTrackingEventSerializer;
-import software.ulpgc.controlpresencia.architecture.domain.*;
+import software.ulpgc.controlpresencia.architecture.model.*;
 import software.ulpgc.controlpresencia.architecture.ports.out.EventStore;
 
 import javax.jms.*;
