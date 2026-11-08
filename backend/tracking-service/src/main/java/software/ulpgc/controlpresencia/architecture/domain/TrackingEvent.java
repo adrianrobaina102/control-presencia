@@ -1,4 +1,4 @@
-package software.ulpgc.controlpresencia.application.model;
+package software.ulpgc.controlpresencia.architecture.domain;
 
 import java.time.Instant;
 

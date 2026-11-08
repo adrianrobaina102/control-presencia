@@ -1,6 +1,6 @@
 package software.ulpgc.controlpresencia.infrastructure.adapters;
 
-import software.ulpgc.controlpresencia.application.ports.EventRepository;
+import software.ulpgc.controlpresencia.architecture.ports.EventRepository;
 
 import java.io.File;
 import java.io.IOException;

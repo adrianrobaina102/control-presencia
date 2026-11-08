@@ -1,9 +1,9 @@
-package software.ulpgc.controlpresencia.application.usecases;
+package software.ulpgc.controlpresencia.architecture.domain;
 
-import software.ulpgc.controlpresencia.application.model.TrackingEvent;
-import software.ulpgc.controlpresencia.application.ports.in.DeviceReader;
-import software.ulpgc.controlpresencia.application.ports.out.EventStore;
-import software.ulpgc.controlpresencia.application.ports.processing.TrackingEventParser;
+import software.ulpgc.controlpresencia.architecture.domain.TrackingEvent;
+import software.ulpgc.controlpresencia.architecture.ports.in.DeviceReader;
+import software.ulpgc.controlpresencia.architecture.ports.out.EventStore;
+import software.ulpgc.controlpresencia.architecture.ports.processing.TrackingEventParser;
 
 public class RegisterPresenceUseCase implements UseCase<Void, Void> {
     private final EventStore eventStore;

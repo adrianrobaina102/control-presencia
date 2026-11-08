@@ -1,7 +1,7 @@
 package software.ulpgc.controlpresencia.factories;
 
 import net.datafaker.Faker;
-import software.ulpgc.controlpresencia.application.model.*;
+import software.ulpgc.controlpresencia.architecture.domain.*;
 
 import java.time.Instant;
 import java.time.LocalDate;

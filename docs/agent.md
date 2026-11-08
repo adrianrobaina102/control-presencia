@@ -10,34 +10,33 @@ Actúa como un compañero de equipo experto en Ingeniería del Software en Java 
 
 ---
 
-## 2. Arquitectura y Estructura de Paquetes (Application vs Infrastructure)
-El proyecto sigue **Arquitectura Hexagonal (Ports & Adapters)** estricta y principios **SOLID**. El código se divide en **dos grandes bloques o directorios principales aislados entre sí**, respetando siempre la regla de dependencia (`infrastructure` depende de `application`, pero `application` NO conoce a nadie del exterior):
+## 2. Arquitectura y Estructura de Paquetes (Architecture vs Infrastructure)
+El proyecto sigue **Arquitectura Hexagonal (Ports & Adapters)** estricta y principios **SOLID**. El código se divide en **dos grandes bloques o directorios principales aislados entre sí**, respetando siempre la regla de dependencia (`infrastructure` depende de `architecture`, pero `architecture` NO conoce a nadie del exterior):
 
-1. **`application` (Arquitectura / El Core):**
+1. **`architecture` (El Core):**
    Es el corazón del sistema, donde viven las reglas de negocio. No sabe nada de bases de datos, colas de mensajes, ficheros, servidores web ni librerías externas (prohibido importar Gson, ActiveMQ, JMS, Javalin o DataFaker aquí). Contiene:
-   - **`model` (`domain`):** Objetos puros e inmutables que representan el negocio (`record` y `enum`: `Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`, y modelos de horarios como `Schedule`, `Shift`, `Incident`).
-   - **`usecases`:** Las acciones concretas del sistema organizadas bajo el contrato base `UseCase<I, O>` (`RegisterPresenceUseCase`, `StoreEventUseCase`, `GetEventsUseCase`). Son los "directores de orquesta" que ejecutan la lógica comunicándose únicamente con las interfaces de `ports`.
+   - **`domain`:** Objetos puros e inmutables que representan el negocio (`record` y `enum`: `Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`, y modelos de horarios como `Schedule`, `Shift`, `Incident`) junto con las acciones concretas del sistema organizadas bajo el contrato base `UseCase<I, O>` (`RegisterPresenceUseCase`, `StoreEventUseCase`, `GetEventsUseCase`).
    - **`ports`:** Las interfaces divididas en subpaquetes espejo (`in`, `processing`, `out`):
-     - `ports.in`: Contratos de entrada de datos (ej. `TrackingEventReader`).
-     - `ports.processing`: Contratos de transformación o validación (ej. `TrackingEventParser`).
-     - `ports.out`: Contratos de persistencia o emisión (ej. `TrackingEventPublisher`, `EventRepository`, `EventReader`).
+     - `ports.in`: Contratos de entrada de datos (ej. `TrackingEventReader`, `ConfigurationReader`, `DeviceReader`).
+     - `ports.processing`: Contratos de transformación o validación (ej. `TrackingEventParser`, `TrackingEventSerializer`).
+     - `ports.out`: Contratos de persistencia o emisión (ej. `EventStore`, `EventRepository`, `EventReader`, `EventReceiver`).
 
 2. **`infrastructure` (Infraestructura / El Exterior):**
    Todo lo que se comunica con el mundo exterior (brokers de mensajería, sistema de ficheros, APIs HTTP, interfaces gráficas Swing, serializadores JSON/CSV). Contiene:
-   - **`adapters.in`:** Implementaciones de entrada externa (ej. `MockDeviceReader` Swing GUI, `RegisterTrackingEndPoint` HTTP Javalin).
+   - **`adapters.in`:** Implementaciones de entrada externa (ej. `MockDeviceReader` Swing GUI, `RegisterTrackingEndPoint` HTTP Javalin, `JsonConfigurationReader`).
    - **`adapters.processing`:** Implementaciones de parseo o serialización (ej. `CsvTrackingEventParser`, `CsvTrackingEventSerializer`).
-   - **`adapters.out`:** Implementaciones de salida externa (ej. `ActiveMQTrackingEventPublisher`, `FileEventRepository`, `FileEventReader`).
+   - **`adapters.out`:** Implementaciones de salida externa (ej. `ActiveMQEventStore`, `FileEventRepository`, `FileEventReader`, `ActiveMQEventReceiver`).
 
 ---
 
 ## 3. Reglas de Nomenclatura y Clean Code (ISP y SRP Extremos)
 Se aplica de forma estricta el Principio de Responsabilidad Única (SRP) y el Principio de Segregación de Interfaces (ISP):
-1. **Modelos (`application.model`):** Sustantivos puros del dominio en `PascalCase`, sin prefijos ni sufijos técnicos (`Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`). Se priorizan `record` y `enum` inmutables con constructores de conveniencia si se requieren.
-2. **Puertos (`application.ports`):** Interfaces atómicas de una sola responsabilidad siguiendo el patrón **`<Entidad><Acción/Rol>`**:
-   - Ejemplos: `TrackingEventReader`, `TrackingEventParser`, `TrackingEventPublisher`, `EventRepository`, `EventReader`.
-3. **Casos de Uso (`application.usecases`):** Clases con sufijo **`UseCase`** que implementan `UseCase<I, O>` (`RegisterPresenceUseCase`, `StoreEventUseCase`, `GetEventsUseCase`).
+1. **Modelos (`architecture.domain`):** Sustantivos puros del dominio en `PascalCase`, sin prefijos ni sufijos técnicos (`Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`). Se priorizan `record` y `enum` inmutables con constructores de conveniencia si se requieren.
+2. **Puertos (`architecture.ports`):** Interfaces atómicas de una sola responsabilidad siguiendo el patrón **`<Entidad><Acción/Rol>`**:
+   - Ejemplos: `DeviceReader`, `TrackingEventParser`, `TrackingEventSerializer`, `EventStore`, `EventRepository`, `EventReader`.
+3. **Casos de Uso (`architecture.domain`):** Clases con sufijo **`UseCase`** que implementan `UseCase<I, O>` (`RegisterPresenceUseCase`, `StoreEventUseCase`, `GetEventsUseCase`). Viven en `domain` para cohesión del núcleo de negocio.
 4. **Adaptadores (`infrastructure.adapters`):** Clases concretas nombradas estrictamente con el patrón **`<Tecnología/Formato><NombreDelPuerto>`**:
-   - Ejemplos: `ActiveMQTrackingEventPublisher`, `CsvTrackingEventParser`, `FileEventRepository`, `FileEventReader`.
+   - Ejemplos: `ActiveMQEventStore`, `CsvTrackingEventParser`, `FileEventRepository`, `FileEventReader`.
    - Endpoints web en adaptadores con sufijo **`EndPoint`** (`RegisterTrackingEndPoint`, `StoreEventEndPoint`, `GetEventsEndPoint`).
 5. **Tests (`test`):** Nomenclatura espejo de la clase probada añadiendo el sufijo **`Test`** (ej. `RegisterPresenceUseCaseTest`, `StoreEventUseCaseTest`, `GetEventsUseCaseTest`, `FileEventRepositoryTest`). Se implementan con JUnit 5 y aserciones fluidas de AssertJ (`assertThat(...)`).
 6. **Métodos:** Cortos, expresivos, con un único nivel de abstracción por método y sin comentarios innecesarios (el código se autoexplica).
@@ -95,7 +94,7 @@ El repositorio sigue el flujo estándar de GitFlow apoyado en Tags de versión p
 El asistente actúa como el guardián de la calidad arquitectónica y de la rúbrica académica. Debe **interrumpir o avisar de forma proactiva e inmediata** (sin esperar a que el usuario lo recuerde) ante cualquiera de las siguientes alertas:
 
 1. **Alerta 1: Ruptura de Arquitectura Hexagonal**
-   - Salta si cualquier clase dentro de `application` importa o referencia librerías de infraestructura (`javalin`, `gson`, `activemq`, `jms`, `java.io.File`, etc.).
+   - Salta si cualquier clase dentro de `architecture` importa o referencia librerías de infraestructura (`javalin`, `gson`, `activemq`, `jms`, `java.io.File`, etc.).
    - Salta si un caso de uso implementa detalles técnicos de persistencia o transporte en lugar de delegar en interfaces de `ports`.
 
 2. **Alerta 2: Violación de Inversión de Dependencias (Pure DI)**

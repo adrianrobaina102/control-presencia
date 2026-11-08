@@ -1,12 +1,12 @@
 package software.ulpgc.controlpresencia;
 
 import io.javalin.Javalin;
-import software.ulpgc.controlpresencia.application.model.Configuration;
-import software.ulpgc.controlpresencia.application.ports.in.ConfigurationReader;
-import software.ulpgc.controlpresencia.application.ports.in.DeviceReader;
-import software.ulpgc.controlpresencia.application.ports.out.EventStore;
-import software.ulpgc.controlpresencia.application.ports.processing.TrackingEventParser;
-import software.ulpgc.controlpresencia.application.usecases.RegisterPresenceUseCase;
+import software.ulpgc.controlpresencia.architecture.domain.Configuration;
+import software.ulpgc.controlpresencia.architecture.ports.in.ConfigurationReader;
+import software.ulpgc.controlpresencia.architecture.ports.in.DeviceReader;
+import software.ulpgc.controlpresencia.architecture.ports.out.EventStore;
+import software.ulpgc.controlpresencia.architecture.ports.processing.TrackingEventParser;
+import software.ulpgc.controlpresencia.architecture.domain.RegisterPresenceUseCase;
 import software.ulpgc.controlpresencia.infrastructure.adapters.in.JsonConfigurationReader;
 import software.ulpgc.controlpresencia.infrastructure.adapters.in.MockDeviceReader;
 import software.ulpgc.controlpresencia.infrastructure.adapters.out.ActiveMQBrokerConnection;

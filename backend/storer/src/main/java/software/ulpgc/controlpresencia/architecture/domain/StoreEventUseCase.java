@@ -1,6 +1,6 @@
-package software.ulpgc.controlpresencia.application.usecases;
+package software.ulpgc.controlpresencia.architecture.domain;
 
-import software.ulpgc.controlpresencia.application.ports.EventRepository;
+import software.ulpgc.controlpresencia.architecture.ports.EventRepository;
 
 public class StoreEventUseCase implements UseCase<String, Void> {
     private final EventRepository  eventRepository;

@@ -1,6 +1,6 @@
-package software.ulpgc.controlpresencia.application.usecases;
+package software.ulpgc.controlpresencia.architecture.domain;
 
-import software.ulpgc.controlpresencia.application.ports.EventReader;
+import software.ulpgc.controlpresencia.architecture.ports.EventReader;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package software.ulpgc.controlpresencia.application.usecases;
+package software.ulpgc.controlpresencia.architecture.domain;
 
 public interface UseCase<I, O> {
     O execute(I input);

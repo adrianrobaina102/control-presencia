@@ -1,6 +1,6 @@
 package software.ulpgc.controlpresencia.infrastructure.adapters;
 
-import software.ulpgc.controlpresencia.application.ports.EventReceiver;
+import software.ulpgc.controlpresencia.architecture.ports.EventReceiver;
 
 import javax.jms.*;
 

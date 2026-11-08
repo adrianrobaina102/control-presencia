@@ -2,7 +2,7 @@ package tests;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import software.ulpgc.controlpresencia.application.ports.EventRepository;
+import software.ulpgc.controlpresencia.architecture.ports.EventRepository;
 import software.ulpgc.controlpresencia.infrastructure.adapters.FileEventRepository;
 
 import javax.jms.JMSException;

@@ -1,9 +1,9 @@
 package software.ulpgc.controlpresencia.infrastructure.adapters.in.endpoints;
 
 import io.javalin.http.Context;
-import software.ulpgc.controlpresencia.application.ports.in.DeviceReader;
-import software.ulpgc.controlpresencia.application.ports.processing.TrackingEventParser;
-import software.ulpgc.controlpresencia.application.usecases.RegisterPresenceUseCase;
+import software.ulpgc.controlpresencia.architecture.ports.in.DeviceReader;
+import software.ulpgc.controlpresencia.architecture.ports.processing.TrackingEventParser;
+import software.ulpgc.controlpresencia.architecture.domain.RegisterPresenceUseCase;
 
 public class RegisterTrackingEndPoint implements EndPoint {
     private final RegisterPresenceUseCase useCase;

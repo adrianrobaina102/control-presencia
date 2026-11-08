@@ -1,8 +1,8 @@
 package tests;
 
 import org.junit.jupiter.api.Test;
-import software.ulpgc.controlpresencia.application.ports.EventRepository;
-import software.ulpgc.controlpresencia.application.usecases.StoreEventUseCase;
+import software.ulpgc.controlpresencia.architecture.ports.EventRepository;
+import software.ulpgc.controlpresencia.architecture.domain.StoreEventUseCase;
 
 import java.util.ArrayList;
 import java.util.List;

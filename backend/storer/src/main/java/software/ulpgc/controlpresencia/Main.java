@@ -1,11 +1,11 @@
 package software.ulpgc.controlpresencia;
 
 import io.javalin.Javalin;
-import software.ulpgc.controlpresencia.application.ports.EventReader;
-import software.ulpgc.controlpresencia.application.ports.EventReceiver;
-import software.ulpgc.controlpresencia.application.ports.EventRepository;
-import software.ulpgc.controlpresencia.application.usecases.GetEventsUseCase;
-import software.ulpgc.controlpresencia.application.usecases.StoreEventUseCase;
+import software.ulpgc.controlpresencia.architecture.ports.EventReader;
+import software.ulpgc.controlpresencia.architecture.ports.EventReceiver;
+import software.ulpgc.controlpresencia.architecture.ports.EventRepository;
+import software.ulpgc.controlpresencia.architecture.domain.GetEventsUseCase;
+import software.ulpgc.controlpresencia.architecture.domain.StoreEventUseCase;
 import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQBrokerConnection;
 import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQEventReceiver;
 import software.ulpgc.controlpresencia.infrastructure.adapters.FileEventReader;

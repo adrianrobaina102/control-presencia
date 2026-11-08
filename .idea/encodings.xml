@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/backend/building-admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/building-admin/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/building-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/building-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/employee-admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/employee-admin/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/employee-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/employee-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/storer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/storer/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/tracking-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/tracking-service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/building-admin/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/building-admin/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/building-service/src/main/java" charset="UTF-8" />

@@ -1,7 +1,7 @@
 package software.ulpgc.controlpresencia.infrastructure.adapters.processing;
 
-import software.ulpgc.controlpresencia.application.model.TrackingEvent;
-import software.ulpgc.controlpresencia.application.ports.processing.TrackingEventSerializer;
+import software.ulpgc.controlpresencia.architecture.domain.TrackingEvent;
+import software.ulpgc.controlpresencia.architecture.ports.processing.TrackingEventSerializer;
 
 public class CsvTrackingEventSerializer implements TrackingEventSerializer {
     @Override

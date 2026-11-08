@@ -1,7 +1,7 @@
 package software.ulpgc.controlpresencia.infrastructure.adapters.endpoints;
 
 import io.javalin.http.Context;
-import software.ulpgc.controlpresencia.application.usecases.GetEventsUseCase;
+import software.ulpgc.controlpresencia.architecture.domain.GetEventsUseCase;
 
 public class GetEventsEndPoint implements EndPoint {
     private final GetEventsUseCase useCase;

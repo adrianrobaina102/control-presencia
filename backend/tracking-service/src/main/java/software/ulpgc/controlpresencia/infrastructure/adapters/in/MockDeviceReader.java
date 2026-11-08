@@ -1,6 +1,6 @@
 package software.ulpgc.controlpresencia.infrastructure.adapters.in;
 
-import software.ulpgc.controlpresencia.application.ports.in.DeviceReader;
+import software.ulpgc.controlpresencia.architecture.ports.in.DeviceReader;
 
 import javax.swing.*;
 import java.awt.*;

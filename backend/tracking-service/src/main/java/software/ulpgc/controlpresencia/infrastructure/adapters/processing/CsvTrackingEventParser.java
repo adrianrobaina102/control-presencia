@@ -1,10 +1,10 @@
 package software.ulpgc.controlpresencia.infrastructure.adapters.processing;
 
-import software.ulpgc.controlpresencia.application.model.Employee;
-import software.ulpgc.controlpresencia.application.model.Place;
-import software.ulpgc.controlpresencia.application.model.TrackingEvent;
-import software.ulpgc.controlpresencia.application.model.TrackingType;
-import software.ulpgc.controlpresencia.application.ports.processing.TrackingEventParser;
+import software.ulpgc.controlpresencia.architecture.domain.Employee;
+import software.ulpgc.controlpresencia.architecture.domain.Place;
+import software.ulpgc.controlpresencia.architecture.domain.TrackingEvent;
+import software.ulpgc.controlpresencia.architecture.domain.TrackingType;
+import software.ulpgc.controlpresencia.architecture.ports.processing.TrackingEventParser;
 
 import java.time.Instant;
 
