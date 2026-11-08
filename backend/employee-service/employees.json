@@ -1,0 +1,50 @@
+[
+  {
+    "id": "emp-01",
+    "name": "Adrián Robaina",
+    "contact": {
+      "email": "adrian@empresa.com",
+      "phone": "+34 600 111 222"
+    },
+    "role": "EMPLOYEE",
+    "contract": {
+      "id": "CTR-2026-001",
+      "scheduleId": "SCH-OFFICE-CONTINUOUS",
+      "startDate": "2026-01-15",
+      "endDate": null,
+      "status": "ACTIVE"
+    }
+  },
+  {
+    "id": "emp-02",
+    "name": "María Comercio",
+    "contact": {
+      "email": "maria@empresa.com",
+      "phone": "+34 600 333 444"
+    },
+    "role": "EMPLOYEE",
+    "contract": {
+      "id": "CTR-2026-002",
+      "scheduleId": "SCH-STORE-SPLIT",
+      "startDate": "2026-02-01",
+      "endDate": null,
+      "status": "ACTIVE"
+    }
+  },
+  {
+    "id": "emp-03",
+    "name": "Carlos Sanitario",
+    "contact": {
+      "email": "carlos@empresa.com",
+      "phone": "+34 600 555 666"
+    },
+    "role": "MANAGER",
+    "contract": {
+      "id": "CTR-2026-003",
+      "scheduleId": "SCH-HOSPITAL-SHIFT",
+      "startDate": "2026-03-01",
+      "endDate": null,
+      "status": "ACTIVE"
+    }
+  }
+]
