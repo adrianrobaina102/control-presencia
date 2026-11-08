@@ -28,12 +28,17 @@ public class Main {
 
         Javalin app = Javalin.create().start(7072);
 
-        app.get("/employees", context -> new ListEmployeesEndPoint(listEmployeesUseCase, context, gson).execute());
-        app.get("/employees/{id}", context -> new GetEmployeeEndPoint(getEmployeeUseCase, context, gson).execute());
+        app.get("/employees", context -> {
+            if (context.queryParam("id") != null) {
+                new GetEmployeeEndPoint(getEmployeeUseCase, context, gson).execute();
+            } else {
+                new ListEmployeesEndPoint(listEmployeesUseCase, context, gson).execute();
+            }
+        });
 
         System.out.println("Employee-service activo en http://localhost:7072");
         System.out.println("-> Listar empleados: http://localhost:7072/employees");
-        System.out.println("-> Consultar empleado: http://localhost:7072/employees/emp-01");
+        System.out.println("-> Consultar empleado: http://localhost:7072/employees?id=emp-01");
 
         Runtime.getRuntime().addShutdownHook(new Thread(app::stop));
     }

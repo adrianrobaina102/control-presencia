@@ -166,7 +166,7 @@ Orquestan la lógica pura comunicándose exclusivamente mediante los puertos baj
   - **Respuesta:** `200 OK` — Array JSON con todos los empleados, roles, contactos y contratos vigentes.
 - **Consultar Empleado por ID:**
   - **Método:** `GET`
-  - **Ruta:** `/employees/{id}` o `/employees?id={id}`
+  - **Ruta:** `/employees?id={id}` (ej. `/employees?id=emp-01`)
   - **Respuesta:** `200 OK` — Ficha completa del empleado en formato JSON, o `404 Not Found`.
 
 ## 8. Verificación y Pruebas Unitarias
