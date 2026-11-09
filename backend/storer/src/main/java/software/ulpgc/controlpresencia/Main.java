@@ -11,7 +11,6 @@ import software.ulpgc.controlpresencia.infrastructure.adapters.ActiveMQEventRece
 import software.ulpgc.controlpresencia.infrastructure.adapters.FileEventReader;
 import software.ulpgc.controlpresencia.infrastructure.adapters.FileEventWriter;
 import software.ulpgc.controlpresencia.infrastructure.adapters.endpoints.GetEventsEndPoint;
-import software.ulpgc.controlpresencia.infrastructure.adapters.endpoints.StoreEventEndPoint;
 
 import java.io.File;
 
@@ -29,8 +28,7 @@ public class Main {
         Javalin app = Javalin.create().start(7071);
 
         app.get("/", context -> new GetEventsEndPoint(getEventsUseCase, context).execute());
-        app.post("/events", context -> new StoreEventEndPoint(storeUseCase, context).execute());
-        app.get("/events", context -> new StoreEventEndPoint(storeUseCase, context).execute());
+        app.get("/events", context -> new GetEventsEndPoint(getEventsUseCase, context).execute());
 
         System.out.println("Storer encendido. Escuchando nuevos fichajes de la cola...");
         String message;
@@ -40,7 +38,6 @@ public class Main {
         }
         System.out.println("Cola vacia. Servidor HTTP activo en puerto 7071.");
         System.out.println("-> Ver fichajes guardados: http://localhost:7071/");
-        System.out.println("-> Registrar fichaje manual: http://localhost:7071/events?event=2026-11-01T08:00:00Z;emp-99;Sede;In");
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
