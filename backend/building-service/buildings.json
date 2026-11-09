@@ -1,0 +1,35 @@
+[
+  {
+    "id": "bld-01",
+    "name": "Sede Central - Oficina Tecnologica",
+    "address": "Calle Mayor de Triana 12, Las Palmas de Gran Canaria",
+    "organization": {
+      "id": "org-01",
+      "name": "Servicios Globales Canarios S.L.",
+      "taxId": "B-35123456"
+    },
+    "active": true
+  },
+  {
+    "id": "bld-02",
+    "name": "Tienda Triana - Zona Comercial",
+    "address": "Calle Triana 88, Las Palmas de Gran Canaria",
+    "organization": {
+      "id": "org-01",
+      "name": "Servicios Globales Canarios S.L.",
+      "taxId": "B-35123456"
+    },
+    "active": true
+  },
+  {
+    "id": "bld-03",
+    "name": "Hospital Insular - Area de Urgencias",
+    "address": "Avenida Maritima del Sur s/n, Las Palmas de Gran Canaria",
+    "organization": {
+      "id": "org-02",
+      "name": "Complejo Hospitalario Canario",
+      "taxId": "Q-3500987A"
+    },
+    "active": true
+  }
+]
