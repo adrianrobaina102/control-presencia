@@ -83,7 +83,7 @@ El proyecto sigue estrictamente la Arquitectura Hexagonal y la Inversión de Dep
 │   │   │   │       ├── ActiveMQEventReceiver.java      # Adaptador de lectura JMS con timeout seguro
 │   │   │   │       ├── FileEventWriter.java            # Adaptador de escritura en Data Lake
 │   │   │   │       ├── FileEventReader.java            # Adaptador de lectura del Data Lake
-│   │   │   │       └── endpoints/                      # StoreEventEndPoint, GetEventsEndPoint
+│   │   │   │       └── endpoints/                      # GetEventsEndPoint
 │   │   │   └── Main.java                               # Composition Root en puerto 7071
 │   │   └── src/test/java/tests/                        # FileEventWriterTest, GetEventsUseCaseTest, StoreEventUseCaseTest, ActiveMQEventReceiverTest
 │   ├── employee-service/                               # Microservicio de empleados (en desarrollo)
@@ -152,12 +152,9 @@ Orquestan la lógica pura comunicándose exclusivamente mediante los puertos baj
 ### Módulo `storer` (Puerto 7071)
 - **Consultar Data Lake:**
   - **Método:** `GET`
-  - **Ruta:** `/`
+  - **Ruta:** `/` o `/events`
   - **Respuesta:** `200 OK` — Listado de todos los fichajes guardados en disco.
-- **Registrar Evento Directo:**
-  - **Método:** `POST` / `GET`
-  - **Ruta:** `/events?event={texto}` o body con el texto del evento.
-  - **Respuesta:** `201 Created` — `"Event stored successfully"`
+  - *Nota:* La ingesta de fichajes en `storer` se realiza exclusivamente por suscripción asíncrona a ActiveMQ (`fichajes.queue`) para garantizar tolerancia a fallos.
 
 ### Módulo `employee-service` (Puerto 7072)
 - **Listar Empleados:**

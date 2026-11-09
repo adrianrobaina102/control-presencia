@@ -152,7 +152,6 @@ backend/storer/src/main/java/software/ulpgc/controlpresencia/
 │       ├── FileEventReader.java          <-- Lee recursivamente los logs de store/
 │       └── endpoints/                    <-- Adaptadores Web Javalin:
 │           ├── EndPoint.java
-│           ├── StoreEventEndPoint.java   <-- Sobrecarga limpia de execute(...)
 │           └── GetEventsEndPoint.java    <-- Sirve el listado en GET /
 │
 └── Main.java                            <-- COMPOSITION ROOT (Puerto 7071, drena la cola y arranca)

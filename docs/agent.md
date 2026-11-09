@@ -38,7 +38,7 @@ Se aplica de forma estricta el Principio de Responsabilidad Única (SRP) y el Pr
 3. **Casos de Uso (`architecture.domain`):** Clases con sufijo **`UseCase`** que implementan `UseCase<I, O>` (`RegisterPresenceUseCase`, `StoreEventUseCase`, `GetEventsUseCase`). Viven en `domain` como operaciones activas del núcleo.
 4. **Adaptadores (`infrastructure.adapters`):** Clases concretas nombradas estrictamente con el patrón **`<Tecnología/Formato><NombreDelPuerto>`**:
    - Ejemplos: `ActiveMQEventPublisher`, `CsvTrackingEventParser`, `FileEventWriter`, `FileEventReader`.
-   - Endpoints web en adaptadores con sufijo **`EndPoint`** (`RegisterPresenceEndPoint`, `StoreEventEndPoint`, `GetEventsEndPoint`).
+   - Endpoints web en adaptadores con sufijo **`EndPoint`** (`RegisterPresenceEndPoint`, `GetEventsEndPoint`).
 5. **Tests (`test`):** Nomenclatura espejo de la clase probada añadiendo el sufijo **`Test`** (ej. `RegisterPresenceUseCaseTest`, `StoreEventUseCaseTest`, `GetEventsUseCaseTest`, `FileEventWriterTest`). Se implementan con JUnit 5 y aserciones fluidas de AssertJ (`assertThat(...)`).
 6. **Métodos:** Cortos, expresivos, con un único nivel de abstracción por método y sin comentarios innecesarios (el código se autoexplica).
 
@@ -67,7 +67,7 @@ El sistema actual opera en módulos independientes comunicados por Apache Active
 - **Adaptadores EndPoint:** Reciben el caso de uso y el `Context` por constructor, resolviendo subproblemas con sobrecarga limpia de `execute(...)`.
 - **Puertos de Servidor:**
   - `tracking-service`: Puerto **`7070`** (`POST /events`).
-  - `storer`: Puerto **`7071`** (`GET /` para consultar el Data Lake, `POST /events` para almacenar).
+  - `storer`: Puerto **`7071`** (`GET /` para consultar el Data Lake).
   - `employee-service`: Puerto **`7072`** (Gestión de empleados y consultas).
   - `building-service`: Puerto **`7073`** (Gestión de edificios/espacios).
 
