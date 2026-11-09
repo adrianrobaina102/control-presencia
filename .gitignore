@@ -4,7 +4,8 @@ target/
 !**/src/test/**/target/
 .kotlin
 
-out/
+/out/
+!**/src/**/out/
 *.class
 *.jar
 *.log
