@@ -60,7 +60,7 @@ Este documento detalla el estado actual de implementación, la planificación po
 - [x] Creación del contrato de caso de uso: `UseCase.java`.
 - [x] Implementación de `GetBuildingUseCase.java` (búsqueda por ID).
 - [x] Implementación de `ListBuildingsUseCase.java` (listado completo).
-- [ ] Implementación de `JsonBuildingReader.java` (deserialización Gson).
+- [x] Implementación de `JsonBuildingReader.java` (deserialización Gson).
 - [ ] Implementación de `EndPoint.java` y adaptadores `GetBuildingEndPoint.java` y `ListBuildingsEndPoint.java`.
 - [ ] Implementación de `Main.java` (inyección manual pura en puerto 7073).
 - [ ] Batería de pruebas unitarias (`GetBuildingUseCaseTest`, `ListBuildingsUseCaseTest`, `JsonBuildingReaderTest`).
