@@ -23,7 +23,7 @@ Este documento detalla el estado actual de implementación, la planificación po
 | **Fase 1** | **`tracking-service`** | `7070` | ✅ **Completado** | • Recepción de eventos de fichaje (terminal / HTTP).<br>• Validación y parseo CSV.<br>• Publicación asíncrona al Broker JMS (ActiveMQ).<br>• Diagrama UML integrado en `docs/diagrams/`. | ActiveMQ (`tcp://localhost:61616`) |
 | **Fase 2** | **`storer`** | `7071` | ✅ **Completado** | • Ingesta asíncrona de eventos desde ActiveMQ (sin hilos manuales).<br>• Almacenamiento append-only particionado en disco (`events/YYYY/MM/DD/...`).<br>• API HTTP de solo lectura (CQRS: `GET /events`).<br>• Diagrama UML integrado en `docs/diagrams/`. | ActiveMQ, Disco local |
 | **Fase 3** | **`employee-service`** | `7072` | ✅ **Completado** | • Gestión de empleados, roles (`EMPLOYEE`, `MANAGER`, `ADMIN`).<br>• Contratos con asignación de régimen horario.<br>• API HTTP (`GET /employees`, `GET /employees?id=...`).<br>• Tests unitarios completos (JUnit 5 + AssertJ).<br>• Diagrama UML integrado en `docs/diagrams/`. | Dataset JSON (`employees.json`) |
-| **Fase 4** | **`building-service`** | `7073` | 🟡 **En Curso** | • **Hecho:** Modelo inmutable (`Building`, `Organization`), Dataset JSON (3 sedes), Puerto `BuildingReader`.<br>• **Pendiente:** Casos de uso (`Get`, `List`), Adaptadores HTTP y JSON, `Main.java` con Pure DI, Tests JUnit 5 y Diagrama UML. | Dataset JSON (`buildings.json`) |
+| **Fase 4** | **`building-service`** | `7073` | 🟡 **En Curso** | • **Hecho:** Modelo inmutable, Dataset JSON (3 sedes), Puerto `BuildingReader`, Casos de uso (`Get`, `List`), Adaptadores HTTP y JSON, `Main.java` con Pure DI, Tests JUnit 5.<br>• **Pendiente:** Diagrama UML de clases. | Dataset JSON (`buildings.json`) |
 | **Fase 5** | **`schedule-service`** | `7074` | 🔴 **Pendiente** | • Catálogo de los 3 regímenes horarios requeridos por la rúbrica:<br>&nbsp;&nbsp;1. Jornada continua oficina (8:00 - 16:00).<br>&nbsp;&nbsp;2. Jornada partida comercial (9:30-13:30 / 16:30-20:30).<br>&nbsp;&nbsp;3. Turnos rotativos hospitalarios (M / T / N - 24/7).<br>• Definición de márgenes de cortesía y tolerancias de entrada/salida. | Dataset JSON (`schedules.json`) |
 | **Fase 6** | **`reporting-service`** | `7075` | 🔴 **Pendiente** | • **Núcleo analítico del sistema (25% rúbrica)**.<br>• Cruce de datos: eventos de presencia (`storer`) + contratos (`employee-service`) + reglas horarias (`schedule-service`).<br>• Cálculo de presencias, cómputo de horas trabajadas, detección de retrasos, horas extra y ausencias. | `storer`, `employee-service`, `schedule-service` |
 | **Fase 7** | **Frontends & UI** | - | 🔴 **Pendiente** | • **Dashboard administrativo** (visualización de empleados, sedes, reportes de puntualidad y balances mensuales).<br>• **Terminal de fichaje interactivo** (registro de entradas/salidas de trabajadores). | Servicios Backend |
@@ -61,7 +61,7 @@ Este documento detalla el estado actual de implementación, la planificación po
 - [x] Implementación de `GetBuildingUseCase.java` (búsqueda por ID).
 - [x] Implementación de `ListBuildingsUseCase.java` (listado completo).
 - [x] Implementación de `JsonBuildingReader.java` (deserialización Gson).
-- [ ] Implementación de `EndPoint.java` y adaptadores `GetBuildingEndPoint.java` y `ListBuildingsEndPoint.java`.
-- [ ] Implementación de `Main.java` (inyección manual pura en puerto 7073).
-- [ ] Batería de pruebas unitarias (`GetBuildingUseCaseTest`, `ListBuildingsUseCaseTest`, `JsonBuildingReaderTest`).
+- [x] Implementación de `EndPoint.java` y adaptadores `GetBuildingEndPoint.java` y `ListBuildingsEndPoint.java`.
+- [x] Implementación de `Main.java` (inyección manual pura en puerto 7073).
+- [x] Batería de pruebas unitarias (`GetBuildingUseCaseTest`, `ListBuildingsUseCaseTest`, `JsonBuildingReaderTest`).
 - [ ] Generación e integración del Diagrama UML en `docs/diagrams/`.
