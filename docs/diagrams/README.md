@@ -63,3 +63,20 @@ Microservicio de consulta de centros de trabajo, organizaciones y localizaciones
 - **Casos de Uso Aislados:** `GetBuildingUseCase` y `ListBuildingsUseCase` implementan `UseCase<I, O>`.
 - **Adaptador de Infraestructura:** `JsonBuildingReader` lee de forma segura `buildings.json` gestionando streams y serialización Gson.
 - **Endpoints Web:** `GetBuildingEndPoint` (`GET /buildings?id={id}`) y `ListBuildingsEndPoint` (`GET /buildings`) con validación de parámetros y respuestas HTTP tipadas (200, 400, 404).
+
+
+---
+
+## 5. Módulo `schedule-service` (Catálogo de Regímenes Horarios)
+
+Microservicio de consulta de normativas de jornada laboral, tolerancias de cortesía e intervalos horarios de trabajo (jornada continua de oficina, jornada partida de comercio y turnos rotativos hospitalarios 24/7).
+
+![Diagrama de Clases - Schedule Service](schedule-service-class-diagram.png)
+
+### Puntos Clave de Diseño:
+- **Modelo de Dominio Rico e Inmutable:** `Schedule` y `TimeInterval` como `record`, con enumeraciones `ShiftType` (`CONTINUOUS`, `SPLIT`, `ROTATING`) y `DayOfWeek`. Métodos de consulta de lógica pura de dominio (`appliesOn`, `totalExpectedMinutes`, `durationMinutes`).
+- **Multiplicidad Exacta:** Un horario (`Schedule`) contiene uno o varios (`1..*`) intervalos (`TimeInterval`) para soportar jornadas partidas (mañana y tarde).
+- **Puerto de Dominio:** `ScheduleReader` desacopla el almacenamiento con `get(id: String): Optional<Schedule>` y `getAll(): List<Schedule>`.
+- **Casos de Uso Aislados:** `GetScheduleUseCase` y `ListSchedulesUseCase` implementando `UseCase<I, O>`.
+- **Adaptador de Infraestructura:** `JsonScheduleReader` deserializa `schedules.json` con Gson de forma segura y tolerante a fallos.
+- **Endpoints Web:** `GetScheduleEndPoint` (`GET /schedules?id={id}`) y `ListSchedulesEndPoint` (`GET /schedules`) implementando `EndPoint`.

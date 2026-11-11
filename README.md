@@ -53,6 +53,12 @@ Microservicio con API REST para la gestión de edificios, ubicaciones y organiza
 
 ![Diagrama de Clases - Building Service](docs/diagrams/building-service-class-diagram.png)
 
+### E. Módulo `schedule-service` (Catálogo de Regímenes Horarios)
+Microservicio con API REST para la gestión y consulta de normativas de jornada, intervalos de trabajo (`TimeInterval`), tipos de turno (`ShiftType`) y tolerancias de cortesía.
+*(Detalle completo en [`docs/diagrams/schedule-service-class-diagram.png`](docs/diagrams/schedule-service-class-diagram.png))*
+
+![Diagrama de Clases - Schedule Service](docs/diagrams/schedule-service-class-diagram.png)
+
 ---
 
 ## 3. 🛠️ Dependencias y Entorno de Desarrollo
@@ -115,7 +121,8 @@ Cada microservicio corre de forma autónoma en su propio puerto y proceso:
 │   │   ├── tracking-service-class-diagram.png
 │   │   ├── storer-class-diagram.png
 │   │   ├── employee-service-class-diagram.png
-│   │   └── building-service-class-diagram.png
+│   │   ├── building-service-class-diagram.png
+│   │   └── schedule-service-class-diagram.png
 │   └── images/                                         # Esquemas conceptuales y capturas
 ├── frontend/                                           # Directorio raíz para aplicaciones cliente
 ├── backend/                                            # Módulos del backend distribuido
@@ -123,8 +130,9 @@ Cada microservicio corre de forma autónoma en su propio puerto y proceso:
 │   ├── storer/                                         # Consumo JMS y Data Lake (Puerto 7071)
 │   ├── employee-service/                               # Catálogo de empleados y contratos (Puerto 7072)
 │   ├── employee-admin/                                 # Consola de administración de empleados
-│   ├── building-service/                               # Catálogo de sedes y edificios (Puerto 7073 - En curso)
-│   └── building-admin/                                 # Consola de administración de sedes
+│   ├── building-service/                               # Catálogo de sedes y edificios (Puerto 7073)
+│   ├── building-admin/                                 # Consola de administración de sedes
+│   └── schedule-service/                               # Catálogo de regímenes horarios (Puerto 7074 - En curso)
 └── store/                                              # Data Lake particionado cronológicamente
     └── YYYY/
         └── MM/
