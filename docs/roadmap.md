@@ -7,12 +7,12 @@ Este documento detalla el estado actual de implementación, la planificación po
 ## 📊 Resumen Ejecutivo del Estado
 
 ```
-[██████████████████████░░░░░░░░░░░░] 55% Completado (Fases 1 a 4 cerradas)
+[██████████████████████████░░░░░░░░] 65% Completado (Fases 1 a 5 cerradas)
 ```
 
-- **Fases Completadas (4/9):** `tracking-service` (v1.0.0), `storer` (v2.0.0), `employee-service` y `building-service` (v4.0.0).
-- **Fase en Curso (0/9):** Preparando inicio de Fase 5 (`schedule-service`).
-- **Fases Pendientes (5/9):** `schedule-service`, `reporting-service`, Frontends, Docker y Auditoría final.
+- **Fases Completadas (5/9):** `tracking-service` (v1.0.0), `storer` (v2.0.0), `employee-service` y `building-service` (v4.0.0), `schedule-service`.
+- **Fase en Curso (0/9):** Preparando inicio de Fase 6 (`reporting-service`).
+- **Fases Pendientes (4/9):** `reporting-service`, Frontends, Docker y Auditoría final.
 
 ---
 
@@ -24,7 +24,7 @@ Este documento detalla el estado actual de implementación, la planificación po
 | **Fase 2** | **`storer`** | `7071` | ✅ **Completado** (`v2.0.0`) | • Ingesta asíncrona de eventos desde ActiveMQ (sin hilos manuales).<br>• Almacenamiento append-only particionado en disco (`events/YYYY/MM/DD/...`).<br>• API HTTP de solo lectura (CQRS: `GET /events`).<br>• Diagrama UML integrado en `docs/diagrams/`. | ActiveMQ, Disco local |
 | **Fase 3** | **`employee-service`** | `7072` | ✅ **Completado** (`v4.0.0`) | • Gestión de empleados, roles (`EMPLOYEE`, `MANAGER`, `ADMIN`).<br>• Contratos con asignación de régimen horario.<br>• API HTTP (`GET /employees`, `GET /employees?id=...`).<br>• Tests unitarios completos (JUnit 5 + AssertJ).<br>• Diagrama UML integrado en `docs/diagrams/`. | Dataset JSON (`employees.json`) |
 | **Fase 4** | **`building-service`** | `7073` | ✅ **Completado** (`v4.0.0`) | • Modelo inmutable (`Building`, `Organization`), Dataset JSON (3 sedes), Puerto `BuildingReader`.<br>• Casos de uso (`Get`, `List`), Adaptadores HTTP y JSON, `Main.java` con Pure DI, Tests JUnit 5.<br>• Diagrama UML integrado en `docs/diagrams/`. | Dataset JSON (`buildings.json`) |
-| **Fase 5** | **`schedule-service`** | `7074` | 🟡 **En Curso** | • **Hecho:** Diagrama UML de clases integrado en `docs/diagrams/`.<br>• **Pendiente:** Dataset `schedules.json`, Modelos (`Schedule`, `TimeInterval`, `ShiftType`), Puerto `ScheduleReader`, Casos de uso, Adaptadores HTTP/JSON, `Main.java` y Tests. | Dataset JSON (`schedules.json`) |
+| **Fase 5** | **`schedule-service`** | `7074` | ✅ **Completado** | • Modelo inmutable (`Schedule`, `TimeInterval`, `ShiftType`, `DayOfWeek`).<br>• Dataset JSON (3 regímenes: continuo, partido, 24/7).<br>• Puerto `ScheduleReader`, Casos de uso (`Get`, `List`), Adaptadores HTTP y JSON.<br>• `Main.java` en 7074 con Pure DI, Tests JUnit 5 y Diagrama UML. | Dataset JSON (`schedules.json`) |
 | **Fase 6** | **`reporting-service`** | `7075` | 🔴 **Pendiente** | • **Núcleo analítico del sistema (25% rúbrica)**.<br>• Cruce de datos: eventos de presencia (`storer`) + contratos (`employee-service`) + reglas horarias (`schedule-service`).<br>• Cálculo de presencias, cómputo de horas trabajadas, detección de retrasos, horas extra y ausencias. | `storer`, `employee-service`, `schedule-service` |
 | **Fase 7** | **Frontends & UI** | - | 🔴 **Pendiente** | • **Dashboard administrativo** (visualización de empleados, sedes, reportes de puntualidad y balances mensuales).<br>• **Terminal de fichaje interactivo** (registro de entradas/salidas de trabajadores). | Servicios Backend |
 | **Fase 8** | **Despliegue & DevOps** | - | 🔴 **Pendiente** | • Orquestación completa con `docker-compose.yml`.<br>• Contenedores para Apache ActiveMQ y microservicios Java.<br>• Instrucciones de ejecución con un solo comando. | Docker, Docker Compose |
@@ -80,7 +80,7 @@ Este documento detalla el estado actual de implementación, la planificación po
 - [x] Creación del puerto del dominio: `ScheduleReader.java`.
 - [x] Implementación de `GetScheduleUseCase.java` (búsqueda por ID).
 - [x] Implementación de `ListSchedulesUseCase.java` (listado completo).
-- [ ] Implementación de `JsonScheduleReader.java` (deserialización Gson).
-- [ ] Implementación de `EndPoint.java` y adaptadores `GetScheduleEndPoint.java` y `ListSchedulesEndPoint.java`.
-- [ ] Implementación de `Main.java` (inyección manual pura en puerto 7074).
-- [ ] Batería de pruebas unitarias (`GetScheduleUseCaseTest`, `ListSchedulesUseCaseTest`, `JsonScheduleReaderTest`).
+- [x] Implementación de `JsonScheduleReader.java` (deserialización Gson).
+- [x] Implementación de `EndPoint.java` y adaptadores `GetScheduleEndPoint.java` y `ListSchedulesEndPoint.java`.
+- [x] Implementación de `Main.java` (inyección manual pura en puerto 7074).
+- [x] Batería de pruebas unitarias (`GetScheduleUseCaseTest`, `ListSchedulesUseCaseTest`, `JsonScheduleReaderTest`).
