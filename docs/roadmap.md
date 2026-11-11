@@ -77,9 +77,9 @@ Este documento detalla el estado actual de implementación, la planificación po
 - [x] Creación del dataset `schedules.json` con los 3 regímenes obligatorios (`SCH-OFFICE-CONTINUOUS`, `SCH-STORE-SPLIT`, `SCH-HOSPITAL-SHIFT`).
 - [x] Creación del contrato base de caso de uso: `UseCase.java`.
 - [x] Creación de modelos de dominio inmutables (`Schedule`, `TimeInterval`, `ShiftType`, `DayOfWeek`).
-- [ ] Creación del puerto del dominio: `ScheduleReader.java`.
-- [ ] Implementación de `GetScheduleUseCase.java` (búsqueda por ID).
-- [ ] Implementación de `ListSchedulesUseCase.java` (listado completo).
+- [x] Creación del puerto del dominio: `ScheduleReader.java`.
+- [x] Implementación de `GetScheduleUseCase.java` (búsqueda por ID).
+- [x] Implementación de `ListSchedulesUseCase.java` (listado completo).
 - [ ] Implementación de `JsonScheduleReader.java` (deserialización Gson).
 - [ ] Implementación de `EndPoint.java` y adaptadores `GetScheduleEndPoint.java` y `ListSchedulesEndPoint.java`.
 - [ ] Implementación de `Main.java` (inyección manual pura en puerto 7074).
