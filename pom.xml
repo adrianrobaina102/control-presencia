@@ -16,6 +16,7 @@
         <module>backend/employee-admin</module>
         <module>backend/building-service</module>
         <module>backend/building-admin</module>
+        <module>backend/schedule-service</module>
     </modules>
 
     <properties>

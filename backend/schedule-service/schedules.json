@@ -1,0 +1,77 @@
+[
+  {
+    "id": "SCH-OFFICE-CONTINUOUS",
+    "name": "Jornada Continua - Oficina Tecnologica",
+    "type": "CONTINUOUS",
+    "courtesyMinutes": 10,
+    "exitMarginMinutes": 5,
+    "days": [
+      "MONDAY",
+      "TUESDAY",
+      "WEDNESDAY",
+      "THURSDAY",
+      "FRIDAY"
+    ],
+    "slots": [
+      {
+        "start": "08:00:00",
+        "end": "16:00:00"
+      }
+    ]
+  },
+  {
+    "id": "SCH-STORE-SPLIT",
+    "name": "Jornada Partida - Tienda y Comercio",
+    "type": "SPLIT",
+    "courtesyMinutes": 10,
+    "exitMarginMinutes": 5,
+    "days": [
+      "MONDAY",
+      "TUESDAY",
+      "WEDNESDAY",
+      "THURSDAY",
+      "FRIDAY",
+      "SATURDAY"
+    ],
+    "slots": [
+      {
+        "start": "09:30:00",
+        "end": "13:30:00"
+      },
+      {
+        "start": "16:30:00",
+        "end": "20:30:00"
+      }
+    ]
+  },
+  {
+    "id": "SCH-HOSPITAL-SHIFT",
+    "name": "Turnos Rotativos 24/7 - Complejo Hospitalario",
+    "type": "ROTATING",
+    "courtesyMinutes": 5,
+    "exitMarginMinutes": 5,
+    "days": [
+      "MONDAY",
+      "TUESDAY",
+      "WEDNESDAY",
+      "THURSDAY",
+      "FRIDAY",
+      "SATURDAY",
+      "SUNDAY"
+    ],
+    "slots": [
+      {
+        "start": "07:00:00",
+        "end": "15:00:00"
+      },
+      {
+        "start": "15:00:00",
+        "end": "23:00:00"
+      },
+      {
+        "start": "23:00:00",
+        "end": "07:00:00"
+      }
+    ]
+  }
+]
