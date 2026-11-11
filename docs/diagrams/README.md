@@ -1,5 +1,7 @@
 # 📐 Diagramas de Clases y Arquitectura Hexagonal
 
+> **Nota de formato:** Todos los diagramas de arquitectura se publican y mantienen **estrictamente en formato de imagen PNG** (`.png`) para garantizar su compatibilidad y renderización nativa inmediata en GitHub y cualquier visor Markdown.
+
 Este directorio contiene los diagramas de clases UML correspondientes a los microservicios del sistema distribuido de **Control de Presencia**, modelados siguiendo los principios de la **Arquitectura Hexagonal (Puertos y Adaptadores)**, Inversión de Dependencias (**Pure DI**) y **SOLID**.
 
 ---
@@ -8,7 +10,7 @@ Este directorio contiene los diagramas de clases UML correspondientes a los micr
 
 Microservicio productor responsable de registrar los fichajes en tiempo real desde terminales físicos o llamadas HTTP y emitirlos como eventos individuales a Apache ActiveMQ.
 
-![Diagrama de Clases - Tracking Service](tracking-service-class-diagram.jpg)
+![Diagrama de Clases - Tracking Service](tracking-service-class-diagram.png)
 
 ### Puntos Clave de Diseño:
 - **Core Aislado (`model` & `ports`):** Entidades puras e inmutables (`TrackingEvent`, `Employee`, `Place`, `TrackingType`, `Configuration`).
@@ -46,3 +48,18 @@ Microservicio de consulta de trabajadores, roles, sedes asignadas y contratos la
 - **Puertos de Consulta Segregados:** `EmployeeReader` expone `get(id: String): Optional<Employee>` y `getAll(): List<Employee>`.
 - **Adaptador de Infraestructura Desacoplado:** `JsonEmployeeReader` procesa el dataset `employees.json` mediante Gson inyectado por constructor.
 - **Adaptadores Web Javalin:** `GetEmployeeEndPoint` (`GET /employees?id={id}`) y `ListEmployeesEndPoint` (`GET /employees`) implementando la interfaz `EndPoint`.
+
+---
+
+## 4. Módulo `building-service` (Gestión de Sedes y Edificios)
+
+Microservicio de consulta de centros de trabajo, organizaciones y localizaciones corporativas donde prestan servicio los trabajadores.
+
+![Diagrama de Clases - Building Service](building-service-class-diagram.png)
+
+### Puntos Clave de Diseño:
+- **Modelo de Dominio Inmutable:** `Building` y `Organization` estructurados como `record` puros.
+- **Puerto de Dominio:** `BuildingReader` desacopla la fuente de datos mediante `get(id: String): Optional<Building>` y `getAll(): List<Building>`.
+- **Casos de Uso Aislados:** `GetBuildingUseCase` y `ListBuildingsUseCase` implementan `UseCase<I, O>`.
+- **Adaptador de Infraestructura:** `JsonBuildingReader` lee de forma segura `buildings.json` gestionando streams y serialización Gson.
+- **Endpoints Web:** `GetBuildingEndPoint` (`GET /buildings?id={id}`) y `ListBuildingsEndPoint` (`GET /buildings`) con validación de parámetros y respuestas HTTP tipadas (200, 400, 404).

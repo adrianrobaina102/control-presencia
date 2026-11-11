@@ -31,9 +31,9 @@ Cada microservicio aísla estrictamente su Core (`architecture`) de la infraestr
 
 ### A. Módulo `tracking-service` (Capturador y Productor)
 Gestiona la lectura de presencia desde terminales físicos o llamadas HTTP y publica los eventos de forma individual en el broker JMS.
-*(Detalle completo en [`docs/diagrams/tracking-service-class-diagram.jpg`](docs/diagrams/tracking-service-class-diagram.jpg))*
+*(Detalle completo en [`docs/diagrams/tracking-service-class-diagram.png`](docs/diagrams/tracking-service-class-diagram.png))*
 
-![Diagrama de Clases - Tracking Service](docs/diagrams/tracking-service-class-diagram.jpg)
+![Diagrama de Clases - Tracking Service](docs/diagrams/tracking-service-class-diagram.png)
 
 ### B. Módulo `storer` (Data Lake y Persistencia Asíncrona)
 Consume eventos de ActiveMQ con confirmación segura `CLIENT_ACKNOWLEDGE`, particiona los fichajes cronológicamente en disco (`store/YYYY/MM/YYYYMMDD.log`) y sirve el visor web de auditoría.
@@ -46,6 +46,12 @@ Microservicio con API REST para la gestión y consulta de trabajadores, roles, c
 *(Detalle completo en [`docs/diagrams/employee-service-class-diagram.png`](docs/diagrams/employee-service-class-diagram.png))*
 
 ![Diagrama de Clases - Employee Service](docs/diagrams/employee-service-class-diagram.png)
+
+### D. Módulo `building-service` (Catálogo de Sedes y Centros de Trabajo)
+Microservicio con API REST para la gestión de edificios, ubicaciones y organizaciones asociadas.
+*(Detalle completo en [`docs/diagrams/building-service-class-diagram.png`](docs/diagrams/building-service-class-diagram.png))*
+
+![Diagrama de Clases - Building Service](docs/diagrams/building-service-class-diagram.png)
 
 ---
 
@@ -90,6 +96,9 @@ Cada microservicio corre de forma autónoma en su propio puerto y proceso:
 3. **Arrancar el Servicio de Empleados (`employee-service` - Puerto 7072):**  
    Ejecutar la clase `Main` en `backend/employee-service`.
    - Expone la API REST de empleados en `http://localhost:7072/employees`.
+4. **Arrancar el Servicio de Edificios (`building-service` - Puerto 7073):**  
+   Ejecutar la clase `Main` en `backend/building-service`.
+   - Expone la API REST de sedes en `http://localhost:7073/buildings`.
 
 ---
 
@@ -100,11 +109,13 @@ Cada microservicio corre de forma autónoma en su propio puerto y proceso:
 │   ├── README.md                                       # Índice maestro de documentación
 │   ├── architecture.md                                 # Red de microservicios y flujos detallados
 │   ├── agent.md                                        # Architecture Guardrails & Directrices de Calidad
-│   ├── diagrams/                                       # Diagramas de clases UML en alta resolución
+│   ├── roadmap.md                                      # Planificación por fases y control de entrega
+│   ├── diagrams/                                       # Diagramas de clases UML en alta resolución (PNG)
 │   │   ├── README.md                                   # Explicación técnica de puertos y patrones
-│   │   ├── tracking-service-class-diagram.jpg
+│   │   ├── tracking-service-class-diagram.png
 │   │   ├── storer-class-diagram.png
-│   │   └── employee-service-class-diagram.png
+│   │   ├── employee-service-class-diagram.png
+│   │   └── building-service-class-diagram.png
 │   └── images/                                         # Esquemas conceptuales y capturas
 ├── frontend/                                           # Directorio raíz para aplicaciones cliente
 ├── backend/                                            # Módulos del backend distribuido

@@ -6,6 +6,7 @@ Actúa como un compañero de equipo experto en Ingeniería del Software en Java 
 - **Formato de Cambios:** Cuando modifiques archivos existentes que ya tienen bastante código, señala claramente con comentarios `// <-- AÑADIR AQUÍ` o `// <-- CAMBIO CLAVE` qué líneas exactas deben tocarse.
 - **Idioma:** Explicaciones y conversación en **español**. Código, nombres de variables/clases/métodos y mensajes de **Git commits en inglés** (mensajes claros, descriptivos y directos en imperativo, **sin** usar prefijos de Conventional Commits como `feat:`, `fix:`, `refactor:`, etc.).
 - **Commits Atómicos y Cortos:** Cada commit debe representar una única unidad lógica de cambio (una sola responsabilidad por commit). Los mensajes deben ser concisos y de **una sola línea directa**, sin cuerpos largos ni viñetas redundantes (ejemplo: `Add UseCase base interface and RegisterTrackingEventUseCase implementation`). Separar siempre código, pruebas y documentación en commits independientes.
+- **Formato Exclusivo de Diagramas:** Todos los diagramas UML de arquitectura se deben publicar y versionar **exclusivamente en formato de imagen `.png`** en `docs/diagrams/`. Queda prohibido subir archivos `.drawio` o XML no renderizables directamente por los visores web de GitHub y Markdown.
 - **Restricciones Académicas:** **PROHIBIDO** utilizar concurrencia compleja o hilos (`Thread`, `ExecutorService`, `Runnable`) para gestionar el ciclo de vida de los consumidores. Todo debe resolverse de forma secuencial y limpia (ej. mediante timeouts nativos de red/JMS).
 
 ---
@@ -132,6 +133,8 @@ El asistente actúa como el guardián de la calidad arquitectónica y de la rúb
   - Parsing de eventos desacoplado (`TrackingEventParser` / `CsvTrackingEventParser`).
   - Caso de uso unificado `RegisterPresenceUseCase` alimentado tanto por interfaz gráfica (`SwingDeviceReader` Swing) como por peticiones HTTP (`RegisterPresenceEndPoint` Javalin).
   - Microservicio `employee-service` (puerto `7072`) completado con arquitectura hexagonal, modelos inmutables, `JsonEmployeeReader`, endpoints REST (`GET /employees`, `GET /employees?id={id}`) y suite completa de tests unitarios con AssertJ.
-  - Tags `v1.0.0`, `v2.0.0` y `v3.0.0` publicados en GitHub.
-- **Siguiente gran paso hacia `v4.0.0`:**
-  - Desarrollar el microservicio `building-service` (puerto `7073`) o el modelado completo de turnos y cálculo de incidencias/horas trabajadas.
+  - Microservicio `building-service` (puerto `7073`) completado con arquitectura hexagonal, modelos inmutables (`Building`, `Organization`), `JsonBuildingReader`, endpoints REST (`GET /buildings`, `GET /buildings?id={id}`) y suite completa de tests unitarios.
+  - Diagramas de clases UML completos y actualizados en formato `.png` para los 4 microservicios en `docs/diagrams/`.
+  - Tags `v1.0.0`, `v2.0.0`, `v3.0.0` y `v4.0.0` (abarcando `employee-service` y `building-service`).
+- **Siguiente gran paso hacia `v5.0.0`:**
+  - Desarrollar el microservicio `schedule-service` (puerto `7074`) con el catálogo de los 3 regímenes horarios exigidos por la rúbrica y márgenes de tolerancia.
