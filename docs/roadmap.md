@@ -1,6 +1,6 @@
-# 🗺️ Roadmap y Estado del Proyecto — Control de Presencia (v4.0.0)
+# 🗺️ Roadmap y Estrategia de Ejecución — Control de Presencia (v4.0.0)
 
-Este documento detalla el estado actual de implementación, la planificación por fases y las tareas de reestructuración técnica y funcional para la entrega de la convocatoria extraordinaria de **Ingeniería del Software 2 (ULPGC)**.
+Este documento detalla el estado actual, el orden de ataque paso a paso y la guía estratégica para abordar la implementación y reestructuración del sistema **Control de Presencia (ULPGC - IS2)**.
 
 ---
 
@@ -10,54 +10,114 @@ Este documento detalla el estado actual de implementación, la planificación po
 [██████████████████████████░░░░░░░░] 65% Completado (Fases 1 a 5 cerradas)
 ```
 
-- **Fases Completadas (5/10):** `tracking-service` (v1.0.0), `storer` (v2.0.0), `employee-service` y `building-service` (v4.0.0), `schedule-service`.
-- **Fase en Curso:** Fase 6 (`reporting-service`) y Plan de Reestructuración Arquitectónica / REST.
-- **Fases Pendientes:** `reporting-service`, Frontends, Docker, Nginx / Reverse Proxy y Auditoría final.
+- **Fases Completadas (5/11):** `tracking-service` (v1.0.0), `storer` (v2.0.0), `employee-service` y `building-service` (v4.0.0), `schedule-service`.
+- **Fase Inmediata (Paso 1):** `reporting-service` (Fase 6).
+- **Fase de Consolidación (Paso 2):** Reestructuración Arquitectónica Hexagonal & REST (`Output`, validación defensiva).
+- **Fases Finales (Paso 3 en adelante):** Auth/Cuentas, Frontends, Nginx/Docker y Entrega.
+
+---
+
+## 🎯 Plan de Ataque y Orden de Ejecución Recomendado
+
+¿Por dónde empezamos y cómo lo afrontamos sin romper nada? Este es el orden natural óptimo:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│ PASO 1: Terminar la Funcionalidad Central (Fase 6: reporting-service)   │
+│ -> 25% de la nota de la rúbrica. Cerramos la lógica analítica.         │
+│ -> Nace directamente con la arquitectura limpia y desacoplada.         │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ PASO 2: Estandarizar Contratos REST & Desacoplamiento (Fase 7)         │
+│ -> Aplicar patrón Output<T> (200, 201, 400, 404).                      │
+│ -> Validación defensiva en endpoints HTTP.                             │
+│ -> Adaptadores EndPoint independientes del Context de Javalin.         │
+│ -> Validar compilación y tests unitarios tras cada servicio.          │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ PASO 3: Cuentas, Autenticación y Persistencia Bidireccional (Fase 8)   │
+│ -> AuthService / RegisterService desacoplado del Employee de fichaje.  │
+│ -> Puertos Store/Repository para CRUD completo.                        │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ PASO 4: Frontends & UI de Administración y Fichaje (Fase 9)            │
+│ -> Terminal de fichaje para empleados.                                 │
+│ -> Dashboard administrativo con reportes y visualización.              │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ PASO 5: Despliegue con Docker y Nginx Reverse Proxy (Fase 10)          │
+│ -> docker-compose unificado (ActiveMQ + microservicios + Nginx).       │
+│ -> Enrutamiento único (/api/v1/...) y cabeceras X-Forwarded-*.         │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ PASO 6: Auditoría Final contra Rúbrica y Tag v5.0.0 / Entrega          │
+└────────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
 ## 🧭 Tabla General de Fases y Microservicios
 
-| Fase | Módulo / Componente | Puerto | Estado | Responsabilidad y Entregables Clave | Dificultad | Dependencias |
-| :--- | :--- | :---: | :---: | :--- | :---: | :--- |
-| **Fase 1** | **`tracking-service`** | `7070` | ✅ **Completado** (`v1.0.0`) | • Recepción de eventos de fichaje (terminal / HTTP).<br>• Validación y parseo CSV.<br>• Publicación asíncrona al Broker JMS (ActiveMQ).<br>• Diagrama UML integrado en `docs/diagrams/`. | Media | ActiveMQ (`tcp://localhost:61616`) |
-| **Fase 2** | **`storer`** | `7071` | ✅ **Completado** (`v2.0.0`) | • Ingesta asíncrona de eventos desde ActiveMQ (sin hilos manuales).<br>• Almacenamiento append-only particionado en disco (`events/YYYY/MM/DD/...`).<br>• API HTTP de solo lectura (CQRS: `GET /events`).<br>• Diagrama UML integrado en `docs/diagrams/`. | Media | ActiveMQ, Disco local |
-| **Fase 3** | **`employee-service`** | `7072` | ✅ **Completado** (`v4.0.0`) | • Gestión de empleados, roles (`EMPLOYEE`, `MANAGER`, `ADMIN`).<br>• Contratos con asignación de régimen horario.<br>• API HTTP (`GET /employees`, `GET /employees?id=...`).<br>• Tests unitarios completos (JUnit 5 + AssertJ).<br>• Diagrama UML integrado en `docs/diagrams/`. | Baja | Dataset JSON (`employees.json`) |
-| **Fase 4** | **`building-service`** | `7073` | ✅ **Completado** (`v4.0.0`) | • Modelo inmutable (`Building`, `Organization`), Dataset JSON (3 sedes), Puerto `BuildingReader`.<br>• Casos de uso (`Get`, `List`), Adaptadores HTTP y JSON, `Main.java` con Pure DI, Tests JUnit 5.<br>• Diagrama UML integrado en `docs/diagrams/`. | Baja | Dataset JSON (`buildings.json`) |
-| **Fase 5** | **`schedule-service`** | `7074` | ✅ **Completado** | • Modelo inmutable (`Schedule`, `TimeInterval`, `ShiftType`, `DayOfWeek`).<br>• Dataset JSON (3 regímenes: continuo, partido, 24/7).<br>• Puerto `ScheduleReader`, Casos de uso (`Get`, `List`), Adaptadores HTTP y JSON.<br>• `Main.java` en 7074 con Pure DI, Tests JUnit 5 y Diagrama UML. | Baja | Dataset JSON (`schedules.json`) |
-| **Fase 6** | **`reporting-service`** | `7075` | 🔴 **Pendiente** | • **Núcleo analítico del sistema (25% rúbrica)**.<br>• Cruce de datos: eventos de presencia (`storer`) + contratos (`employee-service`) + reglas horarias (`schedule-service`).<br>• Cálculo de presencias, cómputo de horas trabajadas, detección de retrasos, horas extra y ausencias. | **Alta** | `storer`, `employee-service`, `schedule-service` |
-| **Fase 7** | **Reestructuración REST & Desacoplamiento Core** | - | 🟡 **Planificado** | • Desacoplamiento total del core respecto a Javalin/HTTP (`core/` vs `infrastructure/`).<br>• Patrón `Output<T>` con `status()` y `result()` en Casos de Uso.<br>• Validación defensiva en frontera HTTP (`400 Bad Request`).<br>• Serializadores/Deserializadores en puertos y adaptadores. | **Media** | Microservicios existentes |
-| **Fase 8** | **Cuentas / Autenticación & Repositorios** | - | 🟡 **Planificado** | • Separación conceptual de cuentas/auth (`AuthService` / `RegisterService`) frente a empleados.<br>• Puertos de persistencia bidireccionales (`Repository` / `Store`). | **Media** | `employee-service` |
-| **Fase 9** | **Frontends & UI** | - | 🔴 **Pendiente** | • **Dashboard administrativo** (visualización de empleados, sedes, reportes de puntualidad y balances mensuales).<br>• **Terminal de fichaje interactivo** (registro de entradas/salidas de trabajadores). | **Media** | Servicios Backend |
-| **Fase 10** | **Despliegue, Nginx & DevOps** | - | 🔴 **Pendiente** | • Orquestación completa con `docker-compose.yml`.<br>• Contenedores para Apache ActiveMQ, microservicios Java y Nginx como Reverse Proxy / Balanceador.<br>• Soporte de cabeceras `X-Forwarded-*`. | **Media** | Docker, Docker Compose, Nginx |
-| **Fase 11** | **Auditoría & Cierre** | - | 🔴 **Pendiente** | • Verificación exhaustiva de la rúbrica ULPGC.<br>• Tag de versión final y validación de entrega. | Baja | Todo el sistema |
+| Orden | Fase | Módulo / Componente | Puerto | Estado | Dificultad | Responsabilidad Clave |
+| :---: | :--- | :--- | :---: | :---: | :---: | :--- |
+| **1** | **Fase 1** | **`tracking-service`** | `7070` | ✅ **Completado** (`v1.0.0`) | Media | Ingesta de fichajes y publicación JMS a ActiveMQ. |
+| **2** | **Fase 2** | **`storer`** | `7071` | ✅ **Completado** (`v2.0.0`) | Media | Persistencia append-only particionada en disco (`events/YYYY/MM/DD`). |
+| **3** | **Fase 3** | **`employee-service`** | `7072` | ✅ **Completado** (`v4.0.0`) | Baja | Gestión y consulta de empleados, contratos y horarios. |
+| **4** | **Fase 4** | **`building-service`** | `7073` | ✅ **Completado** (`v4.0.0`) | Baja | Consulta de sedes físicas y organizaciones. |
+| **5** | **Fase 5** | **`schedule-service`** | `7074` | ✅ **Completado** | Baja | Regímenes horarios (continuo, partido, 24/7). |
+| **6** | **Fase 6** | **`reporting-service`** | `7075` | 🔴 **SIGUIENTE (Paso 1)** | **Alta** | **Núcleo analítico**: Cruza eventos + contratos + horarios para balance e incidentes. |
+| **7** | **Fase 7** | **Reestructuración REST** | - | 🟡 **Paso 2** | Media | Desacoplamiento Javalin, patrón `Output<T>`, validación defensiva en frontera. |
+| **8** | **Fase 8** | **Cuentas & Repositorios**| - | 🟡 **Paso 3** | Media | `AuthService`/`RegisterService`, puertos `Store`/`Repository` bidireccionales. |
+| **9** | **Fase 9** | **Frontends & UI** | - | 🔴 **Paso 4** | Media | Dashboard administrativo y terminal interactivo de fichaje. |
+| **10**| **Fase 10**| **Docker, Nginx & DevOps**| `80/443` | 🔴 **Paso 5** | Media | Orquestación `docker-compose.yml`, proxy inverso Nginx y cabeceras proxy. |
+| **11**| **Fase 11**| **Auditoría & Cierre** | - | 🔴 **Paso 6** | Baja | Chequeo 100% de la rúbrica ULPGC y tag final de release. |
 
 ---
 
-## 🔍 Detalle del Módulo en Curso: `reporting-service` (Fase 6)
+## 🛠️ Detalle de Tareas: Paso 1 Inmediato (`reporting-service`)
 
-### Checklist de Tareas para Fase 6:
-- [ ] Diagrama UML de clases en `docs/diagrams/reporting-service-class-diagram.png`.
-- [ ] Configuración de Maven `backend/reporting-service/pom.xml`.
-- [ ] Modelos de dominio inmutables: `IncidentType`, `Incident`, `DailyReport`, `MonthlyReport`.
-- [ ] Puertos de salida: `EventReader`, `EmployeeReader`, `ScheduleReader`.
-- [ ] Casos de uso: `GenerateDailyReportUseCase` y `GenerateMonthlyReportUseCase` (con contrato `Output` agnóstico).
-- [ ] Adaptadores HTTP asíncronos (`HttpClient.sendAsync(...)`): `HttpEventReader`, `HttpEmployeeReader`, `HttpScheduleReader`.
-- [ ] Adaptadores de entrada (Endpoints Javalin): `GetDailyReportEndPoint`, `GetMonthlyReportEndPoint`.
-- [ ] Composition root `Main.java` (Pure DI en puerto 7075).
-- [ ] Suite de pruebas unitarias con mocks/stubs de los puertos.
+### ¿Cómo afrontar `reporting-service`?
+1. **Diagrama UML:** Exportar el diagrama que diseñamos a `docs/diagrams/reporting-service-class-diagram.png`.
+2. **Setup Maven:** Configurar `backend/reporting-service/pom.xml` con Javalin, Gson, JUnit 5, AssertJ.
+3. **Modelos Inmutables:** `IncidentType`, `Incident`, `DailyReport`, `MonthlyReport`.
+4. **Puertos de Salida:** `EventReader`, `EmployeeReader`, `ScheduleReader`.
+5. **Casos de Uso con `Output`:**
+   * `GenerateDailyReportUseCase` $\rightarrow$ devuelve `Output<DailyReport>` (`200 OK` si procesa, `404 Not Found` si no existe el empleado/horario, `400 Bad Request` si la fecha no es válida).
+   * `GenerateMonthlyReportUseCase` $\rightarrow$ devuelve `Output<MonthlyReport>`.
+6. **Adaptadores HTTP Asíncronos:** `HttpEventReader`, `HttpEmployeeReader`, `HttpScheduleReader` usando `HttpClient.sendAsync(...)`.
+7. **Adaptadores HTTP de Entrada (Endpoints):** `GetDailyReportEndPoint`, `GetMonthlyReportEndPoint` con validación defensiva de query params (`employeeId`, `date`, `month`).
+8. **Composition Root `Main.java`:** Pure DI en el puerto 7075.
+9. **Tests Unitarios:** Suite de pruebas con mocks de los lectores para verificar cálculos de minutos, retrasos y ausencias.
 
 ---
 
-## 🛠️ Plan de Reestructuración Arquitectónica y REST (Fases 7 y 8)
+## 🛠️ Detalle de Tareas: Paso 2 (Reestructuración REST & Desacoplamiento)
 
-Para más detalles consultar la guía de reestructuración en [docs/reestructuracion-arquitectura.md](file:///c:/Users/adri0/IdeaProjects/control-presencia/docs/reestructuracion-arquitectura.md).
+Una vez cerrado `reporting-service`, aplicamos de forma incremental en los servicios existentes:
 
-| Tarea | Descripción | Dificultad | Impacto |
-| :--- | :--- | :---: | :--- |
-| **T1. Paquetes Core / Infraestructura** | Mover de `architecture/` a `core/` (`model`, `ports/in`, `ports/out`, `domain`) y `infrastructure/` (`adapters/in/http`, `adapters/out/persistence`). | Media | Alto (mantiene core 100% independiente de frameworks). |
-| **T2. Patrón `Output<T>`** | Implementar `Output<T>(int status, T result, String error)` en `UseCase` para respuestas semánticas (`200`, `201`, `400`, `404`). | Baja | Alto (habilita APIs REST estándar y testing puro del caso de uso sin Javalin). |
-| **T3. Validación Defensiva en Frontera** | Validadores de entrada en controladores HTTP antes de delegar al caso de uso (query params, path params, JSON payload). | Baja | Medio (robusta ante inputs erróneos, `400 Bad Request`). |
-| **T4. Puertos de Serialización** | Aislar Gson/Jackson en puertos de serialización o adaptadores dedicados. | Baja | Medio (desacopla librerías de serialización). |
-| **T5. AuthService / RegisterService** | Separar credenciales/cuentas de la entidad `Employee` de fichaje y preparar puertos `Store`/`Repository`. | Media | Medio (seguridad desacoplada). |
-| **T6. Reverse Proxy Nginx & Headers** | Añadir configuración para `X-Forwarded-*` y preparar enrutamiento unificado de endpoints en Nginx. | Media | Alto (preparado para producción y balanceo). |
+| Subtarea | Qué hacemos | Cómo afrontarlo |
+| :--- | :--- | :--- |
+| **7.1 Contrato Común `Output<T>`** | Crear `Output<T>` (`status`, `result`, `error`) y actualizar `UseCase<I, O>`. | Se crea en un paquete compartido o se replica limpiamente en cada servicio para independencia total. |
+| **7.2 Desacoplar Endpoints de Javalin** | En vez de inyectar `Context` en el constructor del EndPoint, el EndPoint solo define `void register(Javalin app)` o procesa un `Request` agnóstico. | Modificar `GetEmployeeEndPoint`, `GetBuildingEndPoint`, `GetScheduleEndPoint`. |
+| **7.3 Validación Defensiva** | Validar rigurosamente que los IDs y parámetros no vengan vacíos ni con caracteres inválidos antes del caso de uso. | Si falla $\rightarrow$ retorna inmediatamente `400 Bad Request` con mensaje de error claro en JSON. |
+| **7.4 Validación de Compilación & Tests** | Ejecutar `mvn test` tras actualizar cada microservicio. | Garantizar que no haya regresiones paso a paso. |
+
+---
+
+## 🛠️ Detalle de Tareas: Paso 3 (Cuentas, Auth & Repositorios)
+
+| Subtarea | Qué hacemos | Cómo afrontarlo |
+| :--- | :--- | :--- |
+| **8.1 Desacoplar Cuenta de Empleado** | Crear el modelo `UserAccount` / `Credential` (usuario, rol, hash/token) independiente de `Employee` (datos de fichaje/contrato). | Permite cambiar el sistema de autenticación sin alterar la lógica de presencia. |
+| **8.2 `AuthService` / `RegisterService`** | Casos de uso de login/registro (`LoginUseCase`, `RegisterUseCase`). | Se definen puertos de entrada y adaptadores HTTP correspondientes. |
+| **8.3 Puertos `Store` / `Repository`** | Ampliar los readers de solo lectura a interfaces `Repository` con métodos `save`, `findById`, `findAll`. | Permite crear y modificar empleados/sedes por API (`POST`, `PUT`, `DELETE`). |
