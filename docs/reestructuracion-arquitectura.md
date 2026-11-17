@@ -38,12 +38,14 @@ Este documento analiza el estado real del repositorio `control-presencia` y defi
 ```
 software.ulpgc.controlpresencia/
 │
-├── core/                                          <-- Core de negocio (100% Java puro, sin librerías externas)
-│   ├── model/                                     <-- Entidades y Value Objects inmutables (records, enums)
-│   ├── ports/
-│   │   ├── in/                                    <-- Casos de uso (UseCase<Input, Output<T>>) y contratos de entrada
-│   │   └── out/                                   <-- Puertos de salida: Repositories/Stores, EventPublishers, Readers
-│   └── domain/                                    <-- Implementación de Casos de Uso y Servicios de Dominio
+├── architecture/                                  <-- Core de negocio (100% Java puro, sin librerías externas)
+│   ├── domain/                                    <-- Objetos puros del negocio (records, enums, entidades y value objects)
+│   ├── model/                                     <-- Cómo funciona el negocio (reglas puras, cálculos, políticas de dominio)
+│   ├── usecases/                                  <-- Acciones del sistema (UseCase<Input, Output<T>> e implementaciones)
+│   └── ports/
+│       ├── in/                                    <-- Contratos de entrada
+│       ├── processing/                            <-- Contratos de transformación / serialización
+│       └── out/                                   <-- Puertos de salida: Repositories/Stores, EventPublishers, Readers
 │
 ├── infrastructure/                                <-- Adaptadores y frontera técnica
 │   ├── adapters/
