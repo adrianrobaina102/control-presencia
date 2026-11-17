@@ -1,7 +1,7 @@
 package software.ulpgc.controlpresencia.infrastructure.adapters;
 
 import com.google.gson.Gson;
-import software.ulpgc.controlpresencia.architecture.model.Building;
+import software.ulpgc.controlpresencia.architecture.domain.Building;
 import software.ulpgc.controlpresencia.architecture.ports.BuildingReader;
 
 import java.io.File;

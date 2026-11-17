@@ -2,8 +2,8 @@ package software.ulpgc.controlpresencia;
 
 import com.google.gson.*;
 import io.javalin.Javalin;
-import software.ulpgc.controlpresencia.architecture.domain.GetEmployeeUseCase;
-import software.ulpgc.controlpresencia.architecture.domain.ListEmployeesUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.GetEmployeeUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.ListEmployeesUseCase;
 import software.ulpgc.controlpresencia.architecture.ports.EmployeeReader;
 import software.ulpgc.controlpresencia.infrastructure.adapters.GetEmployeeEndPoint;
 import software.ulpgc.controlpresencia.infrastructure.adapters.JsonEmployeeReader;

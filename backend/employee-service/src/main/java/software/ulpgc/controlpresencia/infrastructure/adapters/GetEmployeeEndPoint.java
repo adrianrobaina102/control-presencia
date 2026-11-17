@@ -2,7 +2,7 @@ package software.ulpgc.controlpresencia.infrastructure.adapters;
 
 import com.google.gson.Gson;
 import io.javalin.http.Context;
-import software.ulpgc.controlpresencia.architecture.domain.GetEmployeeUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.GetEmployeeUseCase;
 
 public class GetEmployeeEndPoint implements EndPoint {
     private final GetEmployeeUseCase useCase;

@@ -1,8 +1,8 @@
 package tests;
 
 import org.junit.jupiter.api.Test;
-import software.ulpgc.controlpresencia.architecture.domain.ListEmployeesUseCase;
-import software.ulpgc.controlpresencia.architecture.model.*;
+import software.ulpgc.controlpresencia.architecture.usecases.ListEmployeesUseCase;
+import software.ulpgc.controlpresencia.architecture.domain.*;
 import software.ulpgc.controlpresencia.architecture.ports.EmployeeReader;
 
 import java.time.LocalDate;

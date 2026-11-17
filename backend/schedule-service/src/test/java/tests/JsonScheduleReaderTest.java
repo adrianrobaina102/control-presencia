@@ -3,7 +3,7 @@ package tests;
 import com.google.gson.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import software.ulpgc.controlpresencia.architecture.model.*;
+import software.ulpgc.controlpresencia.architecture.domain.*;
 import software.ulpgc.controlpresencia.infrastructure.adapters.JsonScheduleReader;
 
 import java.io.IOException;

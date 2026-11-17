@@ -2,7 +2,7 @@ package software.ulpgc.controlpresencia.infrastructure.adapters;
 
 import com.google.gson.Gson;
 import io.javalin.http.Context;
-import software.ulpgc.controlpresencia.architecture.domain.ListBuildingsUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.ListBuildingsUseCase;
 
 public class ListBuildingsEndPoint implements EndPoint {
     private final ListBuildingsUseCase useCase;

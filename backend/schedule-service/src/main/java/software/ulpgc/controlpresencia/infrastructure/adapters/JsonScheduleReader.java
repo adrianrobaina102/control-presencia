@@ -1,7 +1,7 @@
 package software.ulpgc.controlpresencia.infrastructure.adapters;
 
 import com.google.gson.Gson;
-import software.ulpgc.controlpresencia.architecture.model.Schedule;
+import software.ulpgc.controlpresencia.architecture.domain.Schedule;
 import software.ulpgc.controlpresencia.architecture.ports.ScheduleReader;
 
 import java.io.File;

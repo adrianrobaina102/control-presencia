@@ -2,7 +2,7 @@ package software.ulpgc.controlpresencia.infrastructure.adapters;
 
 import com.google.gson.Gson;
 import io.javalin.http.Context;
-import software.ulpgc.controlpresencia.architecture.domain.GetScheduleUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.GetScheduleUseCase;
 
 public class GetScheduleEndPoint implements EndPoint {
     private final GetScheduleUseCase useCase;

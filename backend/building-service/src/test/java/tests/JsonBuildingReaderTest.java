@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import software.ulpgc.controlpresencia.architecture.model.Building;
+import software.ulpgc.controlpresencia.architecture.domain.Building;
 import software.ulpgc.controlpresencia.infrastructure.adapters.JsonBuildingReader;
 
 import java.io.IOException;

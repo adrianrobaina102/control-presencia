@@ -1,9 +1,9 @@
 package tests;
 
 import org.junit.jupiter.api.Test;
-import software.ulpgc.controlpresencia.architecture.domain.ListBuildingsUseCase;
-import software.ulpgc.controlpresencia.architecture.model.Building;
-import software.ulpgc.controlpresencia.architecture.model.Organization;
+import software.ulpgc.controlpresencia.architecture.usecases.ListBuildingsUseCase;
+import software.ulpgc.controlpresencia.architecture.domain.Building;
+import software.ulpgc.controlpresencia.architecture.domain.Organization;
 import software.ulpgc.controlpresencia.architecture.ports.BuildingReader;
 
 import java.util.List;

@@ -2,8 +2,8 @@ package software.ulpgc.controlpresencia;
 
 import com.google.gson.*;
 import io.javalin.Javalin;
-import software.ulpgc.controlpresencia.architecture.domain.GetScheduleUseCase;
-import software.ulpgc.controlpresencia.architecture.domain.ListSchedulesUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.GetScheduleUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.ListSchedulesUseCase;
 import software.ulpgc.controlpresencia.architecture.ports.ScheduleReader;
 import software.ulpgc.controlpresencia.infrastructure.adapters.GetScheduleEndPoint;
 import software.ulpgc.controlpresencia.infrastructure.adapters.JsonScheduleReader;

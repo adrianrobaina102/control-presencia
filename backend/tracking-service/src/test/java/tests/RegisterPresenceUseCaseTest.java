@@ -1,14 +1,14 @@
 package tests;
 
 import org.junit.jupiter.api.Test;
-import software.ulpgc.controlpresencia.architecture.model.Employee;
-import software.ulpgc.controlpresencia.architecture.model.Place;
-import software.ulpgc.controlpresencia.architecture.model.TrackingEvent;
-import software.ulpgc.controlpresencia.architecture.model.TrackingType;
+import software.ulpgc.controlpresencia.architecture.domain.Employee;
+import software.ulpgc.controlpresencia.architecture.domain.Place;
+import software.ulpgc.controlpresencia.architecture.domain.TrackingEvent;
+import software.ulpgc.controlpresencia.architecture.domain.TrackingType;
 import software.ulpgc.controlpresencia.architecture.ports.in.DeviceReader;
 import software.ulpgc.controlpresencia.architecture.ports.out.EventPublisher;
 import software.ulpgc.controlpresencia.architecture.ports.processing.TrackingEventParser;
-import software.ulpgc.controlpresencia.architecture.domain.RegisterPresenceUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.RegisterPresenceUseCase;
 
 import java.util.ArrayList;
 import java.util.List;

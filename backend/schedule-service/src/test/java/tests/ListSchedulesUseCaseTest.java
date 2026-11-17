@@ -1,8 +1,8 @@
 package tests;
 
 import org.junit.jupiter.api.Test;
-import software.ulpgc.controlpresencia.architecture.domain.ListSchedulesUseCase;
-import software.ulpgc.controlpresencia.architecture.model.*;
+import software.ulpgc.controlpresencia.architecture.usecases.ListSchedulesUseCase;
+import software.ulpgc.controlpresencia.architecture.domain.*;
 import software.ulpgc.controlpresencia.architecture.ports.ScheduleReader;
 
 import java.time.LocalTime;

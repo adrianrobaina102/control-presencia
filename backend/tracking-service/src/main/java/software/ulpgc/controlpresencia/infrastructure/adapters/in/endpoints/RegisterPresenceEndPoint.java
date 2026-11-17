@@ -1,7 +1,7 @@
 package software.ulpgc.controlpresencia.infrastructure.adapters.in.endpoints;
 
 import io.javalin.http.Context;
-import software.ulpgc.controlpresencia.architecture.domain.RegisterPresenceUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.RegisterPresenceUseCase;
 
 public class RegisterPresenceEndPoint implements EndPoint {
     private final RegisterPresenceUseCase useCase;

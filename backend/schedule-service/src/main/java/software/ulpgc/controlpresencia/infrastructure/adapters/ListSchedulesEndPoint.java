@@ -2,7 +2,7 @@ package software.ulpgc.controlpresencia.infrastructure.adapters;
 
 import com.google.gson.Gson;
 import io.javalin.http.Context;
-import software.ulpgc.controlpresencia.architecture.domain.ListSchedulesUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.ListSchedulesUseCase;
 
 public class ListSchedulesEndPoint implements EndPoint {
     private final Gson gson;
