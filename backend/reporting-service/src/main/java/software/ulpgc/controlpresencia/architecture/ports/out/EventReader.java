@@ -1,10 +1,10 @@
-package software.ulpgc.controlpresencia.architecture.ports.in;
+package software.ulpgc.controlpresencia.architecture.ports.out;
 
-import software.ulpgc.controlpresencia.architecture.model.TrackingEvent;
+import software.ulpgc.controlpresencia.architecture.model.TrackingInfo;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface EventReader {
-    List<TrackingEvent> getEvents(String employeeId, LocalDate date);
+    List<TrackingInfo> getEvents(String employeeId, LocalDate date);
 }

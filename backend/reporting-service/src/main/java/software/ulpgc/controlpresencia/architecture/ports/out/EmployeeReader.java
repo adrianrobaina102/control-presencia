@@ -1,9 +1,9 @@
-package software.ulpgc.controlpresencia.architecture.ports.in;
+package software.ulpgc.controlpresencia.architecture.ports.out;
 
-import software.ulpgc.controlpresencia.architecture.model.Employee;
+import software.ulpgc.controlpresencia.architecture.model.EmployeeInfo;
 
 import java.util.Optional;
 
 public interface EmployeeReader {
-    Optional<Employee> get(String id);
+    Optional<EmployeeInfo> get(String id);
 }

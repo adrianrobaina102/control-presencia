@@ -1,9 +1,9 @@
-package software.ulpgc.controlpresencia.architecture.ports.in;
+package software.ulpgc.controlpresencia.architecture.ports.out;
 
-import software.ulpgc.controlpresencia.architecture.model.Schedule;
+import software.ulpgc.controlpresencia.architecture.model.ScheduleInfo;
 
 import java.util.Optional;
 
 public interface ScheduleReader {
-    Optional<Schedule> get(String id);
+    Optional<ScheduleInfo> get(String id);
 }
