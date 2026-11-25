@@ -1,6 +1,6 @@
 package software.ulpgc.controlpresencia.architecture.usecases;
 
-import software.ulpgc.controlpresencia.architecture.domain.Schedule;
+import software.ulpgc.controlpresencia.architecture.model.Schedule;
 import software.ulpgc.controlpresencia.architecture.ports.ScheduleReader;
 
 import java.util.List;

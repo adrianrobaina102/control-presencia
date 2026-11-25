@@ -7,7 +7,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import software.ulpgc.controlpresencia.architecture.domain.Employee;
+import software.ulpgc.controlpresencia.architecture.model.Employee;
 import software.ulpgc.controlpresencia.infrastructure.adapters.JsonEmployeeReader;
 
 import java.io.IOException;

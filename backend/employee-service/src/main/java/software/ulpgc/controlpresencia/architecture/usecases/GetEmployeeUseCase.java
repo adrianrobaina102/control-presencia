@@ -1,6 +1,6 @@
 package software.ulpgc.controlpresencia.architecture.usecases;
 
-import software.ulpgc.controlpresencia.architecture.domain.Employee;
+import software.ulpgc.controlpresencia.architecture.model.Employee;
 import software.ulpgc.controlpresencia.architecture.ports.EmployeeReader;
 
 import java.util.Optional;

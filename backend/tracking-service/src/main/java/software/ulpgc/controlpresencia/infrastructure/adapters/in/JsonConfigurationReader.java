@@ -2,7 +2,7 @@ package software.ulpgc.controlpresencia.infrastructure.adapters.in;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import software.ulpgc.controlpresencia.architecture.domain.Configuration;
+import software.ulpgc.controlpresencia.architecture.model.Configuration;
 import software.ulpgc.controlpresencia.architecture.ports.in.ConfigurationReader;
 
 import java.io.File;
