@@ -22,12 +22,9 @@ public class FileEventWriter implements EventWriter {
 
     @Override
     public void write(String eventText) {
-        String row = eventText + System.lineSeparator();
-        File logFile = getFileFor(eventText);
-
         try {
-            logFile.getParentFile().mkdirs();
-            Files.writeString(logFile.toPath(), row, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            getMonthFolder(eventText).mkdirs();
+            Files.writeString(getFileFor(eventText).toPath(), formatRow(eventText), StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -46,8 +43,15 @@ public class FileEventWriter implements EventWriter {
     }
 
     private LocalDateTime getDateTimeFor(String eventText) {
-        String timeStamp = eventText.substring(0, eventText.indexOf(";"));
-        return LocalDateTime.ofInstant(Instant.parse(timeStamp), ZoneId.systemDefault());
+        return LocalDateTime.ofInstant(Instant.parse(extractTimestamp(eventText)), ZoneId.systemDefault());
+    }
+
+    private String extractTimestamp(String eventText) {
+        return eventText.substring(0, eventText.indexOf(";"));
+    }
+
+    private String formatRow(String eventText) {
+        return eventText + System.lineSeparator();
     }
 
     private String formatDate(String eventText, String pattern) {

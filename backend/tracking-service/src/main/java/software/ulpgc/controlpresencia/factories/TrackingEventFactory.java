@@ -20,17 +20,22 @@ public class TrackingEventFactory {
     );
 
     public static TrackingEvent createTrackingEvent() {
-        String phone = faker.phoneNumber().cellPhone();
-        String email = faker.internet().emailAddress();
-        Contact contact = new Contact(email, phone, LocalDate.now());
+        return new TrackingEvent(Instant.now(), randomEmployee(), randomPlace(), randomType());
+    }
 
-        String id = faker.idNumber().valid();
-        String name = faker.name().fullName();
-        Employee employee = new Employee(id, name, contact);
+    private static Employee randomEmployee() {
+        return new Employee(faker.idNumber().valid(), faker.name().fullName(), randomContact());
+    }
 
-        Place randomPlace = places.get(random.nextInt(places.size()));
-        Instant randomTimestamp = Instant.now();
-        TrackingType randomType = random.nextBoolean() ? TrackingType.In : TrackingType.Out;
-        return new TrackingEvent(randomTimestamp, employee, randomPlace, randomType);
+    private static Contact randomContact() {
+        return new Contact(faker.internet().emailAddress(), faker.phoneNumber().cellPhone(), LocalDate.now());
+    }
+
+    private static Place randomPlace() {
+        return places.get(random.nextInt(places.size()));
+    }
+
+    private static TrackingType randomType() {
+        return random.nextBoolean() ? TrackingType.In : TrackingType.Out;
     }
 }
