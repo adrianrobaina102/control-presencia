@@ -87,17 +87,36 @@ Este documento detalla el estado actual, el orden de ataque paso a paso y la gu�
 ## 🛠️ Detalle de Tareas: Paso 1 Inmediato (`reporting-service`)
 
 ### ¿Cómo afrontar `reporting-service`?
-1. **Diagrama UML:** Diagrama editable versionado en `docs/diagrams/reporting-service.drawio`.
-2. **Setup Maven:** Configurar `backend/reporting-service/pom.xml` con Javalin, Gson, JUnit 5, AssertJ.
-3. **Modelos Inmutables:** `IncidentType`, `Incident`, `DailyReport`, `MonthlyReport`.
-4. **Puertos de Salida:** `EventReader`, `EmployeeReader`, `ScheduleReader`.
-5. **Casos de Uso con `Output`:**
+1. [x] **Diagrama UML:** Diagrama editable versionado en `docs/diagrams/reporting-service.drawio`.
+2. [x] **Setup Maven:** Configurado `backend/reporting-service/pom.xml` con Javalin, Gson, JUnit 5, AssertJ.
+3. [x] **Objetos de Negocio (`architecture.model`):** `IncidentType`, `Incident`, `DailyReport`, `MonthlyReport` (con Builders).
+4. [ ] **Lógica de Dominio (`architecture.domain`):** Reglas puras y calculador de horas/incidencias que manejan los objetos de `model`.
+5. [ ] **Puertos de Salida (`architecture.ports`):** `EventReader`, `EmployeeReader`, `ScheduleReader` (y futuro puerto `DatamartRepository` / `ReportStore`).
+6. [ ] **Casos de Uso (`architecture.usecases`) con `Output`:**
    * `GenerateDailyReportUseCase` $\rightarrow$ devuelve `Output<DailyReport>` (`200 OK` si procesa, `404 Not Found` si no existe el empleado/horario, `400 Bad Request` si la fecha no es válida).
    * `GenerateMonthlyReportUseCase` $\rightarrow$ devuelve `Output<MonthlyReport>`.
-6. **Adaptadores HTTP Asíncronos:** `HttpEventReader`, `HttpEmployeeReader`, `HttpScheduleReader` usando `HttpClient.sendAsync(...)`.
-7. **Adaptadores HTTP de Entrada (Endpoints):** `GetDailyReportEndPoint`, `GetMonthlyReportEndPoint` con validación defensiva de query params (`employeeId`, `date`, `month`).
-8. **Composition Root `Main.java`:** Pure DI en el puerto 7075.
-9. **Tests Unitarios:** Suite de pruebas con mocks de los lectores para verificar cálculos de minutos, retrasos y ausencias.
+7. [ ] **Adaptadores HTTP Asíncronos:** `HttpEventReader`, `HttpEmployeeReader`, `HttpScheduleReader` usando `HttpClient.sendAsync(...)`.
+8. [ ] **Adaptadores HTTP de Entrada (Endpoints):** `GetDailyReportEndPoint`, `GetMonthlyReportEndPoint` con validación defensiva de query params (`employeeId`, `date`, `month`).
+9. [ ] **Composition Root `Main.java`:** Pure DI en el puerto 7075.
+10. [ ] **Tests Unitarios:** Suite de pruebas con mocks de los lectores para verificar cálculos de minutos, retrasos y ausencias.
+
+---
+
+## 🏗️ Alineación con Arquitectura de Sistema CQRS (Feeder $\rightarrow$ Datalake $\rightarrow$ Datamart)
+
+Para cumplir al 100% con el patrón **CQRS** visto en clase:
+```text
+[Feeder (tracking-service)] ──(JMS)──▶ [ActiveMQ] ──▶ [Datalake (storer)]
+                                                              │
+                                                              ▼ (Proyector / Monitor)
+                                                     [Datamart Analítico] ◀── [reporting-service]
+```
+
+| Componente | Estado Actual | Qué falta para completarlo |
+| :--- | :--- | :--- |
+| **Feeder (`tracking-service`)** | ✅ Implementado | Documentar/etiquetar su rol como *Feeder* (captura eventos y los publica en ActiveMQ). |
+| **Datalake (`storer`)** | ✅ Implementado | Almacén inmutable en disco (`store/YYYY/MM/YYYYMMDD.log`) + lectura histórica `GET /`. |
+| **Proyector & Datamart (`reporting-service`)** | 🔴 Pendiente | Persistir las proyecciones/reportes calculados en un **Datamart** propio (en lugar de recalcular al vuelo en cada petición) y alimentarlo desde los eventos del Datalake/Broker. |
 
 ---
 

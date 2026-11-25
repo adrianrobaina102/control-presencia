@@ -39,8 +39,8 @@ Este documento analiza el estado real del repositorio `control-presencia` y defi
 software.ulpgc.controlpresencia/
 │
 ├── architecture/                                  <-- Core de negocio (100% Java puro, sin librerías externas)
-│   ├── domain/                                    <-- Objetos puros del negocio (records, enums, entidades y value objects)
-│   ├── model/                                     <-- Cómo funciona el negocio (reglas puras, cálculos, políticas de dominio)
+│   ├── model/                                     <-- Objetos puros del negocio (records, enums, entidades y value objects)
+│   ├── domain/                                    <-- Clases que manejan los objetos del negocio (reglas puras, cálculos, políticas)
 │   ├── usecases/                                  <-- Acciones del sistema (UseCase<Input, Output<T>> e implementaciones)
 │   └── ports/
 │       ├── in/                                    <-- Contratos de entrada

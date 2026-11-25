@@ -16,8 +16,8 @@ El proyecto sigue **Arquitectura Hexagonal (Ports & Adapters)** estricta y princ
 
 1. **`architecture` (El Core):**
    Es el corazón del sistema, donde viven los objetos, reglas y acciones del negocio. No sabe nada de bases de datos, colas de mensajes, ficheros, servidores web ni librerías externas (prohibido importar Gson, ActiveMQ, JMS, Javalin o DataFaker aquí). Contiene **4 subpaquetes estrictos**:
-   - **`domain`:** Los objetos puros e inmutables del negocio (`record` y `enum`: `Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`, `Configuration`, `Building`, `Schedule`, `TimeInterval`, `Incident`). Cero lógica orquestadora.
-   - **`model`:** Cómo funciona el negocio: reglas de dominio puras, políticas, cálculos y servicios de dominio que operan sobre los objetos de `domain` (ej. cálculo de horas trabajadas, detección de incidencias, validaciones de negocio).
+   - **`model`:** Los objetos puros e inmutables del negocio (`record` y `enum`: `Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`, `Configuration`, `Building`, `Schedule`, `TimeInterval`, `Incident`, `DailyReport`, `MonthlyReport`). Cero lógica orquestadora.
+   - **`domain`:** Cómo funciona el negocio: clases y servicios puros que manejan los objetos de `model` (reglas de dominio, cálculos de horas trabajadas, detección de incidencias, validaciones de negocio).
    - **`usecases`:** Las acciones concretas del sistema organizadas bajo el contrato base `UseCase<I, O>` (`RegisterPresenceUseCase`, `StoreEventUseCase`, `GetEventsUseCase`, `GetEmployeeUseCase`, `GenerateDailyReportUseCase`). Son los directores de orquesta del sistema.
    - **`ports`:** Las interfaces divididas en subpaquetes espejo (`in`, `processing`, `out`) o contratos atómicos de entrada/salida:
      - `ports.in`: Contratos de entrada de datos (ej. `TrackingEventReader`, `ConfigurationReader`, `DeviceReader`).
@@ -34,8 +34,8 @@ El proyecto sigue **Arquitectura Hexagonal (Ports & Adapters)** estricta y princ
 
 ## 3. Reglas de Nomenclatura y Clean Code (ISP y SRP Extremos)
 Se aplica de forma estricta el Principio de Responsabilidad Única (SRP) y el Principio de Segregación de Interfaces (ISP):
-1. **Objetos de Dominio (`architecture.domain`):** Sustantivos puros del dominio en `PascalCase`, sin prefijos ni sufijos técnicos (`Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`, `Configuration`, `Building`, `Schedule`). Se priorizan `record` y `enum` inmutables con constructores de conveniencia si se requieren.
-2. **Modelo de Negocio (`architecture.model`):** Clases y servicios puros de dominio que encapsulan cómo funciona el negocio (cálculos, reglas, validaciones de negocio) operando exclusivamente sobre `architecture.domain`.
+1. **Objetos de Negocio (`architecture.model`):** Sustantivos puros del dominio en `PascalCase`, sin prefijos ni sufijos técnicos (`Employee`, `Contact`, `Place`, `TrackingEvent`, `TrackingType`, `Configuration`, `Building`, `Schedule`, `DailyReport`, `MonthlyReport`, `Incident`). Se priorizan `record` y `enum` inmutables con constructores de conveniencia o `Builder` si se requieren.
+2. **Lógica de Dominio (`architecture.domain`):** Clases y servicios puros de dominio que se encargan de manejar los objetos de `architecture.model` (cálculos, reglas, validaciones de negocio).
 3. **Puertos (`architecture.ports`):** Interfaces atómicas de una sola responsabilidad siguiendo el patrón **`<Entidad><Acción/Rol>`**:
    - Ejemplos: `DeviceReader`, `TrackingEventParser`, `TrackingEventSerializer`, `EventPublisher`, `EventWriter`, `EventReader`.
 4. **Casos de Uso (`architecture.usecases`):** Clases con sufijo **`UseCase`** que implementan `UseCase<I, O>` (`RegisterPresenceUseCase`, `StoreEventUseCase`, `GetEventsUseCase`). Viven en `usecases` como las acciones concretas del sistema.
