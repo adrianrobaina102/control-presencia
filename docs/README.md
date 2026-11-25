@@ -10,7 +10,8 @@ Bienvenido al centro de documentación técnica del sistema distribuido de **Con
 | :--- | :--- |
 | **[`roadmap.md`](roadmap.md)** | **Roadmap y Estado del Proyecto**: Planificación por fases, estado de microservicios, tareas pendientes y avance hacia la rúbrica oficial. |
 | **[`diagrams/`](diagrams/README.md)** | **Diagramas de Clases UML** detallados de cada microservicio (`tracking-service`, `storer`, `employee-service`), explicando sus puertos y adaptadores. |
-| **[`architecture.md`](architecture.md)** | **Arquitectura de Red y Flujos de Información** paso a paso, diseño de la red mesh, particionado del Data Lake y reglas para defender la arquitectura. |
+| **[`system-architecture.md`](system-architecture.md)** | **Arquitectura del Sistema (Nivel Macro)**: Visión global Event-Driven + CQRS (**Feeder $\rightarrow$ Broker $\rightarrow$ Datalake $\rightarrow$ Datamart**), microservicios maestros y Gateway. |
+| **[`architecture.md`](architecture.md)** | **Arquitectura de Aplicación y Flujos** paso a paso, diseño interno por servicio, particionado del Data Lake y reglas para defender la arquitectura. |
 | **[`agent.md`](agent.md)** | **Architecture Guardrails & Guidelines**: Especificaciones técnicas, clean code, Pure DI, prohibición de concurrencia manual y cumplimiento de la rúbrica oficial. |
 | **[`images/`](images/)** | Esquemas conceptuales originales de pizarra y diseño de la red de microservicios. |
 
