@@ -39,7 +39,14 @@ public class ListSchedulesUseCaseTest {
     }
 
     private Schedule createSampleSchedule(String id, String name, ShiftType type) {
-        TimeInterval interval = new TimeInterval(LocalTime.of(9, 0), LocalTime.of(17, 0));
-        return new Schedule(id, name, 10, 5, List.of(interval), type, List.of(DayOfWeek.MONDAY));
+        return Schedule.builder()
+                .id(id)
+                .name(name)
+                .courtesyMinutes(10)
+                .exitMarginMinutes(5)
+                .intervals(List.of(new TimeInterval(LocalTime.of(9, 0), LocalTime.of(17, 0))))
+                .type(type)
+                .days(List.of(DayOfWeek.MONDAY))
+                .build();
     }
 }

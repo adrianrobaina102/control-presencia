@@ -58,8 +58,17 @@ public class GetEmployeeUseCaseTest {
     }
 
     private Employee createSampleEmployee(String id, String name) {
-        Contact contact = new Contact("adrian@empresa.com", "+34 600 111 222");
-        Contract contract = new Contract("CTR-001", "SCH-OFFICE-CONTINUOUS", LocalDate.of(2026, 1, 1), null, ContractStatus.ACTIVE);
-        return new Employee(id, name, contact, Role.EMPLOYEE, contract);
+        return Employee.builder()
+                .id(id)
+                .name(name)
+                .contact(new Contact("adrian@empresa.com", "+34 600 111 222"))
+                .role(Role.EMPLOYEE)
+                .contract(Contract.builder()
+                        .id("CTR-001")
+                        .scheduleId("SCH-OFFICE-CONTINUOUS")
+                        .startDate(LocalDate.of(2026, 1, 1))
+                        .status(ContractStatus.ACTIVE)
+                        .build())
+                .build();
     }
 }

@@ -61,8 +61,14 @@ public class GetScheduleUseCaseTest {
     }
 
     private Schedule createSampleSchedule(String id, String name) {
-        TimeInterval interval = new TimeInterval(LocalTime.of(8, 0), LocalTime.of(16, 0));
-        List<DayOfWeek> days = List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY);
-        return new Schedule(id, name, 10, 5, List.of(interval), ShiftType.CONTINUOUS, days);
+        return Schedule.builder()
+                .id(id)
+                .name(name)
+                .courtesyMinutes(10)
+                .exitMarginMinutes(5)
+                .intervals(List.of(new TimeInterval(LocalTime.of(8, 0), LocalTime.of(16, 0))))
+                .type(ShiftType.CONTINUOUS)
+                .days(List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY))
+                .build();
     }
 }
