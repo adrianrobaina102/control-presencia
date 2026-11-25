@@ -31,33 +31,23 @@ Cada microservicio aísla estrictamente su Core (`architecture`) de la infraestr
 
 ### A. Módulo `tracking-service` (Capturador y Productor)
 Gestiona la lectura de presencia desde terminales físicos o llamadas HTTP y publica los eventos de forma individual en el broker JMS.
-*(Detalle completo en [`docs/diagrams/tracking-service-class-diagram.png`](docs/diagrams/tracking-service-class-diagram.png))*
-
-![Diagrama de Clases - Tracking Service](docs/diagrams/tracking-service-class-diagram.png)
+*(Diagrama editable en [`docs/diagrams/tracking-service.drawio`](docs/diagrams/tracking-service.drawio))*
 
 ### B. Módulo `storer` (Data Lake y Persistencia Asíncrona)
 Consume eventos de ActiveMQ con confirmación segura `CLIENT_ACKNOWLEDGE`, particiona los fichajes cronológicamente en disco (`store/YYYY/MM/YYYYMMDD.log`) y sirve el visor web de auditoría.
-*(Detalle completo en [`docs/diagrams/storer-class-diagram.png`](docs/diagrams/storer-class-diagram.png))*
-
-![Diagrama de Clases - Storer](docs/diagrams/storer-class-diagram.png)
+*(Diagrama editable en [`docs/diagrams/storer.drawio`](docs/diagrams/storer.drawio))*
 
 ### C. Módulo `employee-service` (Catálogo de Trabajadores y Contratos)
 Microservicio con API REST para la gestión y consulta de trabajadores, roles, contactos y contratos vinculados a los regímenes horarios.
-*(Detalle completo en [`docs/diagrams/employee-service-class-diagram.png`](docs/diagrams/employee-service-class-diagram.png))*
-
-![Diagrama de Clases - Employee Service](docs/diagrams/employee-service-class-diagram.png)
+*(Diagrama editable en [`docs/diagrams/employee-service.drawio`](docs/diagrams/employee-service.drawio))*
 
 ### D. Módulo `building-service` (Catálogo de Sedes y Centros de Trabajo)
 Microservicio con API REST para la gestión de edificios, ubicaciones y organizaciones asociadas.
-*(Detalle completo en [`docs/diagrams/building-service-class-diagram.png`](docs/diagrams/building-service-class-diagram.png))*
-
-![Diagrama de Clases - Building Service](docs/diagrams/building-service-class-diagram.png)
+*(Diagrama editable en [`docs/diagrams/building-service.drawio`](docs/diagrams/building-service.drawio))*
 
 ### E. Módulo `schedule-service` (Catálogo de Regímenes Horarios)
 Microservicio con API REST para la gestión y consulta de normativas de jornada, intervalos de trabajo (`TimeInterval`), tipos de turno (`ShiftType`) y tolerancias de cortesía.
-*(Detalle completo en [`docs/diagrams/schedule-service-class-diagram.png`](docs/diagrams/schedule-service-class-diagram.png))*
-
-![Diagrama de Clases - Schedule Service](docs/diagrams/schedule-service-class-diagram.png)
+*(Diagrama editable en [`docs/diagrams/schedule-service.drawio`](docs/diagrams/schedule-service.drawio))*
 
 ---
 
@@ -116,13 +106,14 @@ Cada microservicio corre de forma autónoma en su propio puerto y proceso:
 │   ├── architecture.md                                 # Red de microservicios y flujos detallados
 │   ├── agent.md                                        # Architecture Guardrails & Directrices de Calidad
 │   ├── roadmap.md                                      # Planificación por fases y control de entrega
-│   ├── diagrams/                                       # Diagramas de clases UML en alta resolución (PNG)
+│   ├── diagrams/                                       # Diagramas de clases UML editables (.drawio)
 │   │   ├── README.md                                   # Explicación técnica de puertos y patrones
-│   │   ├── tracking-service-class-diagram.png
-│   │   ├── storer-class-diagram.png
-│   │   ├── employee-service-class-diagram.png
-│   │   ├── building-service-class-diagram.png
-│   │   └── schedule-service-class-diagram.png
+│   │   ├── tracking-service.drawio
+│   │   ├── storer.drawio
+│   │   ├── employee-service.drawio
+│   │   ├── building-service.drawio
+│   │   ├── schedule-service.drawio
+│   │   └── reporting-service.drawio
 │   └── images/                                         # Esquemas conceptuales y capturas
 ├── frontend/                                           # Directorio raíz para aplicaciones cliente
 ├── backend/                                            # Módulos del backend distribuido

@@ -1,0 +1,197 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="Página-1">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="model-employee" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;whiteSpace=wrap;html=1;" value="&amp;lt;&amp;lt;Record&amp;gt;&amp;gt;&lt;br&gt;&lt;b&gt;Employee&lt;/b&gt;" vertex="1">
+          <mxGeometry height="88" width="160" x="480" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="emp-attr-id" parent="model-employee" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ id: String" vertex="1">
+          <mxGeometry height="26" width="160" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="emp-attr-name" parent="model-employee" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ name: String" vertex="1">
+          <mxGeometry height="26" width="160" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="model-contact" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;whiteSpace=wrap;html=1;" value="&amp;lt;&amp;lt;Record&amp;gt;&amp;gt;&lt;br&gt;&lt;b&gt;Contact&lt;/b&gt;" vertex="1">
+          <mxGeometry height="88" width="150" x="250" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="contact-attr-email" parent="model-contact" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ email: String" vertex="1">
+          <mxGeometry height="26" width="150" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="contact-attr-phone" parent="model-contact" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ phone: String" vertex="1">
+          <mxGeometry height="26" width="150" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="model-role" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;whiteSpace=wrap;html=1;" value="&amp;lt;&amp;lt;enumeration&amp;gt;&amp;gt;&lt;br&gt;&lt;b&gt;Role&lt;/b&gt;" vertex="1">
+          <mxGeometry height="114" width="140" x="490" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="role-val-1" parent="model-role" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="EMPLOYEE" vertex="1">
+          <mxGeometry height="26" width="140" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="role-val-2" parent="model-role" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="MANAGER" vertex="1">
+          <mxGeometry height="26" width="140" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="role-val-3" parent="model-role" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="ADMIN" vertex="1">
+          <mxGeometry height="26" width="140" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="model-contract" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;whiteSpace=wrap;html=1;" value="&amp;lt;&amp;lt;Record&amp;gt;&amp;gt;&lt;br&gt;&lt;b&gt;Contract&lt;/b&gt;" vertex="1">
+          <mxGeometry height="140" width="160" x="720" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="contract-attr-id" parent="model-contract" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ id: String" vertex="1">
+          <mxGeometry height="26" width="160" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="contract-attr-sched" parent="model-contract" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ scheduleId: String" vertex="1">
+          <mxGeometry height="26" width="160" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="contract-attr-start" parent="model-contract" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ startDate: LocalDate" vertex="1">
+          <mxGeometry height="26" width="160" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="contract-attr-end" parent="model-contract" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ endDate: LocalDate" vertex="1">
+          <mxGeometry height="26" width="160" y="114" as="geometry" />
+        </mxCell>
+        <mxCell id="model-contract-status" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;whiteSpace=wrap;html=1;" value="&amp;lt;&amp;lt;enumeration&amp;gt;&amp;gt;&lt;br&gt;&lt;b&gt;ContractStatus&lt;/b&gt;" vertex="1">
+          <mxGeometry height="114" width="140" x="730" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="status-val-1" parent="model-contract-status" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="ACTIVE" vertex="1">
+          <mxGeometry height="26" width="140" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="status-val-2" parent="model-contract-status" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="ON_LEAVE" vertex="1">
+          <mxGeometry height="26" width="140" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="status-val-3" parent="model-contract-status" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="TERMINATED" vertex="1">
+          <mxGeometry height="26" width="140" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="port-employee-reader" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;whiteSpace=wrap;html=1;" value="&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;br&gt;&lt;b&gt;EmployeeReader&lt;/b&gt;" vertex="1">
+          <mxGeometry height="88" width="240" x="440" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="emp-reader-m1" parent="port-employee-reader" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ get(id: String): Optional&amp;lt;Employee&amp;gt;" vertex="1">
+          <mxGeometry height="26" width="240" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="emp-reader-m2" parent="port-employee-reader" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ getAll(): List&amp;lt;Employee&amp;gt;" vertex="1">
+          <mxGeometry height="26" width="240" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="usecase-get-emp" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="GetEmployeeUseCase" vertex="1">
+          <mxGeometry height="36" width="220" x="405" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="usecase-list-emp" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="ListEmployeesUseCase" vertex="1">
+          <mxGeometry height="36" width="220" x="705" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="interface-usecase" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;whiteSpace=wrap;html=1;" value="&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;br&gt;&lt;b&gt;UseCase&amp;lt;I, O&amp;gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="88" width="180" x="120" y="354" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-base-m1" parent="interface-usecase" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ execute(input: I): O" vertex="1">
+          <mxGeometry height="26" width="180" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-base-m2" parent="interface-usecase" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ execute(): O" vertex="1">
+          <mxGeometry height="26" width="180" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="adapter-json-reader" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="JsonEmployeeReader" vertex="1">
+          <mxGeometry height="78" width="160" x="480" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="json-r-attr1" parent="adapter-json-reader" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- file: File" vertex="1">
+          <mxGeometry height="26" width="160" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="json-r-attr2" parent="adapter-json-reader" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- gson: Gson" vertex="1">
+          <mxGeometry height="26" width="160" y="52" as="geometry" />
+        </mxCell>
+        <mxCell id="endpoint-get-emp" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="GetEmployeeEndPoint" vertex="1">
+          <mxGeometry height="78" width="170" x="430" y="810" as="geometry" />
+        </mxCell>
+        <mxCell id="get-ep-attr1" parent="endpoint-get-emp" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- context: Context" vertex="1">
+          <mxGeometry height="26" width="170" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="get-ep-attr2" parent="endpoint-get-emp" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- gson: Gson" vertex="1">
+          <mxGeometry height="26" width="170" y="52" as="geometry" />
+        </mxCell>
+        <mxCell id="endpoint-list-emp" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="ListEmployeesEndPoint" vertex="1">
+          <mxGeometry height="78" width="170" x="730" y="810" as="geometry" />
+        </mxCell>
+        <mxCell id="list-ep-attr1" parent="endpoint-list-emp" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- context: Context" vertex="1">
+          <mxGeometry height="26" width="170" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="list-ep-attr2" parent="endpoint-list-emp" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- gson: Gson" vertex="1">
+          <mxGeometry height="26" width="170" y="52" as="geometry" />
+        </mxCell>
+        <mxCell id="interface-endpoint" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=36;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;whiteSpace=wrap;html=1;" value="&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;br&gt;&lt;b&gt;EndPoint&lt;/b&gt;" vertex="1">
+          <mxGeometry height="62" width="150" x="150" y="818" as="geometry" />
+        </mxCell>
+        <mxCell id="ep-base-m1" parent="interface-endpoint" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ execute(): void" vertex="1">
+          <mxGeometry height="26" width="150" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-emp-contact" edge="1" parent="1" source="model-employee" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="model-contact" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-emp-role" edge="1" parent="1" source="model-employee" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="model-role" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-emp-contract" edge="1" parent="1" source="model-employee" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="model-contract" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-contract-status" edge="1" parent="1" source="model-contract" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="model-contract-status" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-reader-emp" edge="1" parent="1" source="port-employee-reader" style="endArrow=open;dashed=1;endSize=8;html=1;rounded=0;exitX=0.15;exitY=0;exitDx=0;exitDy=0;entryX=0.15;entryY=1;entryDx=0;entryDy=0;" target="model-employee" value="">
+          <mxGeometry relative="1" x="-0.2643" as="geometry">
+            <Array as="points">
+              <mxPoint x="480" y="480" />
+              <mxPoint x="670" y="480" />
+              <mxPoint x="670" y="360" />
+              <mxPoint x="450" y="360" />
+              <mxPoint x="450" y="160" />
+              <mxPoint x="510" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-getuc-reader" edge="1" parent="1" source="usecase-get-emp" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.35;entryY=0;entryDx=0;entryDy=0;" target="port-employee-reader" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-listuc-reader" edge="1" parent="1" source="usecase-list-emp" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="port-employee-reader" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-getuc-interface" edge="1" parent="1" source="usecase-get-emp" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="interface-usecase" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-listuc-interface" edge="1" parent="1" source="usecase-list-emp" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;" target="interface-usecase" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="815" y="330" />
+              <mxPoint x="210" y="330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-json-reader-port" edge="1" parent="1" source="adapter-json-reader" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="port-employee-reader" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-getep-getuc" edge="1" parent="1" source="endpoint-get-emp" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;exitX=0.15;exitY=0;exitDx=0;exitDy=0;entryX=0.15;entryY=1;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;" target="usecase-get-emp" value="">
+          <mxGeometry relative="1" x="0.0011" as="geometry">
+            <Array as="points">
+              <mxPoint x="455.5" y="770" />
+              <mxPoint x="420" y="770" />
+              <mxPoint x="420" y="490" />
+              <mxPoint x="438" y="490" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-listep-listuc" edge="1" parent="1" source="endpoint-list-emp" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;" target="usecase-list-emp" value="">
+          <mxGeometry relative="1" x="-0.0012" as="geometry">
+            <Array as="points">
+              <mxPoint x="857.5" y="600" />
+              <mxPoint x="870" y="600" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-getep-interface" edge="1" parent="1" source="endpoint-get-emp" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="interface-endpoint" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-listep-interface" edge="1" parent="1" source="endpoint-list-emp" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;" target="interface-endpoint" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="815" y="930" />
+              <mxPoint x="225" y="930" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

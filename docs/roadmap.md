@@ -87,7 +87,7 @@ Este documento detalla el estado actual, el orden de ataque paso a paso y la gu�
 ## 🛠️ Detalle de Tareas: Paso 1 Inmediato (`reporting-service`)
 
 ### ¿Cómo afrontar `reporting-service`?
-1. **Diagrama UML:** Exportar el diagrama que diseñamos a `docs/diagrams/reporting-service-class-diagram.png`.
+1. **Diagrama UML:** Diagrama editable versionado en `docs/diagrams/reporting-service.drawio`.
 2. **Setup Maven:** Configurar `backend/reporting-service/pom.xml` con Javalin, Gson, JUnit 5, AssertJ.
 3. **Modelos Inmutables:** `IncidentType`, `Incident`, `DailyReport`, `MonthlyReport`.
 4. **Puertos de Salida:** `EventReader`, `EmployeeReader`, `ScheduleReader`.

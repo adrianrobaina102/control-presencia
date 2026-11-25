@@ -1,6 +1,6 @@
 # 📐 Diagramas de Clases y Arquitectura Hexagonal
 
-> **Nota de formato:** Todos los diagramas de arquitectura se publican y mantienen **estrictamente en formato de imagen PNG** (`.png`) para garantizar su compatibilidad y renderización nativa inmediata en GitHub y cualquier visor Markdown.
+> **Nota de formato:** Todos los diagramas de arquitectura se mantienen y versionan en formato editable **Draw.io** (`.drawio`) para que puedan inspeccionarse y actualizarse de forma continua durante el desarrollo de la aplicación.
 
 Este directorio contiene los diagramas de clases UML correspondientes a los microservicios del sistema distribuido de **Control de Presencia**, modelados siguiendo los principios de la **Arquitectura Hexagonal (Puertos y Adaptadores)**, Inversión de Dependencias (**Pure DI**) y **SOLID**.
 
@@ -10,10 +10,10 @@ Este directorio contiene los diagramas de clases UML correspondientes a los micr
 
 Microservicio productor responsable de registrar los fichajes en tiempo real desde terminales físicos o llamadas HTTP y emitirlos como eventos individuales a Apache ActiveMQ.
 
-![Diagrama de Clases - Tracking Service](tracking-service-class-diagram.png)
+- **Diagrama editable:** [`tracking-service.drawio`](tracking-service.drawio)
 
 ### Puntos Clave de Diseño:
-- **Core Aislado (`model` & `ports`):** Entidades puras e inmutables (`TrackingEvent`, `Employee`, `Place`, `TrackingType`, `Configuration`).
+- **Core Aislado (`domain` & `ports`):** Entidades puras e inmutables (`TrackingEvent`, `Employee`, `Place`, `TrackingType`, `Configuration`).
 - **Abstracción de Puertos Espejo:**
   - `ports.in.DeviceReader`: Permite conectar dispositivos físicos, terminales simulados o APIs.
   - `ports.processing`: Desacopla la lógica de parseo (`TrackingEventParser`) y formateo (`TrackingEventSerializer`).
@@ -26,7 +26,7 @@ Microservicio productor responsable de registrar los fichajes en tiempo real des
 
 Microservicio consumidor encargado de drenar la cola de mensajería, persistir los eventos de forma cronológica en disco (`store/YYYY/MM/YYYYMMDD.log`) con confirmación segura `CLIENT_ACKNOWLEDGE`, y servir la consulta histórica por HTTP.
 
-![Diagrama de Clases - Storer](storer-class-diagram.png)
+- **Diagrama editable:** [`storer.drawio`](storer.drawio)
 
 ### Puntos Clave de Diseño:
 - **Segregación de Responsabilidades (CQRS):**
@@ -41,7 +41,7 @@ Microservicio consumidor encargado de drenar la cola de mensajería, persistir l
 
 Microservicio de consulta de trabajadores, roles, sedes asignadas y contratos laborales vinculados a los tres regímenes horarios exigidos por la rúbrica.
 
-![Diagrama de Clases - Employee Service](employee-service-class-diagram.png)
+- **Diagrama editable:** [`employee-service.drawio`](employee-service.drawio)
 
 ### Puntos Clave de Diseño:
 - **Modelo de Dominio Inmutable:** `Employee`, `Role`, `Contact`, `Contract`, `ContractStatus` modelados como `record` y `enum` de Java 27.
@@ -55,7 +55,7 @@ Microservicio de consulta de trabajadores, roles, sedes asignadas y contratos la
 
 Microservicio de consulta de centros de trabajo, organizaciones y localizaciones corporativas donde prestan servicio los trabajadores.
 
-![Diagrama de Clases - Building Service](building-service-class-diagram.png)
+- **Diagrama editable:** [`building-service.drawio`](building-service.drawio)
 
 ### Puntos Clave de Diseño:
 - **Modelo de Dominio Inmutable:** `Building` y `Organization` estructurados como `record` puros.
@@ -64,14 +64,13 @@ Microservicio de consulta de centros de trabajo, organizaciones y localizaciones
 - **Adaptador de Infraestructura:** `JsonBuildingReader` lee de forma segura `buildings.json` gestionando streams y serialización Gson.
 - **Endpoints Web:** `GetBuildingEndPoint` (`GET /buildings?id={id}`) y `ListBuildingsEndPoint` (`GET /buildings`) con validación de parámetros y respuestas HTTP tipadas (200, 400, 404).
 
-
 ---
 
 ## 5. Módulo `schedule-service` (Catálogo de Regímenes Horarios)
 
 Microservicio de consulta de normativas de jornada laboral, tolerancias de cortesía e intervalos horarios de trabajo (jornada continua de oficina, jornada partida de comercio y turnos rotativos hospitalarios 24/7).
 
-![Diagrama de Clases - Schedule Service](schedule-service-class-diagram.png)
+- **Diagrama editable:** [`schedule-service.drawio`](schedule-service.drawio)
 
 ### Puntos Clave de Diseño:
 - **Modelo de Dominio Rico e Inmutable:** `Schedule` y `TimeInterval` como `record`, con enumeraciones `ShiftType` (`CONTINUOUS`, `SPLIT`, `ROTATING`) y `DayOfWeek`. Métodos de consulta de lógica pura de dominio (`appliesOn`, `totalExpectedMinutes`, `durationMinutes`).
@@ -80,3 +79,11 @@ Microservicio de consulta de normativas de jornada laboral, tolerancias de corte
 - **Casos de Uso Aislados:** `GetScheduleUseCase` y `ListSchedulesUseCase` implementando `UseCase<I, O>`.
 - **Adaptador de Infraestructura:** `JsonScheduleReader` deserializa `schedules.json` con Gson de forma segura y tolerante a fallos.
 - **Endpoints Web:** `GetScheduleEndPoint` (`GET /schedules?id={id}`) y `ListSchedulesEndPoint` (`GET /schedules`) implementando `EndPoint`.
+
+---
+
+## 6. Módulo `reporting-service` (Núcleo Analítico - En Diseño)
+
+Microservicio analítico encargado de cruzar eventos de presencia, contratos de empleados y regímenes horarios para calcular balances diarios y mensuales e incidentes (`LATE_ARRIVAL`, `EARLY_EXIT`, `UNJUSTIFIED_ABSENCE`, `OVERTIME`).
+
+- **Diagrama editable:** [`reporting-service.drawio`](reporting-service.drawio)
