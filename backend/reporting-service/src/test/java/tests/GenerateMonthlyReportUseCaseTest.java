@@ -11,6 +11,7 @@ import software.ulpgc.controlpresencia.architecture.usecases.GenerateMonthlyRepo
 import java.time.*;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,35 +22,35 @@ public class GenerateMonthlyReportUseCaseTest {
         LocalDate day1 = LocalDate.of(2026, 11, 2); // Monday
         LocalDate day2 = LocalDate.of(2026, 11, 3); // Tuesday
 
-        EmployeeReader employeeReader = _ -> Optional.of(new EmployeeInfo("emp-01", "Adrián", "SCH-01"));
-        ScheduleReader scheduleReader = _ -> Optional.of(new ScheduleInfo(
+        EmployeeReader employeeReader = _ -> CompletableFuture.completedFuture(Optional.of(new EmployeeInfo("emp-01", "Adrián", "SCH-01")));
+        ScheduleReader scheduleReader = _ -> CompletableFuture.completedFuture(Optional.of(new ScheduleInfo(
                 "SCH-01",
                 "Oficina",
                 10,
                 5,
                 List.of(new TimeInterval(LocalTime.of(8, 0), LocalTime.of(16, 0))),
                 List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY)
-        ));
+        )));
         EventReader eventReader = (_, date) -> {
             if (date.equals(day1)) {
-                return List.of(
+                return CompletableFuture.completedFuture(List.of(
                         event(day1, 8, 0, TrackingType.In),
                         event(day1, 16, 0, TrackingType.Out)
-                );
+                ));
             }
             if (date.equals(day2)) {
-                return List.of(
+                return CompletableFuture.completedFuture(List.of(
                         event(day2, 8, 20, TrackingType.In),
                         event(day2, 16, 20, TrackingType.Out)
-                );
+                ));
             }
-            return List.of();
+            return CompletableFuture.completedFuture(List.of());
         };
 
         GenerateDailyReportUseCase dailyUseCase = new GenerateDailyReportUseCase(employeeReader, eventReader, scheduleReader);
         GenerateMonthlyReportUseCase monthlyUseCase = new GenerateMonthlyReportUseCase(dailyUseCase);
 
-        Optional<MonthlyReport> result = monthlyUseCase.execute(new GenerateMonthlyReportUseCase.Param("emp-01", YearMonth.of(2026, 11)));
+        Optional<MonthlyReport> result = monthlyUseCase.execute(new GenerateMonthlyReportUseCase.Param("emp-01", YearMonth.of(2026, 11))).join();
 
         assertThat(result).isPresent();
         MonthlyReport report = result.get();
@@ -66,13 +67,13 @@ public class GenerateMonthlyReportUseCaseTest {
     @Test
     public void should_return_empty_when_employee_does_not_exist() {
         GenerateDailyReportUseCase dailyUseCase = new GenerateDailyReportUseCase(
-                _ -> Optional.empty(),
-                (_, _) -> List.of(),
-                _ -> Optional.empty()
+                _ -> CompletableFuture.completedFuture(Optional.empty()),
+                (_, _) -> CompletableFuture.completedFuture(List.of()),
+                _ -> CompletableFuture.completedFuture(Optional.empty())
         );
         GenerateMonthlyReportUseCase monthlyUseCase = new GenerateMonthlyReportUseCase(dailyUseCase);
 
-        Optional<MonthlyReport> result = monthlyUseCase.execute(new GenerateMonthlyReportUseCase.Param("unknown", YearMonth.of(2026, 11)));
+        Optional<MonthlyReport> result = monthlyUseCase.execute(new GenerateMonthlyReportUseCase.Param("unknown", YearMonth.of(2026, 11))).join();
 
         assertThat(result).isEmpty();
     }
