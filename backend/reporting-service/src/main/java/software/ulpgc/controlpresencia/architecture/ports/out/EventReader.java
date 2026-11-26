@@ -4,7 +4,8 @@ import software.ulpgc.controlpresencia.architecture.model.TrackingInfo;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public interface EventReader {
-    List<TrackingInfo> getEvents(String employeeId, LocalDate date);
+    CompletableFuture<List<TrackingInfo>> getEvents(String employeeId, LocalDate date);
 }

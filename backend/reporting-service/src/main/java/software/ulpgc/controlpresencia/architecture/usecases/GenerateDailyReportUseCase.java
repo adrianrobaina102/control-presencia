@@ -12,8 +12,9 @@ import software.ulpgc.controlpresencia.architecture.ports.out.ScheduleReader;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
-public class GenerateDailyReportUseCase implements UseCase<GenerateDailyReportUseCase.Param, Optional<DailyReport>> {
+public class GenerateDailyReportUseCase implements UseCase<GenerateDailyReportUseCase.Param, CompletableFuture<Optional<DailyReport>>> {
 
     public record Param(String employeeId, LocalDate date) {}
 
@@ -28,13 +29,18 @@ public class GenerateDailyReportUseCase implements UseCase<GenerateDailyReportUs
     }
 
     @Override
-    public Optional<DailyReport> execute(Param input) {
-        Optional<EmployeeInfo> employee = employeeReader.get(input.employeeId());
-        if (employee.isEmpty()) return Optional.empty();
-        Optional<ScheduleInfo> schedule = scheduleReader.get(employee.get().scheduleId());
-        if (schedule.isEmpty()) return Optional.empty();
+    public CompletableFuture<Optional<DailyReport>> execute(Param input) {
+        return employeeReader.get(input.employeeId())
+                .thenCompose(employee -> employee
+                        .map(emp -> fetchScheduleAndEvents(emp, input.date()))
+                        .orElseGet(() -> CompletableFuture.completedFuture(Optional.empty())));
+    }
 
-        List<TrackingInfo> events = eventReader.getEvents(input.employeeId(), input.date());
-        return Optional.of(DailyReportCalculator.calculate(input.employeeId(), input.date(), schedule.get(), events));
+    private CompletableFuture<Optional<DailyReport>> fetchScheduleAndEvents(EmployeeInfo employee, LocalDate date) {
+        CompletableFuture<Optional<ScheduleInfo>> scheduleFuture = scheduleReader.get(employee.scheduleId());
+        CompletableFuture<List<TrackingInfo>> eventsFuture = eventReader.getEvents(employee.id(), date);
+
+        return scheduleFuture.thenCombine(eventsFuture, (scheduleOpt, events) ->
+                scheduleOpt.map(schedule -> DailyReportCalculator.calculate(employee.id(), date, schedule, events)));
     }
 }

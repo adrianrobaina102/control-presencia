@@ -6,11 +6,12 @@ import software.ulpgc.controlpresencia.architecture.model.IncidentType;
 import software.ulpgc.controlpresencia.architecture.model.MonthlyReport;
 
 import java.time.YearMonth;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.IntStream;
 
-public class GenerateMonthlyReportUseCase implements UseCase<GenerateMonthlyReportUseCase.Param, Optional<MonthlyReport>> {
+public class GenerateMonthlyReportUseCase implements UseCase<GenerateMonthlyReportUseCase.Param, CompletableFuture<Optional<MonthlyReport>>> {
     private final GenerateDailyReportUseCase dailyUseCase;
 
     public GenerateMonthlyReportUseCase(GenerateDailyReportUseCase dailyUseCase) {
@@ -20,13 +21,19 @@ public class GenerateMonthlyReportUseCase implements UseCase<GenerateMonthlyRepo
     public record Param(String employeeId, YearMonth month) {}
 
     @Override
-    public Optional<MonthlyReport> execute(Param input) {
-        List<DailyReport> dailyReports = new ArrayList<>();
-        for (int i = 1; i <= input.month().lengthOfMonth(); i++) {
-            Optional<DailyReport> daily = dailyUseCase.execute(new GenerateDailyReportUseCase.Param(input.employeeId(), input.month().atDay(i)));
-            if (daily.isEmpty()) return Optional.empty();
-            dailyReports.add(daily.get());
-        }
+    public CompletableFuture<Optional<MonthlyReport>> execute(Param input) {
+        List<CompletableFuture<Optional<DailyReport>>> futures = IntStream.rangeClosed(1, input.month().lengthOfMonth())
+                .mapToObj(day -> dailyUseCase.execute(new GenerateDailyReportUseCase.Param(input.employeeId(), input.month().atDay(day))))
+                .toList();
+
+        return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
+                .thenApply(_ -> combineDailyReports(input, futures));
+    }
+
+    private Optional<MonthlyReport> combineDailyReports(Param input, List<CompletableFuture<Optional<DailyReport>>> futures) {
+        List<Optional<DailyReport>> results = futures.stream().map(CompletableFuture::join).toList();
+        if (results.stream().anyMatch(Optional::isEmpty)) return Optional.empty();
+        List<DailyReport> dailyReports = results.stream().map(Optional::get).toList();
         return Optional.of(buildMonthlyReport(input, dailyReports));
     }
 
