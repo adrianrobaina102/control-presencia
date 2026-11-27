@@ -108,19 +108,19 @@
         <mxCell id="J2jz5a18MDsQnHRqPScm-13" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="EventReader" vertex="1">
           <mxGeometry height="50" width="390" x="2280" y="490" as="geometry" />
         </mxCell>
-        <mxCell id="J2jz5a18MDsQnHRqPScm-14" parent="J2jz5a18MDsQnHRqPScm-13" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ getEvents(employeeId: String, date: LocalDate): List&amp;lt;TrackingInfo&amp;gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="J2jz5a18MDsQnHRqPScm-14" parent="J2jz5a18MDsQnHRqPScm-13" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ getEvents(employeeId: String, date: LocalDate): CompletableFuture&amp;lt;List&amp;lt;TrackingInfo&amp;gt;&amp;gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="24" width="390" y="26" as="geometry" />
         </mxCell>
         <mxCell id="J2jz5a18MDsQnHRqPScm-17" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="EmployeeReader" vertex="1">
           <mxGeometry height="50" width="300" x="2340" y="560" as="geometry" />
         </mxCell>
-        <mxCell id="J2jz5a18MDsQnHRqPScm-18" parent="J2jz5a18MDsQnHRqPScm-17" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ get(id: String): Optional&amp;lt;EmployeeInfo&amp;gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="J2jz5a18MDsQnHRqPScm-18" parent="J2jz5a18MDsQnHRqPScm-17" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ get(id: String): CompletableFuture&amp;lt;Optional&amp;lt;EmployeeInfo&amp;gt;&amp;gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="24" width="300" y="26" as="geometry" />
         </mxCell>
         <mxCell id="J2jz5a18MDsQnHRqPScm-19" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;text-align: left;&quot;&gt;Schedule&lt;/span&gt;Reader" vertex="1">
           <mxGeometry height="50" width="300" x="2340" y="630" as="geometry" />
         </mxCell>
-        <mxCell id="J2jz5a18MDsQnHRqPScm-20" parent="J2jz5a18MDsQnHRqPScm-19" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ get(id: String): Optional&amp;lt;ScheduleInfo&amp;gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="J2jz5a18MDsQnHRqPScm-20" parent="J2jz5a18MDsQnHRqPScm-19" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ get(id: String): CompletableFuture&amp;lt;Optional&amp;lt;ScheduleInfo&amp;gt;&amp;gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="24" width="300" y="26" as="geometry" />
         </mxCell>
         <mxCell id="J2jz5a18MDsQnHRqPScm-21" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="UseCase&amp;lt;P, R&amp;gt;" vertex="1">
@@ -141,7 +141,7 @@
         <mxCell id="domain-daily-calc" parent="1" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="DailyReportCalculator" vertex="1">
           <mxGeometry height="54" width="520" x="1360" y="510" as="geometry" />
         </mxCell>
-        <mxCell id="domain-daily-calc-m1" parent="domain-daily-calc" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ calculate(employeeId: String, date: LocalDate, schedule: ScheduleInfo, events: List&amp;lt;TrackingInfo&amp;gt;): DailyReport" vertex="1">
+        <mxCell id="domain-daily-calc-m1" parent="domain-daily-calc" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ calculate(employeeId: String, date: LocalDate, schedule: ScheduleInfo, events: CompletableFuture&amp;lt;List&amp;lt;TrackingInfo&amp;gt;&amp;gt;): DailyReport" vertex="1">
           <mxGeometry height="28" width="520" y="26" as="geometry" />
         </mxCell>
         <mxCell id="edge-dailyuc-to-calc" edge="1" parent="1" source="J2jz5a18MDsQnHRqPScm-25" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" target="domain-daily-calc" value="">
@@ -155,7 +155,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="J2jz5a18MDsQnHRqPScm-26" parent="J2jz5a18MDsQnHRqPScm-25" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ record Param(employeeId: String, date: LocalDate)&lt;div&gt;+ execute(param: Param): Optional&amp;lt;DailyReport&amp;gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="J2jz5a18MDsQnHRqPScm-26" parent="J2jz5a18MDsQnHRqPScm-25" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ record Param(employeeId: String, date: LocalDate)&lt;div&gt;+ execute(param: Param): CompletableFuture&amp;lt;Optional&amp;lt;DailyReport&amp;gt;&amp;gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="50" width="400" y="26" as="geometry" />
         </mxCell>
         <mxCell id="J2jz5a18MDsQnHRqPScm-28" edge="1" parent="1" source="J2jz5a18MDsQnHRqPScm-25" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;defaultLabelBackgroundColor=page;labelPadding=0 4;exitX=0.001;exitY=0.287;exitDx=0;exitDy=0;entryX=0.999;entryY=0.379;entryDx=0;entryDy=0;entryPerimeter=0;exitPerimeter=0;" target="J2jz5a18MDsQnHRqPScm-21" value="">
@@ -167,7 +167,7 @@
         <mxCell id="J2jz5a18MDsQnHRqPScm-29" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="GenerateMonthlyReportUseCase" vertex="1">
           <mxGeometry height="76" width="400" x="1780" y="722" as="geometry" />
         </mxCell>
-        <mxCell id="J2jz5a18MDsQnHRqPScm-30" parent="J2jz5a18MDsQnHRqPScm-29" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ record Param(employeeId: String, month: YearMonth)&lt;div&gt;+ execute(param: Param): Optional&amp;lt;MonthlyReport&amp;gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="J2jz5a18MDsQnHRqPScm-30" parent="J2jz5a18MDsQnHRqPScm-29" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ record Param(employeeId: String, month: YearMonth)&lt;div&gt;+ execute(param: Param): CompletableFuture&amp;lt;Optional&amp;lt;MonthlyReport&amp;gt;&amp;gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="50" width="400" y="26" as="geometry" />
         </mxCell>
         <mxCell id="J2jz5a18MDsQnHRqPScm-31" edge="1" parent="1" source="J2jz5a18MDsQnHRqPScm-29" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;defaultLabelBackgroundColor=page;labelPadding=0 4;exitX=-0.009;exitY=0.132;exitDx=0;exitDy=0;entryX=0.997;entryY=0.446;entryDx=0;entryDy=0;entryPerimeter=0;exitPerimeter=0;" target="J2jz5a18MDsQnHRqPScm-21" value="">
@@ -224,19 +224,19 @@
         <mxCell id="J2jz5a18MDsQnHRqPScm-38" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="HttpEventReader" vertex="1">
           <mxGeometry height="50" width="390" x="2790" y="490" as="geometry" />
         </mxCell>
-        <mxCell id="m-http-ev-1" parent="J2jz5a18MDsQnHRqPScm-38" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ getEvents(employeeId: String, date: LocalDate): List&amp;lt;TrackingInfo&amp;gt;" vertex="1">
+        <mxCell id="m-http-ev-1" parent="J2jz5a18MDsQnHRqPScm-38" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ getEvents(employeeId: String, date: LocalDate): CompletableFuture&amp;lt;List&amp;lt;TrackingInfo&amp;gt;&amp;gt;" vertex="1">
           <mxGeometry height="24" width="390" y="26" as="geometry" />
         </mxCell>
         <mxCell id="J2jz5a18MDsQnHRqPScm-40" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="HttpEmployeeReader" vertex="1">
           <mxGeometry height="50" width="300" x="2790" y="560" as="geometry" />
         </mxCell>
-        <mxCell id="m-http-emp-1" parent="J2jz5a18MDsQnHRqPScm-40" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ get(id: String): Optional&amp;lt;EmployeeInfo&amp;gt;" vertex="1">
+        <mxCell id="m-http-emp-1" parent="J2jz5a18MDsQnHRqPScm-40" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ get(id: String): CompletableFuture&amp;lt;Optional&amp;lt;EmployeeInfo&amp;gt;&amp;gt;" vertex="1">
           <mxGeometry height="24" width="300" y="26" as="geometry" />
         </mxCell>
         <mxCell id="J2jz5a18MDsQnHRqPScm-42" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="HttpScheduleReader" vertex="1">
           <mxGeometry height="50" width="300" x="2790" y="630" as="geometry" />
         </mxCell>
-        <mxCell id="m-http-sch-1" parent="J2jz5a18MDsQnHRqPScm-42" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ get(id: String): Optional&amp;lt;ScheduleInfo&amp;gt;" vertex="1">
+        <mxCell id="m-http-sch-1" parent="J2jz5a18MDsQnHRqPScm-42" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ get(id: String): CompletableFuture&amp;lt;Optional&amp;lt;ScheduleInfo&amp;gt;&amp;gt;" vertex="1">
           <mxGeometry height="24" width="300" y="26" as="geometry" />
         </mxCell>
         <mxCell id="J2jz5a18MDsQnHRqPScm-45" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="GetDailyReportEndPoint" vertex="1">
