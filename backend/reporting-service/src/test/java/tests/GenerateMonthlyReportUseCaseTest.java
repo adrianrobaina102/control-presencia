@@ -7,6 +7,7 @@ import software.ulpgc.controlpresencia.architecture.ports.out.EventReader;
 import software.ulpgc.controlpresencia.architecture.ports.out.ScheduleReader;
 import software.ulpgc.controlpresencia.architecture.usecases.GenerateDailyReportUseCase;
 import software.ulpgc.controlpresencia.architecture.usecases.GenerateMonthlyReportUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.Output;
 
 import java.time.*;
 import java.util.List;
@@ -50,10 +51,11 @@ public class GenerateMonthlyReportUseCaseTest {
         GenerateDailyReportUseCase dailyUseCase = new GenerateDailyReportUseCase(employeeReader, eventReader, scheduleReader);
         GenerateMonthlyReportUseCase monthlyUseCase = new GenerateMonthlyReportUseCase(dailyUseCase);
 
-        Optional<MonthlyReport> result = monthlyUseCase.execute(new GenerateMonthlyReportUseCase.Param("emp-01", YearMonth.of(2026, 11))).join();
+        Output<MonthlyReport> output = monthlyUseCase.execute(new GenerateMonthlyReportUseCase.Param("emp-01", YearMonth.of(2026, 11))).join();
 
-        assertThat(result).isPresent();
-        MonthlyReport report = result.get();
+        assertThat(output.isSuccess()).isTrue();
+        assertThat(output.status()).isEqualTo(200);
+        MonthlyReport report = output.result();
         assertThat(report.employeeId()).isEqualTo("emp-01");
         assertThat(report.yearMonth()).isEqualTo("2026-11");
         assertThat(report.reportList()).hasSize(30);
@@ -65,7 +67,7 @@ public class GenerateMonthlyReportUseCaseTest {
     }
 
     @Test
-    public void should_return_empty_when_employee_does_not_exist() {
+    public void should_return_not_found_when_employee_does_not_exist() {
         GenerateDailyReportUseCase dailyUseCase = new GenerateDailyReportUseCase(
                 _ -> CompletableFuture.completedFuture(Optional.empty()),
                 (_, _) -> CompletableFuture.completedFuture(List.of()),
@@ -73,9 +75,10 @@ public class GenerateMonthlyReportUseCaseTest {
         );
         GenerateMonthlyReportUseCase monthlyUseCase = new GenerateMonthlyReportUseCase(dailyUseCase);
 
-        Optional<MonthlyReport> result = monthlyUseCase.execute(new GenerateMonthlyReportUseCase.Param("unknown", YearMonth.of(2026, 11))).join();
+        Output<MonthlyReport> output = monthlyUseCase.execute(new GenerateMonthlyReportUseCase.Param("unknown", YearMonth.of(2026, 11))).join();
 
-        assertThat(result).isEmpty();
+        assertThat(output.isSuccess()).isFalse();
+        assertThat(output.status()).isEqualTo(404);
     }
 
     private TrackingInfo event(LocalDate date, int hour, int minute, TrackingType type) {

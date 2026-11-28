@@ -6,6 +6,7 @@ import software.ulpgc.controlpresencia.architecture.ports.out.EmployeeReader;
 import software.ulpgc.controlpresencia.architecture.ports.out.EventReader;
 import software.ulpgc.controlpresencia.architecture.ports.out.ScheduleReader;
 import software.ulpgc.controlpresencia.architecture.usecases.GenerateDailyReportUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.Output;
 
 import java.time.*;
 import java.util.List;
@@ -36,29 +37,31 @@ public class GenerateDailyReportUseCaseTest {
         ));
 
         GenerateDailyReportUseCase useCase = new GenerateDailyReportUseCase(employeeReader, eventReader, scheduleReader);
-        Optional<DailyReport> result = useCase.execute(new GenerateDailyReportUseCase.Param("emp-01", DATE)).join();
+        Output<DailyReport> output = useCase.execute(new GenerateDailyReportUseCase.Param("emp-01", DATE)).join();
 
-        assertThat(result).isPresent();
-        assertThat(result.get().expectedMinutes()).isEqualTo(480);
-        assertThat(result.get().actualMinutes()).isEqualTo(480);
-        assertThat(result.get().incidents()).isEmpty();
+        assertThat(output.isSuccess()).isTrue();
+        assertThat(output.status()).isEqualTo(200);
+        assertThat(output.result().expectedMinutes()).isEqualTo(480);
+        assertThat(output.result().actualMinutes()).isEqualTo(480);
+        assertThat(output.result().incidents()).isEmpty();
     }
 
     @Test
-    public void should_return_empty_when_employee_does_not_exist() {
+    public void should_return_not_found_when_employee_does_not_exist() {
         GenerateDailyReportUseCase useCase = new GenerateDailyReportUseCase(
                 _ -> CompletableFuture.completedFuture(Optional.empty()),
                 (_, _) -> CompletableFuture.completedFuture(List.of()),
                 _ -> CompletableFuture.completedFuture(Optional.empty())
         );
 
-        Optional<DailyReport> result = useCase.execute(new GenerateDailyReportUseCase.Param("unknown", DATE)).join();
+        Output<DailyReport> output = useCase.execute(new GenerateDailyReportUseCase.Param("unknown", DATE)).join();
 
-        assertThat(result).isEmpty();
+        assertThat(output.isSuccess()).isFalse();
+        assertThat(output.status()).isEqualTo(404);
     }
 
     @Test
-    public void should_return_empty_when_schedule_does_not_exist() {
+    public void should_return_not_found_when_schedule_does_not_exist() {
         EmployeeReader employeeReader = _ -> CompletableFuture.completedFuture(Optional.of(new EmployeeInfo("emp-01", "Adrián", "SCH-MISSING")));
         GenerateDailyReportUseCase useCase = new GenerateDailyReportUseCase(
                 employeeReader,
@@ -66,9 +69,10 @@ public class GenerateDailyReportUseCaseTest {
                 _ -> CompletableFuture.completedFuture(Optional.empty())
         );
 
-        Optional<DailyReport> result = useCase.execute(new GenerateDailyReportUseCase.Param("emp-01", DATE)).join();
+        Output<DailyReport> output = useCase.execute(new GenerateDailyReportUseCase.Param("emp-01", DATE)).join();
 
-        assertThat(result).isEmpty();
+        assertThat(output.isSuccess()).isFalse();
+        assertThat(output.status()).isEqualTo(404);
     }
 
     private Instant instant(int hour, int minute) {
