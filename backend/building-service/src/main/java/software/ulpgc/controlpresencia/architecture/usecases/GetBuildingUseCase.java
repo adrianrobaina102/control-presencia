@@ -5,7 +5,7 @@ import software.ulpgc.controlpresencia.architecture.ports.BuildingReader;
 
 import java.util.Optional;
 
-public class GetBuildingUseCase implements UseCase<String, Optional<Building>>  {
+public class GetBuildingUseCase implements UseCase<String, Output<Building>>  {
     private final BuildingReader reader;
 
     public GetBuildingUseCase(BuildingReader reader) {
@@ -13,7 +13,8 @@ public class GetBuildingUseCase implements UseCase<String, Optional<Building>>  
     }
 
     @Override
-    public Optional<Building> execute(String id) {
-        return this.reader.get(id);
+    public Output<Building> execute(String id) {
+        Optional<Building> building = this.reader.get(id);
+        return building.map(Output::ok).orElseGet(() -> Output.notFound("Building not found"));
     }
 }

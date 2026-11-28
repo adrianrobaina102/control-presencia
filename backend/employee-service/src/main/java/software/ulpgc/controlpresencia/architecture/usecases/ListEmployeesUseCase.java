@@ -5,7 +5,7 @@ import software.ulpgc.controlpresencia.architecture.ports.EmployeeReader;
 
 import java.util.List;
 
-public class ListEmployeesUseCase implements UseCase<Void, List<Employee>> {
+public class ListEmployeesUseCase implements UseCase<Void, Output<List<Employee>>> {
     private final EmployeeReader reader;
 
     public ListEmployeesUseCase(EmployeeReader reader) {
@@ -13,7 +13,7 @@ public class ListEmployeesUseCase implements UseCase<Void, List<Employee>> {
     }
 
     @Override
-    public List<Employee> execute(Void input) {
-        return this.reader.getAll();
+    public Output<List<Employee>> execute(Void input) {
+        return Output.ok(this.reader.getAll());
     }
 }

@@ -3,7 +3,9 @@ package software.ulpgc.controlpresencia.infrastructure.adapters;
 import com.google.gson.Gson;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import software.ulpgc.controlpresencia.architecture.model.Schedule;
 import software.ulpgc.controlpresencia.architecture.usecases.GetScheduleUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.Output;
 
 public class GetScheduleEndPoint implements EndPoint {
     private final GetScheduleUseCase useCase;
@@ -25,9 +27,14 @@ public class GetScheduleEndPoint implements EndPoint {
             ctx.status(400).result("Missing id path parameter");
             return;
         }
-        useCase.execute(id).ifPresentOrElse(
-                schedule -> ctx.contentType("application/json").result(gson.toJson(schedule)),
-                () -> ctx.status(404).result("Schedule not found")
-        );
+        Output<Schedule> output = useCase.execute(id);
+        if (output.isSuccess())
+        {
+            ctx.contentType("application/json").result(gson.toJson(Output.ok(output)));
+        }
+        else
+        {
+            ctx.status(output.status()).result(output.error());
+        }
     }
 }

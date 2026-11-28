@@ -5,7 +5,7 @@ import software.ulpgc.controlpresencia.architecture.ports.ScheduleReader;
 
 import java.util.Optional;
 
-public class GetScheduleUseCase implements UseCase<String, Optional<Schedule>> {
+public class GetScheduleUseCase implements UseCase<String, Output<Schedule>> {
     private final ScheduleReader scheduleReader;
 
     public GetScheduleUseCase(ScheduleReader scheduleReader) {
@@ -14,7 +14,8 @@ public class GetScheduleUseCase implements UseCase<String, Optional<Schedule>> {
 
 
     @Override
-    public Optional<Schedule> execute(String id) {
-        return this.scheduleReader.get(id);
+    public Output<Schedule> execute(String id) {
+        Optional<Schedule> schedule = this.scheduleReader.get(id);
+        return schedule.map(Output::ok).orElseGet(() -> Output.notFound("Schedule not found"));
     }
 }

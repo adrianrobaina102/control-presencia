@@ -3,7 +3,9 @@ package software.ulpgc.controlpresencia.infrastructure.adapters;
 import com.google.gson.Gson;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import software.ulpgc.controlpresencia.architecture.model.Employee;
 import software.ulpgc.controlpresencia.architecture.usecases.GetEmployeeUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.Output;
 
 public class GetEmployeeEndPoint implements EndPoint {
     private final GetEmployeeUseCase useCase;
@@ -25,9 +27,13 @@ public class GetEmployeeEndPoint implements EndPoint {
             ctx.status(400).result("Missing id path parameter");
             return;
         }
-        useCase.execute(id).ifPresentOrElse(
-                employee -> ctx.contentType("application/json").result(gson.toJson(employee)),
-                () -> ctx.status(404).result("Employee not found")
-        );
+        Output<Employee> output = useCase.execute(id);
+        if (output.isSuccess())
+        {
+            ctx.contentType("application/json").result(gson.toJson(output.result()));
+        }
+        else {
+            ctx.status(output.status()).result(output.error());
+        }
     }
 }

@@ -3,7 +3,11 @@ package software.ulpgc.controlpresencia.infrastructure.adapters;
 import com.google.gson.Gson;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import software.ulpgc.controlpresencia.architecture.model.Schedule;
 import software.ulpgc.controlpresencia.architecture.usecases.ListSchedulesUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.Output;
+
+import java.util.List;
 
 public class ListSchedulesEndPoint implements EndPoint {
     private final Gson gson;
@@ -24,6 +28,7 @@ public class ListSchedulesEndPoint implements EndPoint {
     }
 
     private void handle(Context ctx) {
-        ctx.contentType("application/json").result(gson.toJson(this.useCase.execute()));
+        Output<List<Schedule>> output = this.useCase.execute();
+        ctx.contentType("application/json").result(gson.toJson(output.result()));
     }
 }
