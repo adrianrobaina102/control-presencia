@@ -155,7 +155,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="J2jz5a18MDsQnHRqPScm-26" parent="J2jz5a18MDsQnHRqPScm-25" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ record Param(employeeId: String, date: LocalDate)&lt;div&gt;+ execute(param: Param): CompletableFuture&amp;lt;Optional&amp;lt;DailyReport&amp;gt;&amp;gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="J2jz5a18MDsQnHRqPScm-26" parent="J2jz5a18MDsQnHRqPScm-25" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ record Param(employeeId: String, date: LocalDate)&lt;div&gt;+ execute(param: Param): CompletableFuture&amp;lt;Output&amp;lt;DailyReport&amp;gt;&amp;gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="50" width="400" y="26" as="geometry" />
         </mxCell>
         <mxCell id="J2jz5a18MDsQnHRqPScm-28" edge="1" parent="1" source="J2jz5a18MDsQnHRqPScm-25" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;defaultLabelBackgroundColor=page;labelPadding=0 4;exitX=0.001;exitY=0.287;exitDx=0;exitDy=0;entryX=0.999;entryY=0.379;entryDx=0;entryDy=0;entryPerimeter=0;exitPerimeter=0;" target="J2jz5a18MDsQnHRqPScm-21" value="">
@@ -167,7 +167,7 @@
         <mxCell id="J2jz5a18MDsQnHRqPScm-29" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="GenerateMonthlyReportUseCase" vertex="1">
           <mxGeometry height="76" width="400" x="1780" y="722" as="geometry" />
         </mxCell>
-        <mxCell id="J2jz5a18MDsQnHRqPScm-30" parent="J2jz5a18MDsQnHRqPScm-29" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ record Param(employeeId: String, month: YearMonth)&lt;div&gt;+ execute(param: Param): CompletableFuture&amp;lt;Optional&amp;lt;MonthlyReport&amp;gt;&amp;gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="J2jz5a18MDsQnHRqPScm-30" parent="J2jz5a18MDsQnHRqPScm-29" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ record Param(employeeId: String, month: YearMonth)&lt;div&gt;+ execute(param: Param): CompletableFuture&amp;lt;Output&amp;lt;MonthlyReport&amp;gt;&amp;gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="50" width="400" y="26" as="geometry" />
         </mxCell>
         <mxCell id="J2jz5a18MDsQnHRqPScm-31" edge="1" parent="1" source="J2jz5a18MDsQnHRqPScm-29" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;defaultLabelBackgroundColor=page;labelPadding=0 4;exitX=-0.009;exitY=0.132;exitDx=0;exitDy=0;entryX=0.997;entryY=0.446;entryDx=0;entryDy=0;entryPerimeter=0;exitPerimeter=0;" target="J2jz5a18MDsQnHRqPScm-21" value="">
