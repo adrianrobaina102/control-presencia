@@ -38,11 +38,12 @@ public class GetMonthlyReportEndPoint implements EndPoint {
         }
 
         ctx.future(() -> this.useCase.execute(new GenerateMonthlyReportUseCase.Param(employeeId, month))
-                .thenAccept(reportOpt -> {
-                    if (reportOpt.isPresent()) {
-                        ctx.status(200).contentType("application/json").result(gson.toJson(reportOpt.get()));
+                .thenAccept(output -> {
+                    ctx.status(output.status());
+                    if (output.error() == null) {
+                        ctx.contentType("application/json").result(gson.toJson(output.result()));
                     } else {
-                        ctx.status(404).result("Monthly report not found");
+                        ctx.result(output.error());
                     }
                 }));
     }

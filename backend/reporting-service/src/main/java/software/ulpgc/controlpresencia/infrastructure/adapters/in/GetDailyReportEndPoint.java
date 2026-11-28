@@ -38,11 +38,12 @@ public class GetDailyReportEndPoint implements EndPoint {
         }
 
         ctx.future(() -> this.useCase.execute(new GenerateDailyReportUseCase.Param(employeeId, date))
-                .thenAccept(reportOpt -> {
-                    if (reportOpt.isPresent()) {
-                        ctx.status(200).contentType("application/json").result(gson.toJson(reportOpt.get()));
+                .thenAccept(output -> {
+                    ctx.status(output.status());
+                    if (output.error() == null) {
+                        ctx.contentType("application/json").result(gson.toJson(output.result()));
                     } else {
-                        ctx.status(404).result("Daily report not found");
+                        ctx.result(output.error());
                     }
                 }));
     }

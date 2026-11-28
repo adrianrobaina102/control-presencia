@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-public class GenerateDailyReportUseCase implements UseCase<GenerateDailyReportUseCase.Param, CompletableFuture<Optional<DailyReport>>> {
+public class GenerateDailyReportUseCase implements UseCase<GenerateDailyReportUseCase.Param, CompletableFuture<Output<DailyReport>>> {
 
     public record Param(String employeeId, LocalDate date) {}
 
@@ -29,18 +29,18 @@ public class GenerateDailyReportUseCase implements UseCase<GenerateDailyReportUs
     }
 
     @Override
-    public CompletableFuture<Optional<DailyReport>> execute(Param input) {
+    public CompletableFuture<Output<DailyReport>> execute(Param input) {
         return employeeReader.get(input.employeeId())
                 .thenCompose(employee -> employee
                         .map(emp -> fetchScheduleAndEvents(emp, input.date()))
-                        .orElseGet(() -> CompletableFuture.completedFuture(Optional.empty())));
+                        .orElseGet(() -> CompletableFuture.completedFuture(Output.notFound("Employee not found"))));
     }
 
-    private CompletableFuture<Optional<DailyReport>> fetchScheduleAndEvents(EmployeeInfo employee, LocalDate date) {
+    private CompletableFuture<Output<DailyReport>> fetchScheduleAndEvents(EmployeeInfo employee, LocalDate date) {
         CompletableFuture<Optional<ScheduleInfo>> scheduleFuture = scheduleReader.get(employee.scheduleId());
         CompletableFuture<List<TrackingInfo>> eventsFuture = eventReader.getEvents(employee.id(), date);
-
         return scheduleFuture.thenCombine(eventsFuture, (scheduleOpt, events) ->
-                scheduleOpt.map(schedule -> DailyReportCalculator.calculate(employee.id(), date, schedule, events)));
+                scheduleOpt.map(schedule -> Output.ok(DailyReportCalculator.calculate(employee.id(), date, schedule, events)))
+                        .orElseGet(() -> Output.notFound("Schedule not found")));
     }
 }

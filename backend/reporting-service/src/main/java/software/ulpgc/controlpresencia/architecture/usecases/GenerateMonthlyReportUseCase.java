@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.IntStream;
 
-public class GenerateMonthlyReportUseCase implements UseCase<GenerateMonthlyReportUseCase.Param, CompletableFuture<Optional<MonthlyReport>>> {
+public class GenerateMonthlyReportUseCase implements UseCase<GenerateMonthlyReportUseCase.Param, CompletableFuture<Output<MonthlyReport>>> {
     private final GenerateDailyReportUseCase dailyUseCase;
 
     public GenerateMonthlyReportUseCase(GenerateDailyReportUseCase dailyUseCase) {
@@ -21,8 +21,8 @@ public class GenerateMonthlyReportUseCase implements UseCase<GenerateMonthlyRepo
     public record Param(String employeeId, YearMonth month) {}
 
     @Override
-    public CompletableFuture<Optional<MonthlyReport>> execute(Param input) {
-        List<CompletableFuture<Optional<DailyReport>>> futures = IntStream.rangeClosed(1, input.month().lengthOfMonth())
+    public CompletableFuture<Output<MonthlyReport>> execute(Param input) {
+        List<CompletableFuture<Output<DailyReport>>> futures = IntStream.rangeClosed(1, input.month().lengthOfMonth())
                 .mapToObj(day -> dailyUseCase.execute(new GenerateDailyReportUseCase.Param(input.employeeId(), input.month().atDay(day))))
                 .toList();
 
@@ -30,11 +30,12 @@ public class GenerateMonthlyReportUseCase implements UseCase<GenerateMonthlyRepo
                 .thenApply(_ -> combineDailyReports(input, futures));
     }
 
-    private Optional<MonthlyReport> combineDailyReports(Param input, List<CompletableFuture<Optional<DailyReport>>> futures) {
-        List<Optional<DailyReport>> results = futures.stream().map(CompletableFuture::join).toList();
-        if (results.stream().anyMatch(Optional::isEmpty)) return Optional.empty();
-        List<DailyReport> dailyReports = results.stream().map(Optional::get).toList();
-        return Optional.of(buildMonthlyReport(input, dailyReports));
+    private Output<MonthlyReport> combineDailyReports(Param input, List<CompletableFuture<Output<DailyReport>>> futures) {
+        List<Output<DailyReport>> results = futures.stream().map(CompletableFuture::join).toList();
+        Optional<Output<DailyReport>> failed = results.stream().filter(o -> o.error() != null).findFirst();
+        if (failed.isPresent()) return new Output<>(failed.get().status(), null, failed.get().error());
+        List<DailyReport> dailyReports = results.stream().map(Output::result).toList();
+        return Output.ok(buildMonthlyReport(input, dailyReports));
     }
 
     private MonthlyReport buildMonthlyReport(Param input, List<DailyReport> dailyReports) {
