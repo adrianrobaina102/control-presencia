@@ -1,26 +1,29 @@
 package software.ulpgc.controlpresencia.infrastructure.adapters;
 
 import com.google.gson.Gson;
+import io.javalin.Javalin;
 import io.javalin.http.Context;
 import software.ulpgc.controlpresencia.architecture.usecases.ListSchedulesUseCase;
 
 public class ListSchedulesEndPoint implements EndPoint {
     private final Gson gson;
     private final ListSchedulesUseCase useCase;
-    private final Context context;
 
-    public ListSchedulesEndPoint(Gson gson, ListSchedulesUseCase useCase, Context context) {
+    public ListSchedulesEndPoint(Gson gson, ListSchedulesUseCase useCase) {
         this.gson = gson;
         this.useCase = useCase;
-        this.context = context;
     }
 
-    public ListSchedulesEndPoint(ListSchedulesUseCase useCase, Context context, Gson gson) {
-        this(gson, useCase, context);
+    public ListSchedulesEndPoint(ListSchedulesUseCase useCase, Gson gson) {
+        this(gson, useCase);
     }
 
     @Override
-    public void execute() {
-        context.contentType("application/json").result(gson.toJson(this.useCase.execute()));
+    public void execute(Javalin app) {
+        app.get("/schedules", this::handle);
+    }
+
+    private void handle(Context ctx) {
+        ctx.contentType("application/json").result(gson.toJson(this.useCase.execute()));
     }
 }

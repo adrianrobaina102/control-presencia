@@ -26,15 +26,10 @@ public class Main {
         GetEmployeeUseCase getEmployeeUseCase = new GetEmployeeUseCase(reader);
         ListEmployeesUseCase listEmployeesUseCase = new ListEmployeesUseCase(reader);
 
-        Javalin app = Javalin.create().start(7072);
-
-        app.get("/employees", context -> {
-            if (context.queryParam("id") != null) {
-                new GetEmployeeEndPoint(getEmployeeUseCase, context, gson).execute();
-            } else {
-                new ListEmployeesEndPoint(listEmployeesUseCase, context, gson).execute();
-            }
-        });
+        Javalin app = Javalin.create();
+        new GetEmployeeEndPoint(getEmployeeUseCase, gson).execute(app);
+        new ListEmployeesEndPoint(listEmployeesUseCase, gson).execute(app);
+        app.start(7072);
 
         System.out.println("Employee-service activo en http://localhost:7072");
         System.out.println("-> Listar empleados: http://localhost:7072/employees");

@@ -24,15 +24,10 @@ public class Main {
         GetBuildingUseCase getBuildingUseCase = new GetBuildingUseCase(reader);
         ListBuildingsUseCase listBuildingsUseCase = new ListBuildingsUseCase(reader);
 
-        Javalin app = Javalin.create().start(7073);
-
-        app.get("/buildings", context -> {
-            if (context.queryParam("id") != null) {
-                new GetBuildingEndPoint(getBuildingUseCase, context, gson).execute();
-            } else {
-                new ListBuildingsEndPoint(listBuildingsUseCase, context, gson).execute();
-            }
-        });
+        Javalin app = Javalin.create();
+        new GetBuildingEndPoint(getBuildingUseCase, gson).execute(app);
+        new ListBuildingsEndPoint(listBuildingsUseCase, gson).execute(app);
+        app.start(7073);
 
         System.out.println("Building-service activo en http://localhost:7073");
         System.out.println("-> Listar edificios: http://localhost:7073/buildings");

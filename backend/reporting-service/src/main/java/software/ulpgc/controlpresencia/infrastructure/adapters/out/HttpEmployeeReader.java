@@ -45,7 +45,7 @@ public class HttpEmployeeReader implements EmployeeReader {
     }
 
     private HttpRequest requestWith(String id) {
-        return HttpRequest.newBuilder(URI.create(baseUrl +  "/employees?id="  + id))
+        return HttpRequest.newBuilder(URI.create(baseUrl + "/employees/" + id))
                 .GET()
                 .timeout(Duration.ofSeconds(10))
                 .build();

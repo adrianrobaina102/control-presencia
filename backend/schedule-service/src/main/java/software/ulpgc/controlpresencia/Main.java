@@ -26,15 +26,10 @@ public class Main {
         GetScheduleUseCase getScheduleUseCase = new GetScheduleUseCase(reader);
         ListSchedulesUseCase listSchedulesUseCase = new ListSchedulesUseCase(reader);
 
-        Javalin app = Javalin.create().start(7074);
-
-        app.get("/schedules", context -> {
-            if (context.queryParam("id") != null) {
-                new GetScheduleEndPoint(getScheduleUseCase, context, gson).execute();
-            } else {
-                new ListSchedulesEndPoint(listSchedulesUseCase, context, gson).execute();
-            }
-        });
+        Javalin app = Javalin.create();
+        new GetScheduleEndPoint(getScheduleUseCase, gson).execute(app);
+        new ListSchedulesEndPoint(listSchedulesUseCase, gson).execute(app);
+        app.start(7074);
 
         System.out.println("Schedule-service activo en http://localhost:7074");
         System.out.println("-> Listar horarios: http://localhost:7074/schedules");

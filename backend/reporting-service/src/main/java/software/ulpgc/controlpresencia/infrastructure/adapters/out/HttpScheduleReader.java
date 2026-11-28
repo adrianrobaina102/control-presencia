@@ -37,7 +37,7 @@ public class HttpScheduleReader implements ScheduleReader {
     }
 
     private HttpRequest requestWith(String id) {
-        return HttpRequest.newBuilder(URI.create(baseUrl + "/schedules?id=" + id))
+        return HttpRequest.newBuilder(URI.create(baseUrl + "/schedules/" + id))
                 .GET()
                 .timeout(Duration.ofSeconds(10))
                 .build();
