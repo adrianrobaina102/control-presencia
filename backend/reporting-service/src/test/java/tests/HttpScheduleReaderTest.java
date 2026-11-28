@@ -28,8 +28,8 @@ public class HttpScheduleReaderTest {
     public void setUp() throws IOException {
         server = HttpServer.create(new InetSocketAddress(0), 0);
         server.createContext("/schedules", exchange -> {
-            String query = exchange.getRequestURI().getQuery();
-            if ("id=SCH-01".equals(query)) {
+            String path = exchange.getRequestURI().getPath();
+            if ("/schedules/SCH-01".equals(path)) {
                 String json = """
                         {
                           "id": "SCH-01",

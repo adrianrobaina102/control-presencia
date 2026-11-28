@@ -26,8 +26,8 @@ public class HttpEmployeeReaderTest {
     public void setUp() throws IOException {
         server = HttpServer.create(new InetSocketAddress(0), 0);
         server.createContext("/employees", exchange -> {
-            String query = exchange.getRequestURI().getQuery();
-            if ("id=emp-01".equals(query)) {
+            String path = exchange.getRequestURI().getPath();
+            if ("/employees/emp-01".equals(path)) {
                 String json = """
                         {"id":"emp-01","name":"Adrián Robaina","contract":{"scheduleId":"SCH-OFFICE-CONTINUOUS"}}
                         """;
