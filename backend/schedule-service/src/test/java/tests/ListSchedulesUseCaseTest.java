@@ -2,6 +2,7 @@ package tests;
 
 import org.junit.jupiter.api.Test;
 import software.ulpgc.controlpresencia.architecture.usecases.ListSchedulesUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.Output;
 import software.ulpgc.controlpresencia.architecture.model.*;
 import software.ulpgc.controlpresencia.architecture.ports.ScheduleReader;
 
@@ -31,9 +32,11 @@ public class ListSchedulesUseCaseTest {
         };
 
         ListSchedulesUseCase useCase = new ListSchedulesUseCase(mockReader);
-        List<Schedule> result = useCase.execute();
+        Output<List<Schedule>> output = useCase.execute();
 
-        assertThat(result).hasSize(2)
+        assertThat(output.isSuccess()).isTrue();
+        assertThat(output.status()).isEqualTo(200);
+        assertThat(output.result()).hasSize(2)
                 .extracting(Schedule::name)
                 .containsExactly("Oficina", "Comercio");
     }

@@ -2,6 +2,7 @@ package tests;
 
 import org.junit.jupiter.api.Test;
 import software.ulpgc.controlpresencia.architecture.usecases.ListEmployeesUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.Output;
 import software.ulpgc.controlpresencia.architecture.model.*;
 import software.ulpgc.controlpresencia.architecture.ports.EmployeeReader;
 
@@ -31,9 +32,11 @@ public class ListEmployeesUseCaseTest {
         };
 
         ListEmployeesUseCase useCase = new ListEmployeesUseCase(mockReader);
-        List<Employee> result = useCase.execute();
+        Output<List<Employee>> output = useCase.execute();
 
-        assertThat(result).hasSize(2)
+        assertThat(output.isSuccess()).isTrue();
+        assertThat(output.status()).isEqualTo(200);
+        assertThat(output.result()).hasSize(2)
                 .extracting(Employee::name)
                 .containsExactly("Adrián Robaina", "María Comercio");
     }

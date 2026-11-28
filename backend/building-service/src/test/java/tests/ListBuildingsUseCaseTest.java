@@ -1,10 +1,11 @@
 package tests;
 
 import org.junit.jupiter.api.Test;
-import software.ulpgc.controlpresencia.architecture.usecases.ListBuildingsUseCase;
 import software.ulpgc.controlpresencia.architecture.model.Building;
 import software.ulpgc.controlpresencia.architecture.model.Organization;
 import software.ulpgc.controlpresencia.architecture.ports.BuildingReader;
+import software.ulpgc.controlpresencia.architecture.usecases.ListBuildingsUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.Output;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,9 +32,11 @@ public class ListBuildingsUseCaseTest {
         };
 
         ListBuildingsUseCase useCase = new ListBuildingsUseCase(mockReader);
-        List<Building> result = useCase.execute();
+        Output<List<Building>> output = useCase.execute();
 
-        assertThat(result).hasSize(2)
+        assertThat(output.isSuccess()).isTrue();
+        assertThat(output.status()).isEqualTo(200);
+        assertThat(output.result()).hasSize(2)
                 .extracting(Building::name)
                 .containsExactly("Sede Central", "Tienda Triana");
     }

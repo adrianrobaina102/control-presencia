@@ -2,6 +2,7 @@ package tests;
 
 import org.junit.jupiter.api.Test;
 import software.ulpgc.controlpresencia.architecture.usecases.GetEmployeeUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.Output;
 import software.ulpgc.controlpresencia.architecture.model.*;
 import software.ulpgc.controlpresencia.architecture.ports.EmployeeReader;
 
@@ -29,12 +30,13 @@ public class GetEmployeeUseCaseTest {
         };
 
         GetEmployeeUseCase useCase = new GetEmployeeUseCase(mockReader);
-        Optional<Employee> result = useCase.execute("emp-01");
+        Output<Employee> output = useCase.execute("emp-01");
 
-        assertThat(result).isPresent();
-        assertThat(result.get().name()).isEqualTo("Adrián Robaina");
-        assertThat(result.get().role()).isEqualTo(Role.EMPLOYEE);
-        assertThat(result.get().contract().scheduleId()).isEqualTo("SCH-OFFICE-CONTINUOUS");
+        assertThat(output.isSuccess()).isTrue();
+        assertThat(output.status()).isEqualTo(200);
+        assertThat(output.result().name()).isEqualTo("Adrián Robaina");
+        assertThat(output.result().role()).isEqualTo(Role.EMPLOYEE);
+        assertThat(output.result().contract().scheduleId()).isEqualTo("SCH-OFFICE-CONTINUOUS");
     }
 
     @Test
@@ -52,9 +54,11 @@ public class GetEmployeeUseCaseTest {
         };
 
         GetEmployeeUseCase useCase = new GetEmployeeUseCase(emptyReader);
-        Optional<Employee> result = useCase.execute("non-existent");
+        Output<Employee> output = useCase.execute("non-existent");
 
-        assertThat(result).isEmpty();
+        assertThat(output.isSuccess()).isFalse();
+        assertThat(output.status()).isEqualTo(404);
+        assertThat(output.error()).isEqualTo("Employee not found");
     }
 
     private Employee createSampleEmployee(String id, String name) {

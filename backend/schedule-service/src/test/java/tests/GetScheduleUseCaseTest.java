@@ -2,6 +2,7 @@ package tests;
 
 import org.junit.jupiter.api.Test;
 import software.ulpgc.controlpresencia.architecture.usecases.GetScheduleUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.Output;
 import software.ulpgc.controlpresencia.architecture.model.*;
 import software.ulpgc.controlpresencia.architecture.ports.ScheduleReader;
 
@@ -29,15 +30,16 @@ public class GetScheduleUseCaseTest {
         };
 
         GetScheduleUseCase useCase = new GetScheduleUseCase(mockReader);
-        Optional<Schedule> result = useCase.execute("SCH-OFFICE-CONTINUOUS");
+        Output<Schedule> output = useCase.execute("SCH-OFFICE-CONTINUOUS");
 
-        assertThat(result).isPresent();
-        assertThat(result.get().name()).isEqualTo("Oficina Tecnologica");
-        assertThat(result.get().type()).isEqualTo(ShiftType.CONTINUOUS);
-        assertThat(result.get().courtesyMinutes()).isEqualTo(10);
-        assertThat(result.get().totalExpectedMinutes()).isEqualTo(480);
-        assertThat(result.get().appliesOn(DayOfWeek.MONDAY)).isTrue();
-        assertThat(result.get().appliesOn(DayOfWeek.SUNDAY)).isFalse();
+        assertThat(output.isSuccess()).isTrue();
+        assertThat(output.status()).isEqualTo(200);
+        assertThat(output.result().name()).isEqualTo("Oficina Tecnologica");
+        assertThat(output.result().type()).isEqualTo(ShiftType.CONTINUOUS);
+        assertThat(output.result().courtesyMinutes()).isEqualTo(10);
+        assertThat(output.result().totalExpectedMinutes()).isEqualTo(480);
+        assertThat(output.result().appliesOn(DayOfWeek.MONDAY)).isTrue();
+        assertThat(output.result().appliesOn(DayOfWeek.SUNDAY)).isFalse();
     }
 
     @Test
@@ -55,9 +57,11 @@ public class GetScheduleUseCaseTest {
         };
 
         GetScheduleUseCase useCase = new GetScheduleUseCase(emptyReader);
-        Optional<Schedule> result = useCase.execute("non-existent");
+        Output<Schedule> output = useCase.execute("non-existent");
 
-        assertThat(result).isEmpty();
+        assertThat(output.isSuccess()).isFalse();
+        assertThat(output.status()).isEqualTo(404);
+        assertThat(output.error()).isEqualTo("Schedule not found");
     }
 
     private Schedule createSampleSchedule(String id, String name) {

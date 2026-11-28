@@ -1,10 +1,11 @@
 package tests;
 
 import org.junit.jupiter.api.Test;
-import software.ulpgc.controlpresencia.architecture.usecases.GetBuildingUseCase;
 import software.ulpgc.controlpresencia.architecture.model.Building;
 import software.ulpgc.controlpresencia.architecture.model.Organization;
 import software.ulpgc.controlpresencia.architecture.ports.BuildingReader;
+import software.ulpgc.controlpresencia.architecture.usecases.GetBuildingUseCase;
+import software.ulpgc.controlpresencia.architecture.usecases.Output;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,16 +30,17 @@ public class GetBuildingUseCaseTest {
         };
 
         GetBuildingUseCase useCase = new GetBuildingUseCase(mockReader);
-        Optional<Building> result = useCase.execute("bld-01");
+        Output<Building> output = useCase.execute("bld-01");
 
-        assertThat(result).isPresent();
-        assertThat(result.get().name()).isEqualTo("Sede Central");
-        assertThat(result.get().organization().name()).isEqualTo("Servicios Globales Canarios S.L.");
-        assertThat(result.get().active()).isTrue();
+        assertThat(output.isSuccess()).isTrue();
+        assertThat(output.status()).isEqualTo(200);
+        assertThat(output.result().name()).isEqualTo("Sede Central");
+        assertThat(output.result().organization().name()).isEqualTo("Servicios Globales Canarios S.L.");
+        assertThat(output.result().active()).isTrue();
     }
 
     @Test
-    public void should_return_empty_optional_when_building_does_not_exist() {
+    public void should_return_not_found_when_building_does_not_exist() {
         BuildingReader emptyReader = new BuildingReader() {
             @Override
             public Optional<Building> get(String id) {
@@ -52,9 +54,11 @@ public class GetBuildingUseCaseTest {
         };
 
         GetBuildingUseCase useCase = new GetBuildingUseCase(emptyReader);
-        Optional<Building> result = useCase.execute("non-existent");
+        Output<Building> output = useCase.execute("non-existent");
 
-        assertThat(result).isEmpty();
+        assertThat(output.isSuccess()).isFalse();
+        assertThat(output.status()).isEqualTo(404);
+        assertThat(output.error()).isEqualTo("Building not found");
     }
 
     private Building createSampleBuilding(String id, String name) {
